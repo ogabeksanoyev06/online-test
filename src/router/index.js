@@ -44,6 +44,28 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/sign-in",
+    component: () => import("../layouts/Auth"),
+    children: [
+      {
+        path: "/sign-in",
+        name: "login",
+        component: () => import("../components/layouts/auth/login"),
+      },
+    ],
+  },
+  {
+    path: "/sign-up",
+    component: () => import("../layouts/Auth"),
+    children: [
+      {
+        path: "/sign-up",
+        name: "register",
+        component: () => import("../components/layouts/auth/register"),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

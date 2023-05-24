@@ -2,8 +2,8 @@
   <div class="home-page">
     <HeroBanner />
     <cta-banner
-      title="Stesting loyihasi haqida"
-      content="STesting – bu o‘quvchilarni xalqaro PISA, TIMSS, PIRLS tadqiqotlariga tayyorgarlik ko‘rishi uchun sinov platformasidir. “STesting”platformasi xalqaro tadqiqotlardan muvaffaqiyatli o'tishga yordam beradi. Topshiriqlar formati bilan tanishing, ularni bajaring, bilimlaringizni sinang va charxlang! “STesting” sizning doimiy do‘stingiz! U bilan siz yuqori natijalarga erishasiz!"
+      title="iTestify loyihasi haqida"
+      content="iTestify – bu o‘quvchilarni xalqaro PISA, TIMSS, PIRLS tadqiqotlariga tayyorgarlik ko‘rish ,dtm, maktab o'quvchilari va o'qituvchilari  uchun sinov platformasidir. iTestify xalqaro tadqiqotlardan muvaffaqiyatli o'tishga, barcha yo'nalishlarda o'z bilimingizni sinab ko'rishga yordam beradi. Topshiriqlar formati bilan tanishing, ularni bajaring, bilimlaringizni sinang va charxlang! iTestify sizning doimiy do‘stingiz! U bilan siz yuqori natijalarga erishasiz!"
       buttonText="Batafsil"
     />
     <ContentBanner />

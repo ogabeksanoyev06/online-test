@@ -311,3 +311,15 @@
     transform: scale(0.95);
   }
 }
+
+// ui
+.el-form-item {
+  margin-bottom: 10px;
+}
+.el-input__inner {
+  height: 50px;
+  line-height: 50px;
+}
+.el-form--label-top .el-form-item__label {
+  padding: 0 0 0px;
+}

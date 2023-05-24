@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import AppText from "./components/shared-components/AppText.vue";
 import ElementUI from "element-ui";
+import VueMask from "v-mask";
 import "element-ui/lib/theme-chalk/index.css";
 import "./assets/styles/main.scss";
 import "./plugins/media/media-mixin";
@@ -14,6 +15,7 @@ import api from "./service/apiService";
 Vue.config.productionTip = false;
 Vue.component("AppText", AppText);
 Vue.use(ElementUI);
+Vue.use(VueMask);
 Vue.use(api);
 
 new Vue({
