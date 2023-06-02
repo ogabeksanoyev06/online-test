@@ -8,7 +8,7 @@
     >
       Ro'yxatdan o'tish
     </AppText>
-    <div class="auth__form">
+    <div class="auth__form" v-if="true" style="max-width: 500px">
       <div class="auth__form-header">
         <div class="header-logo">
           <img src="/svg/logo1.svg" alt="logo" />
@@ -57,7 +57,7 @@
         </router-link>
       </AppText>
     </div>
-    <div class="auth__form">
+    <div class="auth__form" v-if="true" style="max-width: 500px">
       <div class="auth__form-header">
         <div class="header-logo">
           <img src="/svg/logo1.svg" alt="logo" />
@@ -66,6 +66,10 @@
           Bizning tizim orqali o‘z biliminggizni yuksaltiring
         </p>
       </div>
+      <AppText size="14" weight="600" line-height="17" class="text-center">
+        <span style="color: #e6a23c">+998 93 081 91 40</span> raqamiga kod
+        yuborildi
+      </AppText>
       <el-form
         :model="codeVerify"
         :rules="rules"
@@ -83,11 +87,20 @@
           </el-input>
         </el-form-item>
 
-        <div class="mt-30 mb-30 text-center">
+        <div class="mt-30 mb-30 text-center d-flex">
+          <AppButton
+            theme="white"
+            :font-size="isMobile ? 14 : 16"
+            :sides="isMobile ? 10 : 30"
+            @click="$router.push({ path: '/' })"
+            class="w-100 mr-10 mb-10"
+          >
+            Orqaga qaytish
+          </AppButton>
           <AppButton
             theme="main"
             :font-size="isMobile ? 14 : 16"
-            :sides="isMobile ? 20 : 30"
+            :sides="isMobile ? 10 : 30"
             @click="$router.push({ path: '/' })"
             class="w-100"
           >
@@ -113,16 +126,150 @@
         </router-link>
       </AppText>
     </div>
+    <div class="auth__form" v-if="true">
+      <div class="auth__form-header">
+        <div class="header-logo">
+          <img src="/svg/logo1.svg" alt="logo" />
+        </div>
+        <p class="header-text">
+          Bizning tizim orqali o‘z biliminggizni yuksaltiring
+        </p>
+      </div>
+      <el-form
+        :model="telefon"
+        :rules="rules"
+        ref="ruleForm"
+        labelPosition="top"
+      >
+        <block-wrap
+          :count="isMobile ? 1 : 2"
+          offset-x="12"
+          offset-y="12"
+          class="mb-20"
+        >
+          <el-form-item label="Ismingiz" prop="firstname">
+            <el-input placeholder="Ismingiz" v-model="form.firstName" clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Familiyangiz" prop="lastname">
+            <el-input
+              placeholder="Familiyangiz"
+              v-model="form.lastname"
+              clearable
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Viloyatni tanlang">
+            <el-select
+              v-model="form.region"
+              placeholder="Viloyatni tanlang"
+              class="w-100"
+            >
+              <el-option label="Barchasi" value="all" />
+              <el-option
+                v-for="(item, i) in list"
+                :label="item.name"
+                :value="item.soato"
+                :key="i"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Tumanni tanlang">
+            <el-select
+              v-model="form.city"
+              placeholder="Tumanni tanlang"
+              class="w-100"
+              disabled
+            >
+              <el-option
+                v-for="(item, i) in list"
+                :label="item.name"
+                :value="item.soato"
+                :key="i"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Maktabni tanlang">
+            <el-select
+              v-model="form.school"
+              placeholder="Maktabni tanlang"
+              class="w-100"
+            >
+              <el-option
+                v-for="(item, i) in list"
+                :label="item.name"
+                :value="item.soato"
+                :key="i"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Parol" prop="password">
+            <el-input id="password1" type="password" v-model="form.password">
+              <template slot="append">
+                <img
+                  src="/icons/eye.svg"
+                  style="cursor: pointer; vertical-align: inherit"
+                  @click="passwordSee"
+                  v-if="passwordField"
+                />
+                <img
+                  src="/icons/eye-closed2.svg"
+                  style="cursor: pointer; vertical-align: inherit"
+                  @click="passwordSee"
+                  v-if="!passwordField"
+                />
+              </template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Parolni takrorlang" prop="passwordConfirmation">
+            <el-input
+              id="password2"
+              type="password"
+              v-model="form.passwordConfirmation"
+            >
+              <template slot="append">
+                <img
+                  src="/icons/eye.svg"
+                  style="cursor: pointer; vertical-align: inherit"
+                  @click="confirmationSee"
+                  v-if="passwordConfirmationField"
+                />
+                <img
+                  src="/icons/eye-closed2.svg"
+                  style="cursor: pointer; vertical-align: inherit"
+                  @click="confirmationSee"
+                  v-if="!passwordConfirmationField"
+                />
+              </template>
+            </el-input>
+          </el-form-item>
+        </block-wrap>
+
+        <div class="mt-30 mb-30 text-center">
+          <AppButton
+            theme="main"
+            :font-size="isMobile ? 14 : 16"
+            :sides="isMobile ? 20 : 30"
+            @click="$router.push({ path: '/' })"
+            class=""
+          >
+            Ma'lumotlarni saqlash
+          </AppButton>
+        </div>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
+import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 import AppButton from "../../shared-components/AppButton.vue";
 
 export default {
   name: "AppRegister",
   components: {
     AppButton,
+    BlockWrap,
   },
   data() {
     return {
@@ -132,9 +279,112 @@ export default {
         lastName: "",
         firstName: "",
         login: "",
+        region: "all",
+        city: "",
+        school: "",
         password: "",
         passwordConfirmation: "",
       },
+      list: [
+        {
+          id: 3606,
+          name: "Toshkent viloyati",
+          soato: 1727,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3719,
+          name: "Xorazm viloyati",
+          soato: 1733,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3759,
+          name: "Qoraqalpog‘iston Respublikasi",
+          soato: 1735,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3560,
+          name: "Sirdaryo viloyati",
+          soato: 1724,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3319,
+          name: "Jizzax viloyati",
+          soato: 1708,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3476,
+          name: "Samarqand viloyati",
+          soato: 1718,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3661,
+          name: "Farg‘ona viloyati",
+          soato: 1730,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3273,
+          name: "Buxoro viloyati",
+          soato: 1706,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3357,
+          name: "Qashqadaryo viloyati",
+          soato: 1710,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3432,
+          name: "Namangan viloyati",
+          soato: 1714,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3519,
+          name: "Surxondaryo viloyati",
+          soato: 1722,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3403,
+          name: "Navoiy viloyati",
+          soato: 1712,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3573,
+          name: "Toshkent shahri",
+          soato: 1726,
+          parent: 3235,
+          parent_soato: 17,
+        },
+        {
+          id: 3236,
+          name: "Andijon viloyati",
+          soato: 1703,
+          parent: 3235,
+          parent_soato: 17,
+        },
+      ],
       passwordField: false,
       passwordConfirmationField: false,
       rules: {
@@ -274,14 +524,13 @@ export default {
 
 <style lang="scss" scoped>
 .auth__form {
-  max-width: 500px;
+  max-width: 1200px;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   flex: 1;
-  background: linear-gradient(0deg, #f2f4f6, #f2f4f6),
-    linear-gradient(0deg, #f9f9f9, #f9f9f9), #fff;
+  background: #fff;
   margin: 20px auto;
   padding: 50px;
   &-header {

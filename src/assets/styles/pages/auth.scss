@@ -4,8 +4,8 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  background: no-repeat 50% / cover
-    url("https://cabinet.stesting.uz/images/pictures/auth-background.png");
+  background: #f5f7f9;
+  background-attachment: fixed;
   min-height: 100vh;
 
   &__content {

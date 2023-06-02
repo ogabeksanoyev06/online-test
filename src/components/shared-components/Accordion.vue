@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: "AppAccordion",
   props: {
     activeProp: {
       type: Number,

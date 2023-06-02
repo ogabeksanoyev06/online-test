@@ -33,6 +33,16 @@ const routes = [
         component: () => import("../views/site/video-course"),
       },
       {
+        path: "/detailed-page/:course_id",
+        name: "detailed-page",
+        component: () => import("../views/site/detailed-pages/video-course"),
+      },
+      {
+        path: "/course-page/:course_id",
+        name: "course-page",
+        component: () => import("../views/site/course-page"),
+      },
+      {
         path: "/library",
         name: "library",
         component: () => import("../views/site/library"),
@@ -41,6 +51,11 @@ const routes = [
         path: "/internation-studies",
         name: "internation-studies",
         component: () => import("../views/site/internationalStudies"),
+      },
+      {
+        path: "/test",
+        name: "test",
+        component: () => import("../views/site/test"),
       },
     ],
   },
@@ -72,5 +87,8 @@ const router = new VueRouter({
   mode: "history",
   routes,
 });
-
+router.beforeEach((to, from, next) => {
+  window.scrollTo(0, 0);
+  next();
+});
 export default router;

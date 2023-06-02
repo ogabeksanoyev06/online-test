@@ -4,12 +4,14 @@
       <div class="container">
         <div class="hero-banner__inner">
           <div class="hero-banner__content">
-            <h1 class="hero-banner__title mb-20">O‘z bilimingizni sinang!</h1>
+            <h1 class="hero-banner__title mb-20">
+              iTestify - Onlayn test platformasi
+            </h1>
             <app-text
               :size="isMobile ? 16 : 18"
               :line-height="isMobile ? 20 : 24"
               weight="500"
-              class="color-white text-center"
+              class="color-white"
             >
               Kasbiy maqsadlaringizga erishish uchun eng so'nggi ko'nikmalarni
               o'rganing.
@@ -70,7 +72,6 @@ export default {
   &__title {
     font-weight: 700;
     font-size: 48px;
-    text-align: center;
   }
 
   &__content {

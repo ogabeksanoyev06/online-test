@@ -1,11 +1,13 @@
 <template>
   <div class="pagination">
     <div class="pagination__wrap">
-      <button class="pagination__item"
-              :class="selectedQuestionIndexItem === index ? 'active' : ''"
-              v-for="(item, index) in questions"
-              :key="index"
-              @click="selectQuestion(index)">
+      <button
+        class="pagination__item"
+        :class="selectedQuestionIndexItem === index ? 'active' : ''"
+        v-for="(item, index) in questions"
+        :key="index"
+        @click="selectQuestion(index)"
+      >
         {{ index + 1 }}
       </button>
     </div>
@@ -13,27 +15,27 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "TestPagination",
   props: {
     questionsProp: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
   },
   data() {
     return {
       questions: [],
       selectedQuestionIndexItem: null,
-    }
+    };
   },
   computed: {
-    ...mapGetters(['selectedQuestionIndex'])
+    ...mapGetters(["selectedQuestionIndex"]),
   },
   methods: {
-    ...mapMutations(['setSelectedQuestionIndex']),
+    ...mapMutations(["setSelectedQuestionIndex"]),
     selectQuestion(questionIndex) {
       this.setSelectedQuestionIndex(questionIndex);
       this.selectedQuestionIndexItem = questionIndex;
@@ -50,22 +52,19 @@ export default {
     },
     selectedQuestionIndex() {
       this.selectedQuestionIndexItem = this.selectedQuestionIndex;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 @import "../../assets/styles/abstracts/variables";
 
 .pagination {
-
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-
   &__wrap {
     display: flex;
     align-items: center;
@@ -74,16 +73,17 @@ export default {
   }
 
   &__item {
-    padding: 5px 10px;
+    width: 40px;
+    height: 40px;
     font-family: "ProximaNova", sans-serif;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 16px;
     text-align: center;
     color: $text-color-default;
     background-color: white;
-    border: 1px solid #E5ECF5;
-    border-radius: 4px;
+    border: 1px solid #e5ecf5;
+    border-radius: 10px;
     margin: 4px 4px 4px 0;
     cursor: pointer;
 
@@ -98,13 +98,11 @@ export default {
     }
 
     &.disabled {
-      background: #F5F9FD;
+      background: #f5f9fd;
       color: $color-text;
       border-color: transparent;
       pointer-events: none;
     }
   }
-
 }
-
 </style>

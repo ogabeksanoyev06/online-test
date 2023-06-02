@@ -10,6 +10,15 @@
       <div class="container">
         <div class="header__inner">
           <div class="header__left">
+            <AppButton
+              v-if="isDesktopMedium"
+              theme="transparent"
+              sides="10"
+              class="hamburger__menu"
+              @click="showNavigationDrawer"
+            >
+              <img src="/icons/hamburger.svg" alt="" />
+            </AppButton>
             <router-link to="/" class="logo">
               <img src="/svg/logo1.svg" alt="logo" />
             </router-link>
@@ -28,13 +37,13 @@
           </div>
 
           <div class="header__right">
-            <div class="header__auth mr-20" v-if="!userIsLoggedOn">
+            <div class="header__auth" v-if="!userIsLoggedOn">
               <AppButton
                 theme="main"
-                :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
-                :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
-                class="header__login d-flex align-center mr-10"
-                v-if="!isMobileSmall"
+                :font-size="isMobileSmall ? 14 : 16"
+                :sides="isMobileSmall ? 20 : 30"
+                :height="isMobileSmall ? '40' : '50'"
+                class="header__login d-flex align-center"
                 @click="$router.push({ path: '/sign-in' })"
               >
                 <svg
@@ -43,7 +52,7 @@
                   viewBox="0 0 18 18"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="mr-10"
+                  :class="isMobileSmall ? '' : 'mr-10'"
                 >
                   <path
                     fill-rule="evenodd"
@@ -58,7 +67,7 @@
                     fill="#fff"
                   ></path>
                 </svg>
-                <span> Kabinetga kirish</span>
+                <span v-if="!isMobileSmall"> Kabinetga kirish</span>
               </AppButton>
             </div>
 
@@ -174,16 +183,6 @@
                 </div>
               </transition>
             </div>
-
-            <!-- <AppButton
-              v-if="isDesktopMedium"
-              theme="transparent"
-              sides="10"
-              class="hamburger__menu"
-              @click="showNavigationDrawer"
-            >
-              <img src="/icons/hamburger.svg" alt="" />
-            </AppButton> -->
           </div>
         </div>
       </div>
@@ -193,14 +192,6 @@
         v-if="navigationDrawer"
         @closeNavigationDrawer="closeDrawer"
       />
-    </transition>
-
-    <transition name="fade">
-      <div
-        class="overlay"
-        v-if="navigationDrawer"
-        @click="navigationDrawer = false"
-      ></div>
     </transition>
   </div>
 </template>
@@ -246,11 +237,11 @@ export default {
           title: "Videodarslar",
           link: "/video-course",
         },
-        {
-          id: 6,
-          title: "Kutubxona",
-          link: "/library",
-        },
+        // {
+        //   id: 6,
+        //   title: "Kutubxona",
+        //   link: "/library",
+        // },
       ],
       search: "",
       searchPackage: [],

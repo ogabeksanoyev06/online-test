@@ -1,36 +1,27 @@
 <template>
-  <component
-    :is="horizontal ? 'span' : 'div'"
-    class="app-radio custom-radio "
-    :class="{ 'd-inline-block mr-2': horizontal }"
-  >
+  <component :is="horizontal ? 'span' : 'div'" class="app-radio custom-radio">
     <label
-      :for="uuid"
       v-if="label"
       class="app-radio-wrap"
-      :class="{ radio_button__white: white }"
+      :class="checkedOption ? 'active' : ''"
     >
-      <span class="app-radio-option">
-        {{ label }}
-      </span>
-      <!--      :checked='value === radioValue'-->
       <input
         class="app-radio-input"
-        :id="uuid"
         type="radio"
         :checked="checkedOption"
         :value="radioValue"
         v-bind="$attrs"
         @change="$emit('change', $event)"
       />
+      <span class="app-radio-option"> {{ label + ")" }} </span>
+      <!--:checked='value === radioValue'-->
+
       <span class="app-radio-title" v-html="string"></span>
-      <img v-if="imgPath" class="app-radio-img" :src="imgPath" :alt="imgPath" />
+      <!-- <img v-if="imgPath" class="app-radio-img" :src="imgPath" :alt="imgPath" /> -->
     </label>
   </component>
 </template>
 <script>
-import uniqueId from "../../utils/uniqueId";
-
 export default {
   props: {
     value: {
@@ -78,7 +69,6 @@ export default {
   },
   data() {
     return {
-      uuid: uniqueId().getId(),
       checkedOption: false,
     };
   },
@@ -103,9 +93,9 @@ export default {
 .app-radio {
   display: flex;
   align-items: center;
-  border: 1px solid $border-color;
   border-radius: 10px;
   margin-bottom: 10px;
+  border: 1px solid $border-color;
 
   &:last-child {
     margin-bottom: 0;
@@ -117,14 +107,16 @@ export default {
     flex-wrap: wrap;
     width: 100%;
     cursor: pointer !important;
+    padding: 0 10px;
+    &.active {
+    }
   }
 
   &-option {
     font-weight: 700;
     font-size: 16px;
     line-height: 26px;
-    color: $color-text;
-    padding: 15px 20px;
+    color: #4f4f4f;
   }
 
   &-input {
@@ -144,7 +136,7 @@ export default {
       visibility: visible;
       border-radius: 50%;
       background-color: white;
-      border: 2px solid $border-color;
+      border: 1px solid $border-color;
     }
 
     &:checked::before {
@@ -159,7 +151,7 @@ export default {
       display: inline-block;
       visibility: visible;
       border-radius: 50%;
-      border: 2px solid $color-secondary;
+      border: 2px solid #3165cb;
     }
 
     &:checked::after {
@@ -171,15 +163,15 @@ export default {
       width: 15px;
       height: 15px;
       border-radius: 15px;
-      background: linear-gradient(278.92deg, #00d06c -7.77%, #a6ffdf 158.52%);
+      background: #3165cb;
       display: inline-block;
       visibility: visible;
-      border: 2px solid white;
+      border: 3px solid white;
     }
   }
 
   &-title {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 16px;
     line-height: 26px;
     padding: 15px 20px 15px 10px;
