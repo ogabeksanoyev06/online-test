@@ -136,7 +136,7 @@ export default {
       visibility: visible;
       border-radius: 50%;
       background-color: white;
-      border: 1px solid $border-color;
+      border: 2px solid $border-color;
     }
 
     &:checked::before {

@@ -1,138 +1,81 @@
 <template>
   <section class="py-20">
     <div class="container">
-      <div class="">
-        <div class="test">
-          <div class="test__top">
-            <div class="mandatory__btn">
-              <svg
-                stroke="#fff"
-                fill="none"
-                stroke-width="0"
-                viewBox="0 0 24 24"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-                style="font-size: 1.5rem !important"
+      <div class="test">
+        <div class="test__left">
+          <Test_solving :questions-prop="rawTests"></Test_solving>
+        </div>
+        <div class="test__right">
+          <div class="test__top-item">
+            <AppText
+              size="14"
+              line-height="26"
+              weight="700"
+              v-if="testTypeProperty === 'online'"
+            >
+              Majburiy fanlar
+            </AppText>
+            <div class="test__wrap">
+              <button
+                class="test__item"
+                @click="selectSubjectQuestions(mandatory.id)"
+                v-for="(mandatory, index) in 2"
+                :key="index"
+                :class="selectedSubjectIdItem === mandatory.id ? 'active' : ''"
               >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12ZM14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z"
-                  fill="#fff"
-                ></path>
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M12 3C17.5915 3 22.2898 6.82432 23.6219 12C22.2898 17.1757 17.5915 21 12 21C6.40848 21 1.71018 17.1757 0.378052 12C1.71018 6.82432 6.40848 3 12 3ZM12 19C7.52443 19 3.73132 16.0581 2.45723 12C3.73132 7.94186 7.52443 5 12 5C16.4756 5 20.2687 7.94186 21.5428 12C20.2687 16.0581 16.4756 19 12 19Z"
-                  fill="#fff"
-                ></path>
-              </svg>
+                Matematika
+              </button>
             </div>
-            <!-- <div class="test__top-container">
-              <div class="test__top-item mr-10">
+          </div>
+          <div class="test__top-item">
+            <AppText
+              size="14"
+              line-height="26"
+              weight="700"
+              v-if="testTypeProperty === 'online'"
+            >
+              Majburiy fanlar
+            </AppText>
+            <div class="test__wrap">
+              <button
+                class="test__item"
+                @click="selectSubjectQuestions(mandatory.id)"
+                v-for="(mandatory, index) in 3"
+                :key="index"
+                :class="selectedSubjectIdItem === mandatory.id ? 'active' : ''"
+              >
+                Matematika
+              </button>
+            </div>
+          </div>
+          <div class="test__bottom">
+            <div class="test__details">
+              <div
+                class="test__details-item"
+                style="
+                  cursor: unset;
+                  font-size: 1.2rem;
+                  max-width: 150px;
+                  width: 100%;
+                  color: #00b74a;
+                "
+              >
+                <span> 12 : 00 : 45 </span>
+              </div>
+              <div class="test__details-item" @click="testFinish">
+                <div class="test__details-icon">
+                  <img src="/icons/finish.svg" alt="" />
+                </div>
+
                 <AppText
                   size="14"
                   line-height="26"
                   weight="700"
-                  v-if="testTypeProperty === 'online'"
+                  class="color-danger"
+                  @click="testFinish()"
                 >
-                  Majburiy fanlar
+                  Tugatish
                 </AppText>
-                <div class="test__wrap">
-                  <button
-                    class="test__item"
-                    @click="selectSubjectQuestions(mandatory.id)"
-                    v-for="(mandatory, index) in 2"
-                    :key="index"
-                    :class="
-                      selectedSubjectIdItem === mandatory.id ? 'active' : ''
-                    "
-                  >
-                    Matematika
-                  </button>
-                </div>
-              </div>
-              <div class="test__top-item" v-if="testTypeProperty === 'online'">
-                <AppText size="14" line-height="26" weight="700">
-                  Asosiy fanlar
-                </AppText>
-                <div class="test__wrap">
-                  <button
-                    class="test__item"
-                    :class="selectedSubjectIdItem === main.id ? 'active' : ''"
-                    @click="selectSubjectQuestions(main.id)"
-                    v-for="(main, index) in 3"
-                    :key="index"
-                  >
-                    O'zbekiston tarixi
-                  </button>
-                </div>
-              </div>
-            </div> -->
-            <div
-              class="test__details-item"
-              style="
-                box-shadow: none;
-                margin-left: auto;
-                cursor: unset;
-                font-size: 1.7rem;
-                max-width: 200px;
-                width: 100%;
-                border: 1px solid #00b74a;
-                color: #00b74a;
-              "
-            >
-              <span> 12 : 00 : 45 </span>
-            </div>
-          </div>
-
-          <Test_solving :questions-prop="rawTests"></Test_solving>
-          <div class="test__bottom">
-            <!-- <div class="test__bottom-wrap">
-              <AppButton
-                theme="main"
-                sides="20"
-                style="margin-right: 11px"
-                @click="previousQuestion"
-              >
-                Oldingi
-              </AppButton>
-              <AppButton theme="secondary" sides="20" @click="nextQuestion">
-                Keyingi
-              </AppButton>
-            </div> -->
-            <div class="test__details">
-              <div class="test__details-left"></div>
-              <div class="test__details-right">
-                <div class="test__details-item">
-                  <div class="test__details-icon">
-                    <img src="/icons/pause.svg" alt="" />
-                  </div>
-                  <AppText
-                    size="14"
-                    line-height="26"
-                    weight="700"
-                    class="color-secondary"
-                  >
-                    Tanaffus
-                  </AppText>
-                </div>
-                <div class="test__details-item" @click="testFinish">
-                  <div class="test__details-icon">
-                    <img src="/icons/finish.svg" alt="" />
-                  </div>
-
-                  <AppText
-                    size="14"
-                    line-height="26"
-                    weight="700"
-                    class="color-danger"
-                    @click="testFinish()"
-                  >
-                    Tugatish
-                  </AppText>
-                </div>
               </div>
             </div>
           </div>
@@ -147,7 +90,6 @@
 import Test_solving from "../../../components/test-solving/Test_solving";
 import { mapGetters, mapMutations } from "vuex";
 // import AppModal from "../../../components/shared-components/AppModal";
-// import "../../../assets/styles/pages/cabinet.scss";
 import test from "../../../constants/test";
 
 export default {
@@ -390,29 +332,24 @@ export default {
 
 .test {
   background-color: white;
-  border-radius: 15px;
-  box-shadow: 0 2px 6px rgba(70, 93, 122, 0.08);
-
-  &__top {
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-
-    &-container {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  &__left {
+    max-width: 60%;
+    width: 100%;
   }
-
+  &__right {
+    max-width: 40%;
+    width: 100%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 15px;
+    padding: 10px 20px;
+  }
   &__wrap {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    margin-right: 40px;
   }
 
   &__item {
@@ -426,11 +363,11 @@ export default {
     transition: 0.3s;
     color: #000;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
-
     border-radius: 10px;
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
+    min-height: 50px;
 
     &.active {
       background-color: white;
@@ -441,41 +378,16 @@ export default {
   }
 
   &__body {
-    padding: 30px;
-  }
-
-  &__bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 0 30px 20px;
-
-    &-wrap {
-      display: flex;
-      align-items: center;
-      margin: 10px 20px 10px 0;
-    }
+    padding: 0 30px;
   }
 
   &__details {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin: 10px 0;
     width: 100%;
-
-    &-left {
-    }
-
-    &-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
     &-item {
       margin-left: 10px;
       background: #ffffff;
@@ -515,7 +427,6 @@ export default {
     max-height: 700px;
     width: 100%;
     overflow: hidden;
-
     img {
       width: 100%;
       object-fit: contain;
@@ -539,57 +450,24 @@ export default {
   }
 }
 
-@media (max-width: 900px) {
-  .test__top {
-    .test__details-item {
-      margin-left: 0 !important;
-      // padding: 0;
-      margin-bottom: 0;
+@media (max-width: 991px) {
+  .test {
+    flex-wrap: wrap;
+    &__left {
+      max-width: 100%;
     }
-
-    &-item {
-      &:first-child {
-        margin-bottom: 10px;
-      }
-    }
-
-    .test__wrap {
-      margin-right: 0;
-    }
-
-    &-container {
-      width: 100%;
-      margin-bottom: 20px;
+    &__right {
+      max-width: 100%;
+      margin-top: 30px;
     }
   }
 }
-
-.test__item:hover {
-  border-color: #00d06c;
-}
-
-.test-answer__modal {
-  thead {
-    td {
-      min-width: 90px;
+@media (max-width: 576px) {
+  .test {
+    padding: 0;
+    &__body {
+      padding: 0;
     }
   }
-}
-
-.border-bottom {
-  border-bottom: 1px solid $border-color;
-}
-
-.border-left {
-  border-left: 1px solid $border-color !important;
-}
-
-.vertical-mode {
-  writing-mode: vertical-lr;
-  transform: rotate(180deg);
-}
-
-.border-bottom-none {
-  border-bottom: none !important;
 }
 </style>

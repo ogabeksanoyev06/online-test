@@ -16,7 +16,12 @@
         </div>
       </div>
       <div class="tests">
-        <div class="tests__item" v-for="item in 9" :key="item">
+        <div
+          class="tests__item"
+          v-for="item in 9"
+          :key="item"
+          @click="$router.push({ path: '/test' })"
+        >
           <div class="tests__item-image">
             <img src="/images/cta-banner.jpg" alt="" />
           </div>

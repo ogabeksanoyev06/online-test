@@ -225,7 +225,7 @@ export default {
         {
           id: 3,
           title: "Testlar",
-          link: "/tests",
+          link: "/choose-tests",
         },
         {
           id: 4,

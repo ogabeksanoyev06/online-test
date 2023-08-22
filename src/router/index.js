@@ -23,8 +23,8 @@ const routes = [
         component: () => import("../views/site/publication"),
       },
       {
-        path: "/tests",
-        name: "tests",
+        path: "/choose-tests",
+        name: "choose-tests",
         component: () => import("../views/site/tests"),
       },
       {

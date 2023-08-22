@@ -93,45 +93,10 @@
               </div>
             </div>
 
-            <AppText
-              :size="isMobile ? 24 : 30"
-              :line-height="isMobile ? 30 : 36"
-              weight="700"
-              class="mb-30"
-            >
-              Kurs fayllari
-            </AppText>
-
-            <BlockWrap
-              :count="isMobileSmall ? 1 : isDesktopMedium ? 2 : 3"
-              class="mb-40"
-            >
-              <a
-                :href="`${baseURL}${item.courseFilePlace}`"
-                class="files__item pa-20"
-                v-for="(item, index) in courseFiles"
-                :key="index"
-                target="_blank"
-              >
-                <div class="d-flex mr-10">
-                  <img
-                    src="/icons/files-pdf.svg"
-                    :class="isMobile ? 'mr-10' : 'mr-20'"
-                    alt=""
-                  />
-                  <AppText size="14" line-height="14" weight="500">
-                    {{ item.courseFileName }}
-                  </AppText>
-                </div>
-                <img src="/icons/download.svg" class="mla" alt="" />
-              </a>
-            </BlockWrap>
-
             <div class="author__info mb-30">
               <div class="author__photo mr-30">
                 <img src="/images/author.jpg" alt="" />
               </div>
-
               <div class="author__content">
                 <AppText
                   size="14"
@@ -244,14 +209,13 @@
 
 <script>
 import "../../../assets/styles/pages/detailed-page.scss";
-import BlockWrap from "../../../components/shared-components/BlockWrap";
 import AppButton from "../../../components/shared-components/AppButton";
 import AppText from "../../../components/shared-components/AppText";
 import { mapGetters } from "vuex";
 
 export default {
   name: "AppVideoCourse",
-  components: { AppButton, BlockWrap, AppText },
+  components: { AppButton, AppText },
   data() {
     return {
       certificates: [],

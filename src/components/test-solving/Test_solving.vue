@@ -1,6 +1,6 @@
 <template>
   <div class="test__body" id="test_solving_component">
-    <TestPagination class="mb-10" :questions-prop="questions.questions" />
+    <TestPagination class="mb-10" :questions-prop="30" />
     <div class="test__questions mb-30">
       <AppText
         :size="isMobileSmall ? 16 : 16"
