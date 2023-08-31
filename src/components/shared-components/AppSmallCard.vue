@@ -1,40 +1,33 @@
 <template>
-
   <!--  Add active class to app small card in order to show green borders in card-->
-  <div class="app-small-card " @click="clickMe">
+  <div class="app-small-card" @click="clickMe">
     <div class="app-small-card__icon">
-      <img :src="photo" alt="">
+      <img :src="photo" alt="" />
     </div>
-
-    <AppText
-        size="16"
-        line-height="26"
-        weight="700"
-    >
+    <AppText size="16" line-height="26" weight="700">
       {{ title }}
     </AppText>
   </div>
 </template>
 
 <script>
-import AppText from "./AppText"
+import AppText from "./AppText";
 export default {
   name: "AppSmallCard",
-  components: {AppText},
+  components: { AppText },
   props: {
     title: String,
-    photo: String
+    photo: String,
   },
   methods: {
     clickMe(event) {
-      this.$emit('click', event.target.value)
+      this.$emit("click", event.target.value);
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 @import "../../assets/styles/abstracts/variables";
 
 .app-small-card {
@@ -68,5 +61,4 @@ export default {
 .app-small-card:hover {
   border-color: $color-secondary;
 }
-
 </style>

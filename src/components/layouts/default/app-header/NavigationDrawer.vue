@@ -135,7 +135,7 @@ export default {
     margin-bottom: 10px;
     border-radius: 10px;
     font-size: 16px;
-    font-family: "ProximaNova", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 700;
     display: flex;
     width: 100%;

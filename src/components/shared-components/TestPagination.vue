@@ -75,7 +75,7 @@ export default {
   &__item {
     width: 40px;
     height: 40px;
-    font-family: "ProximaNova", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 16px;
     line-height: 16px;

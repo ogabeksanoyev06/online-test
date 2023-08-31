@@ -37,76 +37,6 @@
             >
               Lorem ipsum dolor sit amet.
             </AppText>
-            <AppDivider style="margin: 0" />
-            <Accordion :active-prop="activeAccordionIndex">
-              <AccordionItem
-                class="m-15 bordered radius"
-                :class="sectionContentId === sectionContent.id ? 'active' : ''"
-                v-for="(sectionContent, sectionContentIndex) in 10"
-                :key="sectionContentIndex"
-              >
-                <template slot="accordion-trigger">
-                  <div class="course__accordion-header">
-                    <div
-                      class="course__accordion-numb"
-                      :class="isDesktopSmall ? 'mr-10' : 'mr-20'"
-                    >
-                      {{ sectionContentIndex + 1 }}
-                    </div>
-                    <h4 class="course__accordion-text">
-                      {{ sectionContent.name }}
-                    </h4>
-                  </div>
-                </template>
-                <template slot="accordion-content">
-                  <div
-                    style="padding: 0 15px 15px"
-                    v-for="(
-                      content, contentIndex
-                    ) in sectionContent.contentList"
-                    :key="contentIndex"
-                    @click="selectContent(sectionContent.id, content.id)"
-                  >
-                    <div
-                      class="course__accordion-item radius bordered pa-10 mb-10"
-                      :class="contentId === content.id ? 'active' : ''"
-                    >
-                      <div class="course__accordion-icon mr-20">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 11 14"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10.5 6.13397C11.1667 6.51888 11.1667 7.48112 10.5 7.86602L1.5 13.0622C0.833332 13.4471 3.43203e-07 12.966 3.76852e-07 12.1962L8.31114e-07 1.80385C8.64763e-07 1.03405 0.833334 0.552922 1.5 0.937822L10.5 6.13397Z"
-                            fill="#008AE4"
-                          />
-                        </svg>
-                      </div>
-                      <h4 class="course__accordion-text">
-                        {{ content.name }}
-                      </h4>
-                    </div>
-                    <a
-                      href="#!"
-                      target="_blank"
-                      class="course__accordion-item mb-10 radius bordered pa-10"
-                      v-for="(file, fileIndex) in content.files"
-                      :key="fileIndex"
-                    >
-                      <div class="course__accordion-icon mr-20">
-                        <img src="/icons/document.svg" alt="" />
-                      </div>
-                      <h4 class="course__accordion-text">
-                        What Matters In This Section?
-                      </h4>
-                    </a>
-                  </div>
-                </template>
-              </AccordionItem>
-            </Accordion>
           </div>
         </div>
       </div>
@@ -116,9 +46,6 @@
 
 <script>
 import "../../../assets/styles/pages/detailed-page.scss";
-import Accordion from "../../../components/shared-components/Accordion";
-import AppDivider from "../../../components/shared-components/AppDivider";
-import AccordionItem from "../../../components/shared-components/AccordionItem";
 import AppText from "../../../components/shared-components/AppText";
 // import { videoPlayer } from "vue-vjs-hls";
 import { mapActions, mapGetters, mapMutations } from "vuex";
@@ -126,9 +53,6 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   name: "AppCoursePage",
   components: {
-    AccordionItem,
-    AppDivider,
-    Accordion,
     // videoPlayer,
     AppText,
   },

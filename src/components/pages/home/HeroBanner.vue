@@ -64,7 +64,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 80px);
     width: 100%;
     color: #fff;
   }

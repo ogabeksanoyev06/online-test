@@ -2,9 +2,6 @@
 @import "../../../../assets/styles/base/animations";
 
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   z-index: 99;
   background-color: #fff;
@@ -16,42 +13,41 @@
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 100px;
+    min-height: 60px;
     padding: 20px 0;
     justify-content: space-between;
   }
-
   &__left {
+    max-width: 60%;
+    width: 100%;
+    padding-right: 20px;
     display: flex;
     align-items: center;
-    flex: 1;
   }
-
   &__right {
+    max-width: 40%;
+    width: 100%;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     justify-content: flex-end;
   }
-
   &__menu {
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-wrap: wrap;
     width: 100%;
-    padding: 0 20px;
-
+    padding-right: 20px;
     &-item {
-      margin-right: 40px;
-      font-weight: 700;
-      color: #161c27;
+      margin-right: 30px;
+      font-weight: 500;
+      color: #14161a;
       position: relative;
       font-size: 16px;
-      line-height: 26px;
+      font-style: normal;
       transition: 0.3s;
       cursor: pointer;
-
+      white-space: nowrap;
       &:last-child {
         margin-right: 0;
       }
@@ -60,7 +56,6 @@
     &-link {
       &.router-link-exact-active {
         color: $color-main;
-
         &::before {
           content: "";
           position: absolute;
@@ -77,11 +72,12 @@
       }
     }
   }
-
-  &__auth {
-  }
-
-  &__login {
+  &__language {
+    img {
+      width: 25px;
+      object-fit: contain;
+      border-radius: 2px;
+    }
   }
 
   &__account {
@@ -134,7 +130,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     &.active {
       svg {
         path {
@@ -150,11 +145,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-
       svg {
-        stroke: #008ae4;
-        fill: #fff;
-        color: #008ae4;
+        // stroke: #008ae4;
+        // fill: #fff;
+        // color: #008ae4;
         height: 24px;
         transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         width: 24px;
@@ -182,7 +176,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     &.active {
       svg {
         path {
@@ -190,7 +183,6 @@
         }
       }
     }
-
     &-icon {
       position: relative;
       height: 42px;
@@ -231,11 +223,11 @@
 
 .logo {
   max-width: 120px;
-  height: 50px;
   width: 100%;
   display: flex;
   align-items: center;
   overflow: hidden;
+  margin-right: 40px;
   img {
     width: 100%;
     object-fit: contain;
@@ -325,15 +317,12 @@
   .header__menu-item {
     margin-right: 20px;
   }
-
   .logo {
     margin-right: 20px;
   }
-
   .header__menu {
     margin-left: auto;
   }
-
   .header__left {
     max-width: unset;
     width: unset;
@@ -344,7 +333,6 @@
     max-width: unset;
     width: unset;
   }
-
   .header__search {
     .input__holder {
       max-width: 200px;
@@ -357,7 +345,6 @@
 
 @media (max-width: 500px) {
   .header__inner {
-    padding: 15px 0;
   }
   .logo {
     margin-right: auto;

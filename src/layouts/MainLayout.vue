@@ -5,7 +5,6 @@
       <router-view />
     </div>
     <AppFooter />
-   
   </div>
 </template>
 
@@ -40,7 +39,6 @@ export default {
 .page {
   &__wrap {
     min-height: calc(100vh - 402px);
-    padding-top: 100px;
   }
 }
 </style>

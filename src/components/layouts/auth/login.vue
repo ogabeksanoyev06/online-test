@@ -1,151 +1,160 @@
 <template>
-  <div class="auth__body">
-    <AppText
-      :size="isDesktopSmall ? 26 : 30"
-      :line-height="isDesktopSmall ? 30 : 36"
-      weight="700"
-      class="text-center"
-    >
-      Tizimga kirish
-    </AppText>
-    <div class="auth__form">
-      <div class="auth__form-header">
-        <div class="header-logo">
-          <img src="/svg/logo1.svg" alt="logo" />
-        </div>
-        <p class="header-text">
-          Bizning tizim orqali o‘z biliminggizni yuksaltiring
-        </p>
-      </div>
-
-      <el-form
-        :model="request"
-        :rules="rules"
-        ref="ruleForm"
-        labelPosition="top"
-      >
-        <el-form-item label="Telefon raqam" prop="tel">
-          <el-input placeholder="Telefon raqam" v-model="request.tel" clearable>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="Parolingiz" prop="password">
-          <el-input
-            placeholder="Parolingiz"
-            v-model="request.password"
-            clearable
-          >
-          </el-input>
-        </el-form-item>
-        <div class="mt-30 mb-30 text-center">
-          <AppButton
-            theme="main"
-            :font-size="isMobile ? 14 : 16"
-            :sides="isMobile ? 20 : 30"
-            @click="$router.push({ path: '/' })"
-            class="w-100"
-          >
-            Tizimga kirish
-          </AppButton>
-        </div>
-      </el-form>
-      <AppText size="14" weight="700" line-height="17" class="text-center">
-        Ro'yxatdan o'tmadingizmi?
-        <router-link
-          style="color: #3563cb !important; margin-left: 5px"
-          to="/sign-up"
-          >Ro'yxatdan o'tish
+  <div class="auth">
+    <div class="auth__wrap">
+      <div class="auth__header">
+        <router-link to="/">
+          <div style="max-height: 50px; cursor: pointer" class="text-center">
+            <img
+              src="/svg/logo1.svg"
+              alt=""
+              style="height: 50px; width: 8rem"
+            />
+          </div>
         </router-link>
-      </AppText>
+        <AppText
+          :size="isDesktopSmall ? 20 : 26"
+          :line-height="isDesktopSmall ? 30 : 32"
+          weight="700"
+          class="text-center mb-20"
+        >
+          Tizimga kirish
+        </AppText>
+      </div>
+      <div class="auth__body">
+        <ValidationObserver v-slot="{ handleSubmit }">
+          <form @submit.prevent="handleSubmit(registerUser)">
+            <div class="form-control">
+              <div class="form-group">
+                <base-input
+                  type="text"
+                  vid="phone"
+                  rules="required"
+                  label="Telefon raqam"
+                  placeholder="93 343-43-43"
+                  v-mask="'## ###-##-##'"
+                  v-model="request.phone"
+                  :prepend="true"
+                >
+                  <template #prepend> +998 </template>
+                </base-input>
+              </div>
+              <div class="form-group">
+                <base-input
+                  :type="passwordField ? 'text' : 'password'"
+                  vid="password"
+                  rules="required"
+                  label="Parolni kiriting"
+                  placeholder="Parolni kiriting"
+                  v-model="request.password"
+                  :append="true"
+                >
+                  <template #append>
+                    <i
+                      class="fas fa-eye"
+                      v-if="passwordField"
+                      @click="passwordSee"
+                    >
+                    </i>
+                    <i
+                      class="far fa-eye-slash"
+                      v-if="!passwordField"
+                      @click="passwordSee"
+                    ></i>
+                  </template>
+                </base-input>
+              </div>
+            </div>
+            <div class="text-center">
+              <app-button
+                theme="main"
+                type="submit"
+                :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+                :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
+                :height="45"
+                class="w-100 mb-10"
+              >
+                Tizimga kirish
+              </app-button>
+              <app-button
+                theme="secondary"
+                type="submit"
+                :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+                :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
+                :height="45"
+                class="w-100"
+                @click="$router.push({ name: 'register' })"
+              >
+                Ro'yxatdan o'tish
+              </app-button>
+            </div>
+          </form>
+        </ValidationObserver>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import TokenService from "../../../service/TokenService";
-import { mapActions, mapGetters } from "vuex";
+import "../../../assets/styles/pages/auth.scss";
+import { ValidationObserver } from "vee-validate";
 import AppButton from "@/components/shared-components/AppButton.vue";
-
+import BaseInput from "@/components/shared-components/BaseInput.vue";
+import { mapActions, mapMutations } from 'vuex';
 export default {
   name: "AppLogin",
-  components: { AppButton },
+  components: { AppButton, BaseInput, ValidationObserver },
   data() {
     return {
       request: {
-        tel: "",
+        phone: "",
         password: "",
       },
       errorMes: "",
       authError: "",
-      showPassword: false,
+      passwordField: false,
     };
   },
-  computed: {
-    ...mapGetters(["user"]),
-  },
+  computed: {},
   methods: {
-    ...mapActions(["getUser"]),
-    async loginToSystem() {
-      await this.$api
-        .post("auth/Login/token", this.request)
-        .then((data) => {
-          if (data.error) {
-            this.errorMes = data.error;
-          } else {
-            TokenService.saveToken(data.result.access_token);
-            TokenService.saveRefreshToken(data.result.refresh_token);
-            TokenService.tokenExpireDate(data.result.expires_in);
-            this.$router.push({ name: "home" });
-            this.request.password = "";
-            this.getUser();
-          }
-        })
-        .catch((error) => {
-          this.errorMes = error.response.data.error.message;
-        });
+    ...mapActions([]),
+    ...mapMutations(["setWindowWidth"]),
+    setWidth() {
+      this.setWindowWidth(document.documentElement.clientWidth);
+    },
+    passwordSee() {
+      this.passwordField = !this.passwordField;
     },
     showPasswordMethod() {
       this.showPassword = !this.showPassword;
     },
   },
   mounted() {
-    if (TokenService.getToken()) {
-      this.getUser();
-    }
+    this.setWidth();
+    window.addEventListener("resize", this.setWidth);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.setWidth);
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.auth__form {
+.form-control {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 30px;
+  margin: auto;
+  margin-bottom: 20px;
+}
+.auth__wrap {
+  padding: 60px;
   max-width: 500px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
-  background: linear-gradient(0deg, #f2f4f6, #f2f4f6),
-    linear-gradient(0deg, #f9f9f9, #f9f9f9), #fff;
-  margin: 20px auto;
-  padding: 50px;
-  &-header {
-    text-align: center;
-    margin-bottom: 30px;
-    .header-logo {
-      margin-bottom: 10px;
-    }
-    .header-text {
-      display: block;
-      font-style: normal;
-      font-size: 14px !important;
-      line-height: 17px;
-      color: #000;
-      font-weight: 600;
-    }
-  }
 }
 @media (max-width: 768px) {
-  .auth__form {
-    padding: 30px;
+  .form-control {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0 20px;
   }
 }
 </style>
