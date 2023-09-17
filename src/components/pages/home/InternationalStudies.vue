@@ -2,19 +2,6 @@
   <section class="section py-30" :class="isMobile ? 'mt-30' : 'mt-60'">
     <div class="container">
       <div class="section__top mb-30">
-        <div>
-          <app-text
-            :size="isMobile ? 18 : 28"
-            :line-height="isMobile ? 28 : 36"
-            weight="700"
-          >
-            Xalqaro tadqiqotlar
-          </app-text>
-          <app-text size="16" line-height="18" weight="500" class="color-text">
-            Lorem ipsum dolor sit amet.
-          </app-text>
-        </div>
-
         <div class="section__top-details">
           <router-link class="section__top-link" to="/internation-studies">
             <span> Barcha tadqiqotlar</span>

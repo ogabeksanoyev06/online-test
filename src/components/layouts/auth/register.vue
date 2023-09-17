@@ -1,6 +1,6 @@
 <template>
   <div class="auth">
-    <div class="auth__wrap" v-if="true">
+    <div class="auth__wrap" v-if="!verify">
       <router-link to="/">
         <div style="max-height: 50px; cursor: pointer" class="text-center">
           <img src="/svg/logo1.svg" alt="" style="height: 50px; width: 8rem" />
@@ -24,7 +24,7 @@
                 class="switch-label"
                 v-for="item in userTypes"
                 :key="item.name"
-                :class="request.type === item.label ? 'active' : ''"
+                :class="form.type === item.label ? 'active' : ''"
                 @click="toggleSlider(item.label)"
               >
                 {{ item.name }}
@@ -39,11 +39,11 @@
                 <base-input
                   type="text"
                   vid="phone"
-                  rules="required"
+                  rules="required|min:9"
                   label="Telefon raqam"
                   placeholder="93 343-43-43"
-                  v-mask="'## ###-##-##'"
-                  v-model="request.phone"
+                  v-mask="'#########'"
+                  v-model="form.phone"
                   :prepend="true"
                 >
                   <template #prepend> +998 </template>
@@ -52,21 +52,21 @@
               <div class="form-group">
                 <base-input
                   type="text"
-                  vid="firstName"
+                  vid="first_name"
                   rules="required"
                   label="Ismingizni kiritng"
                   placeholder="Ism"
-                  v-model="request.firstName"
+                  v-model="form.first_name"
                 />
               </div>
               <div class="form-group">
                 <base-input
                   type="text"
-                  vid="lastName"
+                  vid="last_name"
                   rules="required"
                   label="Familiyangizni kiritng"
                   placeholder="Familiya"
-                  v-model="request.lastName"
+                  v-model="form.last_name"
                 />
               </div>
               <ValidationObserver>
@@ -76,7 +76,7 @@
                   rules="required"
                   label="Parolni kiriting"
                   placeholder="Parolni kiriting"
-                  v-model="request.password"
+                  v-model="form.password"
                   :append="true"
                 >
                   <template #append>
@@ -134,7 +134,7 @@
         </ValidationObserver>
       </div>
     </div>
-    <div class="auth__wrap" style="max-width: 500px" v-if="false">
+    <div class="auth__wrap" style="max-width: 500px" v-if="verify">
       <div class="auth__header">
         <AppText
           :size="isMobileSmall ? '16' : '20'"
@@ -143,12 +143,12 @@
           class="text-center mb-20"
         >
           Kod sms orqali quyidagi raqamga yuborildi:
-          <p class="bold-text mt-10">+998930819140</p>
+          <p class="bold-text mt-10">{{ user }}</p>
         </AppText>
       </div>
       <div class="auth__body">
         <ValidationObserver v-slot="{ handleSubmit }">
-          <form @submit.prevent="handleSubmit(registerUser)">
+          <form @submit.prevent="handleSubmit(verifyUser)">
             <div class="form-control">
               <div class="form-group">
                 <base-input
@@ -157,7 +157,7 @@
                   rules="required"
                   label="Kodni kiriting"
                   placeholder="Kodni kiritng"
-                  v-mask="'# # # #'"
+                  v-mask="'######'"
                   v-model="verifyCode"
                 >
                 </base-input>
@@ -169,6 +169,7 @@
                 :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
                 :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
                 :height="45"
+                @click="goBack"
               >
                 Orqaga
               </app-button>
@@ -188,8 +189,14 @@
                 line-height="20"
                 class="text-center color-main"
               >
-                Kodni qayta yuborish
-                <b>01:16</b>
+                <a
+                  class="link-title"
+                  :disabled="registerTimer !== 0"
+                  @click="resendCode"
+                >
+                  Kodni qayta yuborish
+                </a>
+                <b> {{ timerFormat() }}</b>
               </AppText>
             </div>
           </form>
@@ -211,28 +218,30 @@ export default {
   components: { ValidationObserver, BaseInput, AppButton },
   data() {
     return {
-      request: {
+      form: {
         phone: "",
         password: "",
-        type: "student",
-        lastName: "",
-        firstName: "",
+        type: "applicant",
+        last_name: "",
+        first_name: "",
       },
       verifyCode: "",
-      errorMes: "",
-      authError: "",
+      verify: false,
       passwordField: false,
       passwordConfirmationField: false,
       confirmPassword: "",
       isActive: false,
+      loading: false,
+      user: "",
+      registerTimer: 120,
       userTypes: [
         {
           name: "Abituriyent",
-          label: "student",
+          label: "applicant",
         },
         {
-          name: "O`qituvchi",
-          label: "teacher",
+          name: "O`quvchi",
+          label: "pupil",
         },
       ],
     };
@@ -254,10 +263,89 @@ export default {
     },
     toggleSlider(type) {
       this.isActive = !this.isActive;
-      this.request.type = type;
+      this.form.type = type;
     },
-    loginToSystem() {
-      console.log("o'xshadiiiiiii");
+    setTimer() {
+      let _this = this;
+      let testTimerInterval = setInterval(function () {
+        if (_this.registerTimer <= 0) {
+          clearInterval(testTimerInterval);
+          return;
+        }
+        _this.registerTimer--;
+      }, 1000);
+    },
+    timerFormat() {
+      let sec_num = parseInt(this.registerTimer);
+      let hours = Math.floor(sec_num / 3600);
+      let minutes = Math.floor((sec_num - hours * 3600) / 60);
+      let seconds = sec_num - hours * 3600 - minutes * 60;
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      return minutes + ":" + seconds;
+    },
+    registerUser() {
+      this.loading = true;
+      this.$http
+        .post("users/register/", this.form)
+        .then((res) => {
+          if (res.result && res.result.user) {
+            this.user = res.result.user;
+            this.verify = true;
+            this.setTimer();
+            this.loading = false;
+            this.successNotification(
+              res.result.user + " telefon raqamiga kod yuborildi"
+            );
+          }
+        })
+        .catch((error) => {
+          this.warningNotification(error.response.data.phone[0]);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    verifyUser() {
+      this.loading = true;
+      this.$http
+        .post("users/verify/otp/", {
+          code: this.verifyCode,
+          user: this.user,
+        })
+        .then((res) => {
+          if (res && res.code === 200) {
+            this.successNotification("Hisobingiz muvaffaqiyatli tasdiqlandi.");
+            this.$router.push({ name: "login" });
+          }
+        })
+        .catch((err) => {
+          this.errorNotification(err.response.data.message);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    goBack() {
+      this.form = {
+        phone: "",
+        password: "",
+        type: "applicant",
+        last_name: "",
+        first_name: "",
+      };
+      this.registerTimer = 120;
+      this.verify = false;
+    },
+    resendCode() {
+      if (this.registerTimer === 0) {
+        this.registerTimer = 120;
+        this.registerUser();
+      }
     },
   },
 

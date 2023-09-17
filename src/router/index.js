@@ -23,9 +23,14 @@ const routes = [
         component: () => import("../views/site/publication"),
       },
       {
-        path: "/choose-tests",
-        name: "choose-tests",
-        component: () => import("../views/site/tests"),
+        path: "/choose-test",
+        name: "choose-test",
+        component: () => import("../views/site/choose-test"),
+      },
+      {
+        path: "/choose-subject",
+        name: "choose-subject",
+        component: () => import("../views/site/choose-subject"),
       },
       {
         path: "/video-course",
@@ -56,6 +61,53 @@ const routes = [
         path: "/test",
         name: "test",
         component: () => import("../views/site/test"),
+      },
+      {
+        path: "/my-favourites",
+        name: "favourites",
+        component: () => import("../views/cabinet/my-favourites"),
+      },
+      {
+        path: "/my-cart",
+        name: "my-cart",
+        component: () => import("../views/cabinet/my-cart"),
+      },
+    ],
+  },
+  {
+    path: "/cabinet",
+    component: () => import("../layouts/Cabinet"),
+    children: [
+      {
+        path: "/cabinet",
+        name: "cabinet",
+        component: () =>
+          import("../views/cabinet/my-account/general-information"),
+      },
+      {
+        path: "/my-courses",
+        name: "my-courses",
+        component: () => import("../views/cabinet/my-account/my-courses"),
+      },
+      {
+        path: "/tests-results",
+        name: "tests-results",
+        component: () => import("../views/cabinet/my-account/tests-results"),
+      },
+      {
+        path: "/tests-results-2",
+        name: "tests-results-2",
+        component: () => import("../views/cabinet/my-account/tests-results-2"),
+      },
+      {
+        path: "/payment-history",
+        name: "payment-history",
+        component: () => import("../views/cabinet/my-account/payment-history"),
+      },
+      {
+        path: "/top-up-balance",
+        name: "top-up-balance",
+        component: () => import("../views/cabinet/my-account/top-up-balance"),
       },
     ],
   },

@@ -33,8 +33,7 @@
             class="input__block-input"
             autocomplete="off"
             :class="[
-              errors[0] ? 'error' : '',
-              isValid ? 'valid' : '',
+              errors[0] ? 'error' : isValid && value !== null ? 'valid' : '',
               append ? 'append' : '',
               prepend ? 'prepend' : '',
             ]"
@@ -49,10 +48,18 @@
 </template>
 <script>
 import { ValidationProvider, extend } from "vee-validate";
-import { required, confirmed } from "vee-validate/dist/rules";
+import { required, min, confirmed, email } from "vee-validate/dist/rules";
 extend("required", {
   ...required,
   message: "{_field_}ni kiritish majburiy",
+});
+extend("min", {
+  ...min,
+  message: "Belgilar soni kamida 9 ta bo'lishi kerak",
+});
+extend("email", {
+  ...email,
+  message: "Email formatda kiriting",
 });
 extend("confirmed", {
   ...confirmed,
@@ -112,21 +119,17 @@ export default {
       this.$refs.input.focus();
     },
   },
+  watch: {
+    value() {
+      if (!this.$refs.validationInput.errors[0]) {
+        this.isValid = true;
+      }
+    },
+  },
   mounted() {
     if (this.autofocus) {
       this.focus();
     }
-  },
-  watch: {
-    value(newVal) {
-      this.$nextTick(() => {
-        if (!this.$refs.validationInput.errors[0] && newVal) {
-          this.isValid = true;
-        } else {
-          this.isValid = false;
-        }
-      });
-    },
   },
 };
 </script>

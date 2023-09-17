@@ -48,13 +48,13 @@
               bayon etilgan.
             </AppText>
 
-            <div class="header__auth mr-20" v-if="!userIsLoggedOn">
+            <div class="header__auth mr-20">
               <AppButton
                 theme="main"
                 :font-size="isMobileSmall ? 14 : 16"
                 :sides="isMobileSmall ? 20 : 30"
-                class=""
-                >Yuklab olish
+              >
+                Yuklab olish
               </AppButton>
             </div>
           </div>

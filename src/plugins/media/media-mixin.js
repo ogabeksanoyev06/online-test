@@ -9,7 +9,7 @@ Vue.mixin({
     computed: {
         ...mapGetters(['windowWidth']),
         isDesktop() {
-            return this.windowWidth && this.windowWidth > 800;
+            return this.windowWidth && this.windowWidth > 991;
         },
         isDesktopMedium() {
             return mediaHelper(this.windowWidth, 1240);
@@ -18,7 +18,7 @@ Vue.mixin({
             return mediaHelper(this.windowWidth, 1040);
         },
         isMobile() {
-            return mediaHelper(this.windowWidth, 800);
+            return mediaHelper(this.windowWidth, 991);
         },
         isMobileMedium() {
             return mediaHelper(this.windowWidth, 650);

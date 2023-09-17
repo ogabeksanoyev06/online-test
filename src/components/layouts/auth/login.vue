@@ -22,16 +22,16 @@
       </div>
       <div class="auth__body">
         <ValidationObserver v-slot="{ handleSubmit }">
-          <form @submit.prevent="handleSubmit(registerUser)">
+          <form @submit.prevent="handleSubmit(loginToSystem)">
             <div class="form-control">
               <div class="form-group">
                 <base-input
                   type="text"
                   vid="phone"
-                  rules="required"
+                  rules="required|min:9"
                   label="Telefon raqam"
                   placeholder="93 343-43-43"
-                  v-mask="'## ###-##-##'"
+                  v-mask="'#########'"
                   v-model="request.phone"
                   :prepend="true"
                 >
@@ -99,7 +99,8 @@ import "../../../assets/styles/pages/auth.scss";
 import { ValidationObserver } from "vee-validate";
 import AppButton from "@/components/shared-components/AppButton.vue";
 import BaseInput from "@/components/shared-components/BaseInput.vue";
-import { mapActions, mapMutations } from 'vuex';
+import { mapActions, mapMutations } from "vuex";
+import TokenService from "@/service/TokenService";
 export default {
   name: "AppLogin",
   components: { AppButton, BaseInput, ValidationObserver },
@@ -109,8 +110,6 @@ export default {
         phone: "",
         password: "",
       },
-      errorMes: "",
-      authError: "",
       passwordField: false,
     };
   },
@@ -126,6 +125,27 @@ export default {
     },
     showPasswordMethod() {
       this.showPassword = !this.showPassword;
+    },
+    loginToSystem() {
+      this.$http
+        .post("users/login/", this.request)
+        .then((data) => {
+          if (data) {
+            TokenService.saveToken(data.access);
+            TokenService.saveRefreshToken(data.refresh);
+            TokenService.tokenExpireDate(3600);
+            this.$router.push({ name: "home" });
+            this.successNotification("Tizimga kirildi");
+            this.request.password = "";
+          }
+        })
+        .catch((err) => {
+          if (err.response && err.response.data && err.response.data.detail) {
+            this.errorNotification(err.response.data.detail);
+          }
+          this.request.login = "";
+          this.request.password = "";
+        });
     },
   },
   mounted() {

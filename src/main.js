@@ -4,17 +4,21 @@ import router from "./router";
 import store from "./store";
 import AppText from "./components/shared-components/AppText.vue";
 import VueMask from "v-mask";
-import "element-ui/lib/theme-chalk/index.css";
+import Moment from "vue-moment";
+import Toast from "vue-toastification";
 import "./assets/styles/main.scss";
 import "./plugins/media/media-mixin";
 import "./plugins/directives/click-outside";
 import "./plugins/mixins/mixin";
-import api from "./service/apiService";
+import "vue-toastification/dist/index.css";
+import http from "./plugins/axios";
 
 Vue.config.productionTip = false;
 Vue.component("AppText", AppText);
 Vue.use(VueMask);
-Vue.use(api);
+Vue.use(Moment);
+Vue.use(Toast);
+Vue.prototype.$http = http;
 
 new Vue({
   router,

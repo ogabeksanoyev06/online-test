@@ -34,7 +34,7 @@ export default {
         {
           id: 3,
           title: "Testlar",
-          link: "/tests",
+          link: "/choose-test",
         },
         {
           id: 4,

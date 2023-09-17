@@ -15,126 +15,113 @@
           </app-text>
         </div>
       </div>
-      <div class="tests">
-        <div class="tests__item" v-for="item in 4" :key="item">
-          <div class="tests__item-image">
-            <img src="/images/cta-banner.jpg" alt="" />
+      <BlockWrap
+        :count="isMobileSmall ? 1 : isMobile ? 2 : 3"
+        :offset-y="isMobileSmall ? 15 : 20"
+        :offset-x="isMobileSmall ? 15 : 20"
+      >
+        <div
+          class="block__item bordered"
+          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
+        >
+          <div>
+            <BlockWrap count="2" width-auto class="align-center mb-20">
+              <div class="block__icon">
+                <img src="/svg/online-exams.svg" alt="icon" />
+              </div>
+              <app-text size="18" line-height="24" weight="700">
+                PIRLS tadqiqoti
+              </app-text>
+            </BlockWrap>
+            <AppText size="14" line-height="20" class="color-text mb-20">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat a
+              tenetur inventore maxime ab explicabo nostrum iusto totam vero
+              autem! Sapiente nesciunt voluptates praesentium deleniti
+              doloremque velit, iure ea. Unde.
+            </AppText>
           </div>
-          <div class="tests__item-content">
-            <div>
-              <p>PISA testlar</p>
-              <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Assumenda ducimus labore ea ipsum eaque iure culpa aspernatur
-                velit iusto, hic harum expedita nulla voluptatem eum? Molestiae
-                repellendus hic et optio?
-              </span>
-            </div>
-          </div>
-          <div class="tests__item-contents">
-            <p>Maktab o'quvchilari uchun testlar</p>
-          </div>
+
+          <AppButton
+            theme="main"
+            sides="20"
+            :font-size="isMobileSmall ? 14 : 16"
+            :height="isMobileSmall ? 40 : 50"
+          >
+            Testni boshlash
+          </AppButton>
         </div>
-      </div>
+        <div
+          class="block__item bordered"
+          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
+        >
+          <div>
+            <BlockWrap count="2" width-auto class="align-center mb-20">
+              <div class="block__icon">
+                <img src="/svg/block-exams.svg" alt="icon" />
+              </div>
+              <app-text size="18" line-height="24" weight="700">
+                TIMSS tadqiqoti
+              </app-text>
+            </BlockWrap>
+            <AppText size="14" line-height="20" class="color-text mb-20">
+              Bu qismda tanlagan faningiz bo'yicha 30 ta savoldan iborat
+              testlarni yechasiz. 10 marta blokli test topshirish tekin. Testni
+              boshlash uchun boshlash tugmachasini bosing
+            </AppText>
+          </div>
+
+          <app-button
+            theme="main"
+            sides="20"
+            :font-size="isMobileSmall ? 14 : 16"
+            :height="isMobileSmall ? 40 : 50"
+          >
+            Testni boshlash
+          </app-button>
+        </div>
+        <div
+          class="block__item bordered"
+          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
+        >
+          <div>
+            <block-wrap count="2" width-auto class="align-center mb-20">
+              <div class="block__icon">
+                <img src="/svg/school-exams.svg" alt="icon" />
+              </div>
+              <app-text size="18" line-height="24" weight="700">
+                PISA tadqiqoti
+              </app-text>
+            </block-wrap>
+            <AppText size="14" line-height="20" class="color-text mb-20">
+              O'quvchilar uchun 5-, 7-, 8-, 9-, 10-, 11- sinflar uchun
+              matematika fanidan PISA savollar to'plami. Mazkur PISA testlar
+              o'quvchilarning PISA savollar haqidagi tasavvurlarini
+              shakllantirishda namuna vazifasini o'taydi.
+            </AppText>
+          </div>
+
+          <AppButton
+            theme="main"
+            sides="20"
+            :font-size="isMobileSmall ? 14 : 16"
+            :height="isMobileSmall ? 40 : 50"
+          >
+            Testni boshlash
+          </AppButton>
+        </div>
+      </BlockWrap>
     </div>
   </section>
 </template>
 <script>
+import AppButton from "@/components/shared-components/AppButton.vue";
+import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 export default {
   name: "AppInternationStudies",
-  components: {},
+  components: { AppButton, BlockWrap },
   data() {
     return {};
   },
 };
 </script>
-<style lang="scss" scoped>
-.tests {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 30px;
-  &__item {
-    background-color: #fff;
-    cursor: pointer;
-    overflow: hidden;
-    position: relative;
-    &-image {
-      max-width: 450px;
-      width: 100%;
-      position: relative;
-      img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-      }
-    }
-    &-content {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      -webkit-backdrop-filter: blur(13px);
-      backdrop-filter: blur(13px);
-      padding: 10px;
-      transform: translateY(100%);
-      transition: 0.3s;
-      p {
-        font-size: 18px;
-        font-weight: 600;
-        color: #fff;
-        text-align: center;
-        margin-bottom: 10px;
-      }
-      span {
-        font-size: 14px;
-        color: #fff;
-        text-align: center;
-      }
-    }
-    &-contents {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 10px;
-      transform: translateY(0%);
-      transition: 0.3s;
-      p {
-        font-size: 22px;
-        font-weight: 600;
-        color: #fff;
-        text-align: center;
-        margin-bottom: 10px;
-      }
-    }
-  }
-}
-.tests__item:hover .tests__item-content {
-  transform: translateY(0%);
-}
-.tests__item:hover .tests__item-contents {
-  transform: translateY(-100%);
-}
-@media (max-width: 991px) {
-  .tests {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-@media (max-width: 576px) {
-  .tests {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

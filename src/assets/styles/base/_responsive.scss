@@ -1,7 +1,7 @@
 @import "../abstracts/variables";
 
 .container {
-  max-width: 1360px;
+  max-width: 1440px;
   margin-left: auto;
   margin-right: auto;
   width: 100%;
@@ -13,11 +13,9 @@
   @media (max-width: $m-desktop-medium) {
     width: $m-desktop-small;
   }
-
   @media (max-width: $m-desktop-small) {
     width: 100%;
   }
-
   @media (max-width: $m-mobile-medium) {
     width: 100%;
     padding-left: 15px;
@@ -32,13 +30,12 @@
     }
   }
 }
-
 @media (max-width: 800px) {
   .sidebar {
     max-width: 100% !important;
     margin-bottom: 20px;
+    margin-right: 0 !important;
   }
-
   .content__main {
     max-width: 100% !important;
     &.lg {
@@ -46,7 +43,6 @@
     }
   }
 }
-
 @media (max-width: 600px) {
   .science-categories {
     .app-card {
@@ -61,8 +57,7 @@
         margin-bottom: 10px;
       }
     }
-  }
-
+  } 
   .section {
     &__top {
       text-align: center;
