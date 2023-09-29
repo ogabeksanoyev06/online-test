@@ -1,10 +1,10 @@
 <template>
-  <component :is="horizontal ? 'span' : 'div'" class="app-radio custom-radio">
-    <label
-      v-if="label"
-      class="app-radio-wrap"
-      :class="checkedOption ? 'active' : ''"
-    >
+  <component
+    :is="horizontal ? 'span' : 'div'"
+    class="app-radio custom-radio"
+    :class="checkedOption ? 'active' : ''"
+  >
+    <label v-if="label" class="app-radio-wrap">
       <input
         class="app-radio-input"
         type="radio"
@@ -13,11 +13,8 @@
         v-bind="$attrs"
         @change="$emit('change', $event)"
       />
-      <span class="app-radio-option"> {{ label + ")" }} </span>
-      <!--:checked='value === radioValue'-->
-
+      <span class="app-radio-option"> {{ label + "." }}</span>
       <span class="app-radio-title" v-html="string"></span>
-      <!-- <img v-if="imgPath" class="app-radio-img" :src="imgPath" :alt="imgPath" /> -->
     </label>
   </component>
 </template>
@@ -91,11 +88,17 @@ export default {
 @import "../../assets/styles/abstracts/variables";
 
 .app-radio {
+  $self: &;
   display: flex;
   align-items: center;
   border-radius: 10px;
   margin-bottom: 10px;
-  border: 1px solid $border-color;
+  background-color: rgb(245 247 249);
+  padding: 0.75rem 1rem;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
 
   &:last-child {
     margin-bottom: 0;
@@ -111,70 +114,24 @@ export default {
     &.active {
     }
   }
-
   &-option {
     font-weight: 700;
-    font-size: 16px;
-    line-height: 26px;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
     color: #4f4f4f;
+    margin-right: 0.5rem;
   }
 
   &-input {
     margin-right: 20px;
     position: relative;
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 17px;
-      height: 17px;
-      z-index: 1;
-      display: inline-block;
-      visibility: visible;
-      border-radius: 50%;
-      background-color: white;
-      border: 2px solid $border-color;
-    }
-
-    &:checked::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 17px;
-      height: 17px;
-      z-index: 1;
-      display: inline-block;
-      visibility: visible;
-      border-radius: 50%;
-      border: 2px solid #3165cb;
-    }
-
-    &:checked::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 15px;
-      height: 15px;
-      border-radius: 15px;
-      background: #3165cb;
-      display: inline-block;
-      visibility: visible;
-      border: 3px solid white;
-    }
+    display: none;
   }
 
   &-title {
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 26px;
-    padding: 15px 20px 15px 10px;
   }
 
   &-img {
@@ -185,6 +142,19 @@ export default {
     img {
       width: 100%;
       object-fit: contain;
+    }
+  }
+  &:hover {
+    background-color: rgba(2, 64, 51, 0.3);
+    #{$self}-option {
+    }
+  }
+  &.active {
+    background-color: #024033;
+    color: #fff;
+    z-index: 99;
+    #{$self}-option {
+      color: #fff;
     }
   }
 }

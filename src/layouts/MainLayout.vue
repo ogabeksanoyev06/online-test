@@ -4,7 +4,7 @@
     <div class="page__wrap">
       <router-view />
     </div>
-    <AppFooter />
+    <AppFooter v-if="$route.name !== 'test'" />
   </div>
 </template>
 
@@ -18,7 +18,14 @@ export default {
   name: "MainLayout",
   components: { AppHeader, AppFooter },
   methods: {
-    ...mapMutations(["setWindowWidth", "setAccessToken", "setIsLoggedOn"]),
+    ...mapMutations([
+      "setWindowWidth",
+      "setAccessToken",
+      "setIsLoggedOn",
+      "setSelectedQuestionIndex",
+      "setSelectedSubjectId",
+      "setTestType",
+    ]),
     setWidth() {
       this.setWindowWidth(document.documentElement.clientWidth);
     },
@@ -32,6 +39,15 @@ export default {
         this.setIsLoggedOn(false);
       }
     },
+    setQuestionIndex() {
+      this.setSelectedQuestionIndex(this.checkQuestionIndex());
+    },
+    setSelectedSubjectIdInLayout() {
+      this.setSelectedSubjectId(this.getSelectedSubjectIdMixin());
+    },
+    setTestTypeInLayout() {
+      this.setTestType(this.getTestTypeFromStorage());
+    },
   },
   computed: {
     ...mapGetters(["windowWidth"]),
@@ -39,6 +55,9 @@ export default {
   mounted() {
     this.setWidth();
     this.setToken();
+    this.setSelectedSubjectIdInLayout();
+    this.setQuestionIndex();
+    this.setTestTypeInLayout();
     window.addEventListener("resize", this.setWidth);
   },
   beforeDestroy() {

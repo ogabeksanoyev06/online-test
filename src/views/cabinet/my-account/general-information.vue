@@ -136,7 +136,7 @@
                 vid="Fakultet"
                 placeholder="Maktabni tanlang"
                 :optionsProp="schools"
-                v-model="user.school.number"
+                v-model="user.school"
                 :append="true"
                 :disabled="school_select"
                 @itemSelected="filterSchoolId"
@@ -215,7 +215,7 @@ export default {
   },
   methods: {
     getRegions() {
-      this.$http.get("common/regions").then((response) => {
+      this.$http.get("common/regions/").then((response) => {
         if (response) {
           this.regions = response;
         } else {
@@ -225,7 +225,7 @@ export default {
     },
     getDistricts(region_id) {
       this.$http
-        .get(`common/districts/?region_id=${region_id}`)
+        .get(`common/districts/?region_id=${region_id}/`)
         .then((response) => {
           if (response) {
             this.districts = response;
@@ -236,7 +236,7 @@ export default {
     },
     getSchools(district_id) {
       this.$http
-        .get(`common/schools/?district_id=${district_id}`)
+        .get(`common/schools/?district_id=${district_id}/`)
         .then((response) => {
           if (response) {
             this.schools = response;

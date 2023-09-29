@@ -10,17 +10,26 @@
       <div class="container">
         <div class="header__inner">
           <div class="header__left">
-            <!-- <AppButton
+            <svg
+              width="15"
+              height="15"
+              class="pointer mr-10"
+              viewBox="0 0 18 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
               v-if="isDesktopMedium"
-              theme="transparent"
-              sides="10"
-              class="hamburger__menu"
               @click="showNavigationDrawer"
             >
-              <img src="/icons/hamburger.svg" alt="" />
-            </AppButton> -->
+              <path
+                d="M0 0H18V2H0V0ZM0 7H18V9H0V7ZM0 14H18V16H0V14Z"
+                fill="#000"
+              />
+            </svg>
             <router-link to="/" class="logo">
-              <img src="/svg/logo1.svg" alt="logo" />
+              <img
+                src="https://topskill.uz/_next/static/media/main-logo-svg.0c512e66.svg"
+                alt="logo"
+              />
             </router-link>
             <ul class="header__menu" v-if="!isDesktopMedium">
               <li
@@ -34,9 +43,12 @@
               </li>
             </ul>
           </div>
-
           <div class="header__right">
-            <router-link to="/my-favourites" class="header__favourite">
+            <router-link
+              to="/my-favourites"
+              class="header__favourite"
+              v-if="!isMobileSmall"
+            >
               <span class="header__favourite-icon">
                 <svg
                   width="22"
@@ -53,7 +65,11 @@
                 <span class="header__favourite-notification"> 4 </span>
               </span>
             </router-link>
-            <router-link to="/my-cart" class="header__basket">
+            <router-link
+              to="/my-cart"
+              class="header__basket"
+              v-if="!isMobileSmall"
+            >
               <span class="header__basket-icon">
                 <svg
                   class="mx-0"
@@ -90,6 +106,7 @@
               class="header__language"
               @click="languageDropdown = !languageDropdown"
               v-on-click-outside:excludedClass="hideLanguageDropdown"
+              v-if="!isMobileSmall"
             >
               <svg
                 width="22"
@@ -121,7 +138,7 @@
                 theme="main"
                 :font-size="16"
                 :sides="20"
-                :height="40"
+                :height="isMobileSmall ? '40' : '45'"
                 weight="500"
                 class="header__login d-flex align-center"
                 @click="$router.push({ path: '/sign-in' })"
@@ -133,13 +150,13 @@
                 theme="main"
                 radius="10"
                 :font-size="16"
-                :sides="20"
-                :height="45"
+                :sides="isMobileSmall ? '10' : '20'"
+                :height="isMobileSmall ? '40' : '45'"
                 weight="500"
                 class="header__login"
                 @click="$router.push({ path: '/cabinet' })"
               >
-                Shaxsiy kabinet
+                Kabinet
               </AppButton>
             </div>
           </div>
@@ -152,6 +169,11 @@
         @closeNavigationDrawer="closeDrawer"
       />
     </transition>
+    <div
+      class="overlay"
+      :class="navigationDrawer ? 'visible' : ''"
+      @click="close"
+    ></div>
   </div>
 </template>
 
@@ -228,6 +250,9 @@ export default {
     closeDrawer() {
       this.navigationDrawer = false;
     },
+    close() {
+      this.navigationDrawer = false;
+    },
     ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
     ...mapActions(["getUser"]),
     showNavigationDrawer() {
@@ -239,7 +264,6 @@ export default {
     hideLanguageDropdown() {
       this.languageDropdown = false;
     },
-
     logout() {
       this.$api
         .delete(
@@ -291,14 +315,5 @@ export default {
 .dropdown-leave-active {
   opacity: 0;
   transform: scale(0);
-}
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: #ffffff96;
-  z-index: 49;
 }
 </style>

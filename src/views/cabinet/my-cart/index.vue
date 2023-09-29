@@ -364,12 +364,13 @@ export default {
 .sidebar {
   max-width: 450px;
   width: 100%;
+  position: relative;
   &-sticky {
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.06);
     border-radius: 15px;
     padding: 24px;
     background-color: #fff;
-    position: sticky;
+    position: sticky !important;
     top: 100px;
   }
   &-form__detail-list {

@@ -26,7 +26,7 @@ const actions = {
   async getSpecList({ commit }) {
     try {
       await this._vm.$http
-        .get("tests/categories")
+        .get("tests/specialists")
         .then((data) => {
           if (data) {
             commit("setSpecList", data);

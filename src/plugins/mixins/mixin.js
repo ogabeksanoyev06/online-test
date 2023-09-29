@@ -20,7 +20,7 @@ Vue.mixin({
         if (number % 1 === 0) return number;
         if (number === null || number === undefined || number === 0)
           return false;
-        return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$& ");
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
       } catch {
         return number;
       }
@@ -72,6 +72,65 @@ Vue.mixin({
         icon: true,
         rtl: false,
       });
+    },
+
+    storeTestTimeToStorage(testTime) {
+      localStorage.removeItem("testTime");
+      localStorage.setItem("testTime", testTime);
+    },
+    clearTestPropertiesFromLocalStorage() {
+      localStorage.removeItem("selectedQuestionIndex");
+      localStorage.removeItem("testTime");
+    },
+    setTestTypeToStorage(testType) {
+      localStorage.removeItem("testType");
+      localStorage.setItem("testType", testType);
+    },
+
+    getTestTypeFromStorage() {
+      let testType = localStorage.getItem("testType");
+      if (!testType) return null;
+      return testType;
+    },
+    // setMathPlugin() {
+    //   window.renderMathInElement(
+    //     document.getElementById("test_solving_component"),
+    //     {
+    //       delimiters: [
+    //         { left: "$$", right: "$$", display: true },
+    //         { left: "$", right: "$", display: false },
+    //         { left: "\\(", right: "\\)", display: false },
+    //         { left: "\\[", right: "\\]", display: true },
+    //       ],
+    //       Macros: {
+    //         "\\par": "\\newline",
+    //       },
+    //     }
+    //   );
+    // },
+    setQuestionIndexToStorage(questionIndex) {
+      localStorage.removeItem("selectedQuestionIndex");
+      localStorage.setItem("selectedQuestionIndex", questionIndex);
+    },
+    checkQuestionIndex() {
+      let selectedQuestionIndex = localStorage.getItem("selectedQuestionIndex");
+      if (!selectedQuestionIndex) return 0;
+      return parseInt(selectedQuestionIndex);
+    },
+    setSelectedSubjectIdMixin(selectedSubjectId) {
+      localStorage.removeItem("selectedSubjectId");
+      localStorage.setItem("selectedSubjectId", selectedSubjectId);
+    },
+    getSelectedSubjectIdMixin() {
+      let selectedSubjectId = localStorage.getItem("selectedSubjectId");
+      if (!selectedSubjectId) return null;
+      return parseInt(selectedSubjectId);
+    },
+    removeTestAttributesFromStorage() {
+      localStorage.removeItem("selectedSubjectId");
+      localStorage.removeItem("questions");
+      localStorage.removeItem("answers");
+      localStorage.removeItem("testType");
     },
   },
 });

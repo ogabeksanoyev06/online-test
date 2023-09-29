@@ -16,7 +16,7 @@
       @after-leave="end"
     >
       <div class="accordion__content" v-show="visible">
-        <ul>
+        <ul style="margin-top: 20px">
           <!-- This slot will handle all the content that is passed to the accordion -->
           <slot name="accordion-content"></slot>
         </ul>
@@ -76,15 +76,12 @@ export default {
 
 <style lang="scss" scoped>
 .accordion__item {
-  padding: 20px 25px;
-  border-radius: 4px;
   background-color: #fff;
   color: #212529;
   font-size: 18px;
   cursor: pointer;
-  border: 1px solid #eaeaeb !important;
-  &:nth-child(2n) {
-    margin: 0 0 15px;
+  padding: 20px 15px;
+  &.active {
   }
 }
 
@@ -92,6 +89,14 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  svg {
+    transition: 0.2s;
+  }
+  &.accordion__trigger_active {
+    svg {
+      transform: rotate(45deg);
+    }
+  }
 }
 
 .accordion-enter-active,

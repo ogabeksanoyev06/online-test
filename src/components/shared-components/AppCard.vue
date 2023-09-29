@@ -1,9 +1,9 @@
 <template>
   <div class="course" :class="{ 'news-card--medium': medium }">
     <div class="course-card">
-      <div class="course-card-header">
+      <div class="course-card-header" @click="goToLink(i)">
         <img
-          src="https://topskill.uz/_next/image?url=https%3A%2F%2Ftopskill-bucket2.s3.ap-south-1.amazonaws.com%2Fcourses%2Fbanner_files%2F0188580d-c10f-78bf-a7c0-5c8a77ecfc21.jpeg&w=3840&q=75"
+          :src="photo"
           style="
             position: absolute;
             height: 100%;
@@ -67,7 +67,7 @@
         </p>
       </div>
       <div class="course-card-body">
-        <h3 class="course-card-body-title">UX/UI Design</h3>
+        <h3 class="course-card-body-title">{{ title }}</h3>
         <div>
           <div class="d-flex align-center course-card-body-count">
             <svg
@@ -90,16 +90,16 @@
             <p>257 o'quvchi</p>
           </div>
           <p class="course-card-body-name">Muhammad Jumayev</p>
-          <p class="course-card-body-price">247 000 so'm</p>
+          <p class="course-card-body-price">{{ currencyFormat(price) }}</p>
           <AppButton
-            @click="goToLink(i)"
             theme="secondary"
             :font-size="16"
             :sides="20"
             :height="40"
             weight="500"
             :radius="50"
-            class="d-flex align-center disabled"
+            class="d-flex align-center"
+            :disabled="trailerBtn"
           >
             <svg
               class="mr-10"
@@ -135,6 +135,7 @@ export default {
     subtitle: String,
     photo: String,
     medium: Boolean,
+    trailerBtn: Boolean,
     value: null,
     price: {
       type: [String, Number],

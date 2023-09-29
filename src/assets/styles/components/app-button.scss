@@ -52,7 +52,6 @@
   @each $height in (30, 40, 45, 50, 60) {
     &--hg-#{$height} {
       height: #{$height}px;
-      line-height: #{$height}px;
     }
   }
   @each $radius in (5, 10, 15, 20, 25, 28, 50, 100) {
@@ -127,10 +126,10 @@
           #95abc6
         ),
         (
-          "logout",
-          #ff4d4f,
-          lighten(#ff4d4f, 5%),
-          darken(#ff4d4f, 5%),
+          "red",
+          rgb(244 44 44),
+          lighten(rgb(244 44 44), 5%),
+          darken(rgb(244 44 44), 5%),
           white,
           white,
           white

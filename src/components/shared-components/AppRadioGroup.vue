@@ -61,26 +61,66 @@ export default {
   methods: {
     ...mapMutations(["setSelectedQuestionIndex"]),
     alreadySelected(questionId) {
-      let alreadySelected = this.selectedAnswers.findIndex(
-        (sa) => sa.questionId === questionId
+      let examEntry = this.selectedAnswers.find(
+        (entry) =>
+          entry.exam_id === parseInt(localStorage.getItem("exam_id")) &&
+          entry.directionId === parseInt(localStorage.getItem("directionId"))
       );
-      if (alreadySelected !== -1) {
-        return this.selectedAnswers[alreadySelected].answer;
+      if (examEntry) {
+        let questionEntry = examEntry.questions.find(
+          (q) => q.question_id === questionId
+        );
+        return questionEntry ? questionEntry.answer : -1;
       }
       return -1;
     },
     selectAnswer(questionId, answerKey) {
-      let alreadySelected = this.selectedAnswers.findIndex(
-        (sa) => sa.questionId === questionId
+      let examEntry = this.selectedAnswers.find(
+        (entry) =>
+          entry.exam_id === parseInt(localStorage.getItem("exam_id")) &&
+          entry.directionId === parseInt(localStorage.getItem("directionId"))
       );
-      if (alreadySelected !== -1) {
-        this.selectedAnswers[alreadySelected].answer = answerKey;
+
+      if (examEntry) {
+        let questionEntry = examEntry.questions.find(
+          (q) => q.question_id === questionId
+        );
+        if (questionEntry) {
+          questionEntry.answer = answerKey;
+        } else {
+          examEntry.questions.push({
+            question_id: questionId,
+            answer: answerKey,
+          });
+        }
       } else {
         this.fillSelectedAnswersArray(questionId, answerKey);
       }
       localStorage.removeItem("answers");
       localStorage.setItem("answers", JSON.stringify(this.selectedAnswers));
       this.goToNextQuestion();
+    },
+    fillSelectedAnswersArray(questionId, answerKey) {
+      let model = {
+        exam_id: parseInt(localStorage.getItem("exam_id")),
+        directionId: parseInt(localStorage.getItem("directionId")),
+        started_time: "2023-09-09 22:02:20",
+        finished_time: "2021-09-09 22:05:30",
+        questions: [
+          {
+            question_id: questionId,
+            answer: answerKey,
+          },
+        ],
+      };
+
+      this.selectedAnswers.push(model);
+    },
+    readSelectedAnswersFromAppStorage() {
+      let storedAnswers = JSON.parse(localStorage.getItem("answers"));
+      if (storedAnswers && storedAnswers.length > 0) {
+        this.selectedAnswers = storedAnswers;
+      }
     },
     goToNextQuestion() {
       if (this.currentSubjectQuestionCount - 1 === this.selectedQuestionIndex)
@@ -91,24 +131,6 @@ export default {
         this.setSelectedQuestionIndex(selectedQuestionIndex);
         this.setQuestionIndexToStorage(selectedQuestionIndex);
       }, 300);
-    },
-    fillSelectedAnswersArray(questionId, answerKey) {
-      let model = {};
-      model.questionId = questionId;
-      model.answer = answerKey;
-      this.selectedAnswers.push(model);
-    },
-    readSelectedAnswersFromAppStorage() {
-      let selectedAnswers = JSON.parse(localStorage.getItem("answers"));
-      if (selectedAnswers && selectedAnswers.length > 0) {
-        this.selectedAnswers = [];
-        selectedAnswers.forEach((selectedAnswer) => {
-          this.fillSelectedAnswersArray(
-            selectedAnswer.questionId,
-            selectedAnswer.answer
-          );
-        });
-      }
     },
   },
   mounted() {

@@ -134,6 +134,7 @@ export default {
             TokenService.saveToken(data.access);
             TokenService.saveRefreshToken(data.refresh);
             TokenService.tokenExpireDate(3600);
+            TokenService.saveTokenCreationTime(new Date() / 1000);
             this.$router.push({ name: "home" });
             this.successNotification("Tizimga kirildi");
             this.request.password = "";

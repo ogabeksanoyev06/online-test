@@ -7,9 +7,9 @@
       buttonText="Batafsil"
     />
     <ContentBanner />
-    <Tests />
+    <!-- <Tests /> -->
     <ContentBanner />
-    <InternationalStudies />
+    <!-- <InternationalStudies /> -->
     <VideoCourceBanner />
     <Counts />
     <section class="section py-30">
@@ -42,8 +42,8 @@
 <script>
 import CtaBanner from "@/components/pages/home/CtaBanner.vue";
 import HeroBanner from "../../../components/pages/home/HeroBanner";
-import Tests from "@/components/pages/home/Tests.vue";
-import InternationalStudies from "@/components/pages/home/InternationalStudies.vue";
+// import Tests from "@/components/pages/home/Tests.vue";
+// import InternationalStudies from "@/components/pages/home/InternationalStudies.vue";
 import VideoCourceBanner from "@/components/pages/home/VideoCourceBanner.vue";
 import Counts from "@/components/pages/home/Counts.vue";
 import ContentBanner from "@/components/pages/home/ContentBanner.vue";
@@ -53,8 +53,6 @@ export default {
   components: {
     HeroBanner,
     CtaBanner,
-    Tests,
-    InternationalStudies,
     VideoCourceBanner,
     Counts,
     ContentBanner,
@@ -75,7 +73,7 @@ export default {
     box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
     transition: all ease-in-out 0.3s;
     &:hover {
-      background: #3165cb;
+      background: rgb(4, 81, 64);
       padding: 30px 30px 70px 30px;
       box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.18);
       span,
@@ -88,7 +86,7 @@ export default {
       display: block;
       font-size: 28px;
       font-weight: 700;
-      color: #3165cb;
+      color: rgb(4, 81, 64);
     }
     h4 {
       font-size: 24px;

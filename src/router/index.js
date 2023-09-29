@@ -75,6 +75,16 @@ const routes = [
     ],
   },
   {
+    path: "*",
+    name: "NotFound",
+    component: () => import("@/components/pages/error/404.vue"),
+  },
+  {
+    path: "/403",
+    name: "Forbidden",
+    component: () => import("@/components/pages/error/403.vue"),
+  },
+  {
     path: "/cabinet",
     component: () => import("../layouts/Cabinet"),
     children: [

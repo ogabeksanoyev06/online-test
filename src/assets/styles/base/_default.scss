@@ -41,7 +41,10 @@ a {
   padding: 0;
   margin: 0;
 }
-
+img,
+svg {
+  vertical-align: middle;
+}
 a,
 a:hover,
 a:focus,

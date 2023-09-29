@@ -1,23 +1,17 @@
 <template>
   <div class="cta__banner mt-30">
-    <!-- <div class="cta__banner-photo">
-      <img :src="photo" alt="" />
-    </div> -->
     <div class="container">
-      <div
-        class="cta__banner-content"
-        :class="isDesktopSmall ? 'pa-30' : 'pa-60'"
-      >
+      <div class="cta__banner-content" :class="isMobile ? 'py-30' : 'py-60'">
         <app-text
-          :size="isMobile ? 26 : 30"
-          :line-height="isMobile ? 30 : 36"
+          :size="isMobile ? 26 : 32"
+          :line-height="isMobile ? 30 : 42"
           weight="600"
-          class="mb-30"
+          class="color-main mb-10"
         >
           {{ title }}
         </app-text>
 
-        <app-text class="color-text mb-30" size="16" line-height="24">
+        <app-text class="mb-20" size="16" line-height="24">
           {{ content }}
         </app-text>
 
@@ -52,21 +46,7 @@ export default {
   // background: #f5f9fd;
   background: url("https://stesting.uz/stestinglandingbg.png") no-repeat 50%;
   background-size: cover;
-
-  // &-photo {
-  //   max-width: 450px;
-  //   width: 100%;
-
-  //   img {
-  //     width: 100%;
-  //     height: 100%;
-  //     object-fit: cover;
-  //   }
-  // }
-
   &-content {
-    // width: calc(100% - 450px);
-    width: 100%;
   }
 }
 
@@ -92,7 +72,6 @@ export default {
 
     &-content {
       width: 100%;
-      padding: 20px;
     }
   }
 }

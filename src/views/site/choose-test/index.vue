@@ -161,19 +161,31 @@
           >
             Majburiy fanlar:
           </AppText>
+          <BlockWrap
+            class="align-center mb-10"
+            :count="1"
+            offset-y="10"
+            v-for="(item, index) in directionMandatorySubjects"
+            :key="index + 'mandatory'"
+          >
+            <base-input hideDetails="" v-model="item.science" disabled />
+          </BlockWrap>
           <BaseInput
             label="Birinchi fan"
             placeholder="Birinchi fan"
+            v-if="directionMandatorySubjects.length <= 0"
             :disabled="true"
           />
           <BaseInput
             label="Ikkinchi fan"
             placeholder="Ikkinchi fan"
+            v-if="directionMandatorySubjects.length <= 0"
             :disabled="true"
           />
           <BaseInput
             label="Uchinchi fan"
             placeholder="Uchinchi fan"
+            v-if="directionMandatorySubjects.length <= 0"
             :disabled="true"
           />
           <AppText
@@ -184,14 +196,25 @@
           >
             Asosiy fanlar:
           </AppText>
+          <BlockWrap
+            class="align-center mb-10"
+            :count="1"
+            offset-y="10"
+            v-for="(item, i) in directionMainSubjects"
+            :key="i"
+          >
+            <base-input hideDetails="" v-model="item.science" disabled />
+          </BlockWrap>
           <BaseInput
             label="Birinchi fan"
             placeholder="Birinchi fan"
+            v-if="directionMainSubjects.length <= 0"
             :disabled="true"
           />
           <BaseInput
             label="Ikkinchi fan"
             placeholder="Ikkinchi fan"
+            v-if="directionMainSubjects.length <= 0"
             :disabled="true"
           />
           <BlockWrap
@@ -209,7 +232,7 @@
               weight="700"
               class="color-secondary"
             >
-              180 min
+              {{ examsOverAllTime }} min
             </AppText>
           </BlockWrap>
           <BlockWrap
@@ -224,7 +247,7 @@
             </AppText>
 
             <AppText size="16" line-height="24" weight="700" class="color-main">
-              180 ball
+              {{ examsOverAllBall }} ball
             </AppText>
           </BlockWrap>
           <AppButton
@@ -254,7 +277,8 @@ import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 import AppModal from "@/components/shared-components/AppModal.vue";
 import BaseSelect from "@/components/shared-components/BaseSelect.vue";
 import BaseInput from "@/components/shared-components/BaseInput.vue";
-import { mapActions, mapGetters } from "vuex";
+import test from "../../../constants/test";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   name: "AppTests",
   components: { AppButton, BlockWrap, AppModal, BaseSelect, BaseInput },
@@ -264,13 +288,19 @@ export default {
       selectedDirection: null,
       selectedDirectionId: null,
       directionMandatorySubjects: [],
-      startTestButtonState: false,
+      directionMainSubjects: [],
+      subjectLabels: ["Birinchi fan", "Ikkinchi fan", "Uchinchi fan"],
       examsOverAllTime: 0,
       examsOverAllBall: 0,
+      subjectsListForStartingTest: [],
+      selectedSubjectsForOnlineTest: [],
+      firstSubjectId: null,
+      startTestButtonState: true,
     };
   },
   methods: {
     ...mapActions(["getSpecList"]),
+    ...mapMutations(["setTestType"]),
     directionChange(item) {
       if (!this.selectedDirection) {
         this.startTestButtonState = true;
@@ -281,34 +311,31 @@ export default {
         return;
       }
       this.selectedDirectionId = item.id;
+      localStorage.setItem("directionId", item.id);
       this.getSubjectsByDirectionId(this.selectedDirectionId);
     },
     getSubjectsByDirectionId(directionId) {
       try {
-        this.$http.get("tests/exam-templates/" + directionId).then((res) => {
-          if (!res.error) {
-            this.directionMainSubjects = [];
-            this.directionMandatorySubjects = [];
-            this.examsOverAllTime = 0;
-            this.examsOverAllBall = 0;
-            res.result.forEach((item, key) => {
-              let model = {};
-              model.examId = item.examId;
-              model.selectedSubjectId = key === 0 ? item.subjects[0].id : null;
-              item.selectedSubjectId = item.subjects[0].id;
-
-              this.subjectsListForStartingTest.push(model);
-              if (key <= 2) {
-                this.directionMandatorySubjects.push(item);
-              } else {
-                this.directionMainSubjects.push(item);
-              }
-              this.examsOverAllBall += item.quesCount * item.quesBall;
-              this.examsOverAllTime += item.testMinute;
-            });
-          }
-          this.startTestButtonState = false;
-        });
+        this.$http
+          .get("tests/exam-tests/?spec_id=" + directionId)
+          .then((res) => {
+            if (res) {
+              this.directionMainSubjects = [];
+              this.directionMandatorySubjects = [];
+              this.examsOverAllTime = 0;
+              this.examsOverAllBall = 0;
+              res.forEach((item) => {
+                if (item.type === "compulsory") {
+                  this.directionMandatorySubjects.push(item);
+                } else {
+                  this.directionMainSubjects.push(item);
+                }
+                this.examsOverAllBall += item.quesCount * item.quesBall;
+                this.examsOverAllTime += item.duration_time;
+              });
+            }
+            this.startTestButtonState = false;
+          });
       } catch (e) {
         this.errorNotification(e.response.data.error.message);
       }
@@ -325,7 +352,34 @@ export default {
       console.log("aa");
     },
     startOnlineTest() {
-      //
+      this.clearTestPropertiesFromLocalStorage();
+      this.storeTestTimeToStorage(this.examsOverAllTime);
+      this.directionMandatorySubjects.forEach((s) => {
+        this.selectedSubjectsForOnlineTest.push(s.id);
+      });
+      this.directionMainSubjects.forEach((s) => {
+        this.selectedSubjectsForOnlineTest.push(s.id);
+      });
+      this.setTestType(test.TYPE_ONLINE);
+      this.setTestTypeToStorage(test.TYPE_ONLINE);
+      try {
+        this.$http
+          .post("tests/exam-tests/start/", {
+            exam_ids: this.selectedSubjectsForOnlineTest,
+            started_time: new Date(),
+          })
+          .then((res) => {
+            if (res) {
+              localStorage.setItem("questions", JSON.stringify(res));
+              this.$router.push({ name: "test" });
+            }
+          })
+          .catch((err) => {
+            this.errorNotification(err.response.data);
+          });
+      } catch (e) {
+        // this.errorNotification(e.response.data.error.message);
+      }
     },
     closeModal() {
       this.chooseTestModal = false;
@@ -338,6 +392,7 @@ export default {
   mounted() {},
   created() {
     this.getSpecList();
+    this.removeTestAttributesFromStorage();
   },
 };
 </script>

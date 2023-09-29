@@ -180,46 +180,100 @@
                 :class="sectionContentId === sectionContent.id ? 'active' : ''"
                 v-for="(sectionContent, sectionContentIndex) in sections"
                 :key="sectionContentIndex"
+                class="active"
               >
                 <template slot="accordion-trigger">
                   <div class="course__accordion-header">
+                    <div
+                      class="course__accordion-numb"
+                      :class="isDesktopSmall ? 'mr-10' : 'mr-20'"
+                    >
+                      {{ sectionContentIndex + 1 }}-modul
+                    </div>
                     <h4 class="course__accordion-text">
                       {{ sectionContent.name }}
                     </h4>
                   </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="1em"
+                    viewBox="0 0 448 512"
+                    fill="#024033"
+                  >
+                    <path
+                      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                    />
+                  </svg>
                 </template>
                 <template slot="accordion-content">
-                  <div
-                    style="padding: 0 15px 15px"
+                  <li
                     v-for="(
                       content, contentIndex
                     ) in sectionContent.contentList"
                     :key="contentIndex"
                     @click="selectContent(sectionContent.id, content.id)"
+                    class="d-flex align-center justify-space-between"
                   >
-                    <div
-                      class="course__accordion-item radius bordered pa-10 mb-10"
-                      :class="contentId === content.id ? 'active' : ''"
-                    >
-                      <div class="course__accordion-icon mr-20">
+                    Introduction to Programming
+                    <div class="d-flex align-center">
+                      <span>
                         <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 11 14"
+                          width="78"
+                          height="78"
+                          viewBox="0 0 78 78"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
+                          style="
+                            width: 25px;
+                            height: 25px;
+                            margin-right: 15px;
+                            cursor: pointer;
+                          "
                         >
-                          <path
-                            d="M10.5 6.13397C11.1667 6.51888 11.1667 7.48112 10.5 7.86602L1.5 13.0622C0.833332 13.4471 3.43203e-07 12.966 3.76852e-07 12.1962L8.31114e-07 1.80385C8.64763e-07 1.03405 0.833334 0.552922 1.5 0.937822L10.5 6.13397Z"
-                            fill="#008AE4"
-                          />
+                          <circle
+                            cx="39"
+                            cy="39"
+                            r="39"
+                            fill="#A0E82F"
+                          ></circle>
+                          <g clip-path="url(#clip0_91_11352)">
+                            <path
+                              d="M30 51.0001C29.7348 51.0001 29.4804 50.8947 29.2929 50.7072C29.1054 50.5196 29 50.2653 29 50.0001V28.0001C29 27.8263 29.0453 27.6555 29.1314 27.5046C29.2175 27.3536 29.3414 27.2277 29.491 27.1392C29.6406 27.0508 29.8106 27.0028 29.9844 27.0001C30.1582 26.9974 30.3296 27.04 30.4819 27.1238L50.4819 38.1238C50.6388 38.2101 50.7697 38.3369 50.8608 38.491C50.952 38.6452 51 38.821 51 39C51 39.1791 50.952 39.3549 50.8608 39.509C50.7697 39.6632 50.6388 39.79 50.4819 39.8763L30.4819 50.8763C30.3343 50.9575 30.1685 51 30 51.0001Z"
+                              fill="#045140"
+                            ></path>
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_91_11352">
+                              <rect
+                                width="32"
+                                height="32"
+                                fill="white"
+                                transform="translate(23 23)"
+                              ></rect>
+                            </clipPath>
+                          </defs>
                         </svg>
-                      </div>
-                      <h4 class="course__accordion-text">
-                        {{ content.name }}
-                      </h4>
+                      </span>
+                      <svg
+                        fill="none"
+                        width="25"
+                        height="25"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        style="color: rgb(130, 211, 0); margin-right: 15px"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"
+                        ></path>
+                      </svg>
+                      <span class="lesson-duration">16 : 44</span>
                     </div>
-                  </div>
+                  </li>
                 </template>
               </AccordionItem>
             </Accordion>
@@ -405,7 +459,6 @@ export default {
             },
           ],
         },
-        // Yana boshqa bo'limlar qo'shishingiz mumkin...
       ],
       comments: [],
     };
@@ -437,68 +490,65 @@ export default {
 </script>
 
 <style lang="scss">
-.course__accordion {
-  .accordion__content {
-    padding: 15px 30px 15px;
-  }
-  transition: 0.3s;
-  .accordion {
-    transition: 0.3s !important;
-    height: 100%;
-    &__item {
-    
-      &.active {
-        background-color: #f5f9fd;
-        .course__accordion-numb {
-          background-color: white;
-          border: 1px solid #000;
-          font-size: 12px;
-          font-weight: 700;
-          color: #000;
-        }
-      }
-      &.background_changed {
-        background-color: #f5f9fd;
+.accordion__content {
+  ul {
+    li {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 156%;
+      letter-spacing: -0.02em;
+      color: #000;
+      opacity: 0.8;
+      padding: 24px 0;
+      position: relative;
+      border-bottom: 1.5px solid #eaeaea;
+      .lesson-duration {
+        width: 50px;
+        font-size: 16px;
+        white-space: nowrap;
       }
       &:hover {
-        background-color: #f5f9fd;
+        background-color: #eaeaea;
       }
     }
-    .course__accordion-numb {
-      font-weight: 700;
-      color: #000;
-    }
   }
+}
+.accordion {
+  border: 1px solid #eaeaea;
+}
+.accordion__item {
+  border-bottom: 1px solid #d9d9d9;
+}
+.course__accordion {
   &-header {
-    padding: 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
+  }
+  &-text {
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 143%;
+    color: #024033;
   }
   &-wrap {
     padding: 15px 30px 15px 30px;
   }
-  &-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    img {
-      min-width: 18px;
-    }
-  }
+
   &-numb {
-    background-color: #000;
-    color: #000;
-    font-weight: 700;
+    background-color: #024033;
+    color: #fff;
+    font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: 5px;
     min-width: 24px;
     min-height: 24px;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 14px;
+    padding: 0 10px;
+    white-space: nowrap;
   }
   &-item {
     display: flex;
@@ -513,6 +563,46 @@ export default {
     }
     &:nth-child(3n) {
       margin-bottom: 0;
+    }
+  }
+}
+@media (max-width: 992px) {
+  .accordion__content {
+    ul {
+      li {
+        font-size: 16px;
+        padding: 18px 0;
+      }
+    }
+  }
+  .course__accordion {
+    &-text {
+      font-weight: 500;
+      font-size: 28px;
+      line-height: 143%;
+      color: #024033;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .accordion__content {
+    ul {
+      li {
+        font-size: 12px;
+        padding: 15px 0;
+      }
+    }
+  }
+  .course__accordion {
+    &-text {
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 143%;
+      color: #024033;
+    }
+    &-numb {
+      font-size: 11px;
+      padding: 4px 12px;
     }
   }
 }

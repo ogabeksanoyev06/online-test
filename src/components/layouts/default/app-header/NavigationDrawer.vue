@@ -1,11 +1,11 @@
 <template>
   <div class="navigation-drawer">
     <ul class="nav-open">
-      <li v-for="(item, i) in menu" :key="i" class="nav__item">
+      <!-- <li v-for="(item, i) in menu" :key="i" class="nav__item">
         <router-link :to="item.link">
           {{ item.title }}
         </router-link>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
@@ -86,18 +86,19 @@ export default {
 @import "../../../../assets/styles/abstracts/variables";
 
 .navigation-drawer {
-  width: 100vw;
+  max-width: 320px;
+  width: 100%;
   height: 100%;
-  z-index: 8;
+  z-index: 1000;
   position: fixed;
   top: 0;
   bottom: 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(193, 218, 209, 0.1);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  background-color: #fff;
+  box-shadow: 6px 0 16px 0 rgba(0, 0, 0, 0.08),
+    3px 0 6px -4px rgba(0, 0, 0, 0.12), 9px 0 28px 8px rgba(0, 0, 0, 0.05);
   .nav-open {
     width: 100%;
     height: 100%;

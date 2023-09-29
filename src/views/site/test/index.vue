@@ -19,32 +19,32 @@
               <button
                 class="test__item"
                 @click="selectSubjectQuestions(mandatory.id)"
-                v-for="(mandatory, index) in 2"
+                v-for="(mandatory, index) in mandatorySubjectsQuestions"
                 :key="index"
                 :class="selectedSubjectIdItem === mandatory.id ? 'active' : ''"
               >
-                Matematika
+                {{ mandatory.name }}
               </button>
             </div>
           </div>
-          <div class="test__top-item">
+          <div class="test__top-item" v-if="testTypeProperty === 'online'">
             <AppText
               size="14"
               line-height="26"
               weight="700"
               v-if="testTypeProperty === 'online'"
             >
-              Majburiy fanlar
+              Asosiy fanlar
             </AppText>
             <div class="test__wrap">
               <button
                 class="test__item"
-                @click="selectSubjectQuestions(mandatory.id)"
-                v-for="(mandatory, index) in 3"
+                @click="selectSubjectQuestions(main.id)"
+                v-for="(main, index) in mainSubjectsQuestions"
                 :key="index"
-                :class="selectedSubjectIdItem === mandatory.id ? 'active' : ''"
+                :class="selectedSubjectIdItem === main.id ? 'active' : ''"
               >
-                Matematika
+                {{ main.name }}
               </button>
             </div>
           </div>
@@ -60,13 +60,12 @@
                   color: #00b74a;
                 "
               >
-                <span> 12 : 00 : 45 </span>
+                <span> {{ timerFormat(testTimer) }} </span>
               </div>
               <div class="test__details-item" @click="testFinish">
                 <div class="test__details-icon">
                   <img src="/icons/finish.svg" alt="" />
                 </div>
-
                 <AppText
                   size="14"
                   line-height="26"
@@ -99,8 +98,6 @@ export default {
     return {
       questions: [
         {
-          maxBall: null,
-          quesCount: null,
           questions: [],
           subjectName: null,
         },
@@ -170,19 +167,21 @@ export default {
     ]),
     selectSubjectQuestions(subjectId) {
       this.setSelectedQuestionIndex(0);
+      this.setQuestionIndexToStorage(0);
       this.setSelectedSubjectId(subjectId);
       this.setSelectedSubjectIdMixin(subjectId);
+      localStorage.setItem("exam_id", subjectId);
       let index = this.questions.findIndex((q) => q.id === subjectId);
       if (index === -1) return;
       this.rawTests = this.questions[index];
-      this.setCurrentSubjectQuestionCount(this.rawTests.quesCount);
+      this.setCurrentSubjectQuestionCount(this.rawTests.questions.length);
     },
     readQuestionsFromStorage() {
       let questions = JSON.parse(localStorage.getItem("questions"));
       if (questions.length > 0) {
         this.questions = questions;
         this.rawTests = questions[this.questionsInitialIndex()];
-        this.setCurrentSubjectQuestionCount(this.rawTests.quesCount);
+        this.setCurrentSubjectQuestionCount(this.rawTests.questions.length);
         this.mandatorySubjectsQuestions = [];
         this.mainSubjectsQuestions = [];
         this.questions.forEach((q, index) => {
@@ -192,6 +191,10 @@ export default {
             this.mainSubjectsQuestions.push(q);
           }
         });
+        if (!this.selectedSubjectId) {
+          this.setSelectedSubjectId(this.questions[0].id);
+          localStorage.setItem("exam_id", this.questions[0].id);
+        }
       }
     },
     questionsInitialIndex() {
@@ -205,19 +208,6 @@ export default {
       let index = this.questions.findIndex((q) => q.id === subjectId);
       if (index === -1) return 0;
       return index;
-    },
-    nextQuestion() {
-      if (this.selectedQuestionIndex === this.rawTests.questions.length - 1)
-        return null;
-      let nextQuestionIndex = this.selectedQuestionIndex + 1;
-      this.setSelectedQuestionIndex(nextQuestionIndex);
-      this.setQuestionIndexToStorage(nextQuestionIndex);
-    },
-    previousQuestion() {
-      if (this.selectedQuestionIndex === 0) return null;
-      let prevQuestionIndex = this.selectedQuestionIndex - 1;
-      this.setSelectedQuestionIndex(prevQuestionIndex);
-      this.setQuestionIndexToStorage(prevQuestionIndex);
     },
     testFinish() {
       try {
@@ -247,20 +237,29 @@ export default {
       }
     },
     subjectTestResults(answers) {
-      this.$api.post(`main/BlockTest/TestDone`, answers).then((res) => {
-        if (!res.error) {
-          this.blockTestAnswers = true;
-          this.onlineTestResult = res.result;
-          this.setTestResultTotals();
-        }
-      });
+      this.$api
+        .post(`main/BlockTest/TestDone`, {
+          answers,
+        })
+        .then((res) => {
+          if (!res.error) {
+            this.blockTestAnswers = true;
+            this.onlineTestResult = res.result;
+            this.setTestResultTotals();
+          }
+        });
     },
     onlineTestResults(answers) {
-      this.$api.post(`main/ExamTest/DoneTest`, answers).then((res) => {
+      const additionalData = {
+        started_time: "2023-09-09 22:02:20",
+        finished_time: "2021-09-09 22:05:30",
+      };
+      answers.push(additionalData);
+      this.$http.post(`tests/exam-tests/done`, answers).then((res) => {
         if (!res.error) {
           this.onlineTestAnswers = true;
           this.onlineTestResult = res.result;
-          this.setTestResultTotals();
+          // this.setTestResultTotals();
         }
       });
     },
@@ -311,6 +310,15 @@ export default {
   mounted() {
     this.selectedSubjectIdItem = this.selectedSubjectId;
     this.testTypeProperty = this.testType;
+    console.log([
+      {
+        ...JSON.parse(localStorage.getItem("answers")),
+      },
+      {
+        started_time: "2023-09-09 22:02:20",
+        finished_time: "2021-09-09 22:05:30",
+      },
+    ]);
   },
   created() {
     this.setTimer();
@@ -332,7 +340,6 @@ export default {
 
 .test {
   background-color: white;
-  padding: 20px;
   display: flex;
   align-items: flex-start;
   &__left {
@@ -355,25 +362,23 @@ export default {
   &__item {
     cursor: pointer;
     background-color: white;
-    font-family: "Gilroy", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 14px;
-    line-height: 26px;
+    line-height: 1.5;
     padding: 10px 15px;
     transition: 0.3s;
     color: #000;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 0px 10px rgba(2, 64, 51, 0.2);
     border-radius: 10px;
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    min-height: 50px;
-
+    min-height: 40px;
     &.active {
-      background-color: white;
-      color: $text-color-default;
-      font-weight: 700;
-      border-color: $color-secondary;
+      background-color: #024033;
+      color: #fff;
+      box-shadow: 0px 0px 0px rgba(2, 64, 51, 0.2);
     }
   }
 

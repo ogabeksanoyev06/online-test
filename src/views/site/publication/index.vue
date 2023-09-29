@@ -8,10 +8,7 @@
             :line-height="isMobile ? 28 : 36"
             weight="700"
           >
-            Nashrlar
-          </app-text>
-          <app-text size="16" line-height="18" weight="500" class="color-text">
-            Lorem ipsum dolor sit amet.
+            Foydali kitoblar
           </app-text>
         </div>
       </div>
@@ -27,7 +24,7 @@
               :size="isMobileSmall ? 18 : 22"
               :line-height="isMobileSmall ? 24 : 28"
               weight="600"
-              class="mb-10"
+              class="mb-10 color-main"
             >
               PISA, PIRLS va TIMSS xаlqаro tаdqiqotlаr tаlаblаri аsosidа
               o‘tkаzilgаn bаholаsh nаtijаlаri

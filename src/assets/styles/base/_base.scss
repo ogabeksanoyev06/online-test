@@ -218,13 +218,16 @@
 .w-100 {
   width: 100% !important;
 }
+.pointer {
+  cursor: pointer;
+}
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #000;
+  background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   display: flex;
   align-items: center;
@@ -232,7 +235,7 @@
   cursor: pointer;
   visibility: hidden;
   transition: opacity 0.15s linear, visibility 0.15s linear;
-  z-index: 99;
+  z-index: 999;
   &.visible {
     opacity: 0.5;
     visibility: visible;

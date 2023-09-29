@@ -13,8 +13,8 @@
         >
           <span v-html="test.qustion" class="mr-5"></span>
           <span>
-            <strong>savolId: {{ test.id }}</strong></span
-          >
+            <strong>savolId: {{ test.id }}</strong>
+          </span>
         </AppText>
       </div>
 
@@ -174,9 +174,8 @@ export default {
     setInitialSelectedQuestion() {
       this.questions = this.questionsProp;
       if (this.questions && this.questions.questions.length > 0) {
-        this.selectedQuestion = this.questions.questions[
-          this.selectedQuestionIndex
-        ];
+        this.selectedQuestion =
+          this.questions.questions[this.selectedQuestionIndex];
         this.setAnswers(
           this.selectedQuestion.answers,
           this.selectedQuestion.id
