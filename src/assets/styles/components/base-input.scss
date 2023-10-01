@@ -31,40 +31,28 @@
     color: #212529;
     text-align: center;
     white-space: nowrap;
-    background-color: #e9ecef;
+    background-color: #fff;
     border: 1px solid #ced4da;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
   &-append {
-    order: 3;
-    display: flex;
-    align-items: center;
-    height: 45px;
-    line-height: 45px;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    color: #212529;
-    text-align: center;
-    white-space: nowrap;
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    margin-left: -1px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    z-index: 10;
     cursor: pointer;
     i {
       width: 1.5rem;
     }
   }
   &-input {
-    display: block;
-    width: 100%;
+    flex: 1 1 auto;
+    width: 1%;
     height: 45px;
-    padding: 0.375rem 0.75rem;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
     font-weight: 400;
     font-size: 14px;
     color: #212529;
@@ -74,12 +62,9 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    z-index: 3;
     &.append {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
     }
     &.prepend {
       margin-left: -1px;

@@ -425,7 +425,7 @@ export default {
   }
   &-image {
     width: 15rem;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     overflow: hidden;
     img {
       display: block;

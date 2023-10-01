@@ -29,6 +29,7 @@ export default {
     return {
       questions: [],
       selectedQuestionIndexItem: null,
+      specified: null,
     };
   },
   computed: {
@@ -83,7 +84,7 @@ export default {
     color: $text-color-default;
     background-color: white;
     border: 1px solid #e5ecf5;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     margin: 4px 4px 4px 0;
     cursor: pointer;
 

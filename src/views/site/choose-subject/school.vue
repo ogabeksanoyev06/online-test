@@ -1,97 +1,119 @@
 <template>
-  <div class="container">
-    <section class="py-40">
-      <div class="section__top" :class="isMobile ? 'mb-10' : 'mb-30'">
-        <app-text
-          :size="isMobileSmall ? 22 : isMobile ? 26 : 30"
-          :line-height="isMobileSmall ? 26 : isMobile ? 30 : 36"
-          weight="700"
-          class="mb-10"
+  <div style="background-color: rgb(242 242 242)">
+    <div class="container">
+      <section class="py-40">
+        <div class="section__top" :class="isMobile ? 'mb-10' : 'mb-20'">
+          <app-text
+            :size="isMobileSmall ? 22 : isMobile ? 26 : 30"
+            :line-height="isMobileSmall ? 26 : isMobile ? 30 : 36"
+            weight="700"
+            class="mb-10"
+          >
+            Test olinadigan fanni tanlang
+          </app-text>
+        </div>
+
+        <div class="bg-white radius" :class="isMobileSmall ? 'pa-10' : 'pa-20'">
+          <AppSmallCard
+            v-for="(item, idx) in subjects"
+            :key="idx"
+            :title="item.name"
+            style="cursor: pointer"
+            :class="selectedSubject.subject.id === item.id ? '' : ''"
+            @click="selectSubject(item)"
+          />
+        </div>
+
+        <div
+          class="bg-white radius w-100 mt-20"
+          :class="isMobileSmall ? 'pa-10' : 'pa-20'"
         >
-          Test olinadigan fanni tanlang
-        </app-text>
-      </div>
-      <BlockWrap
-        :count="
-          isMobileSmall ? 1 : isMobileMedium ? 2 : isDesktopMedium ? 3 : 5
-        "
-        offset-x="12"
-        offset-y="12"
-        class="mb-20"
-      >
-        <AppSmallCard
-          v-for="(item, idx) in subjects"
-          :key="idx"
-          :title="item.name + '(' + item.allQuestionCount + ')'"
-          :photo="item.photo"
-          style="cursor: pointer"
-          :class="selectedSubject.subject.id === item.id ? 'active' : ''"
-          @click="selectSubject(item)"
-        />
-      </BlockWrap>
-
-      <div class="shadowed bordered radius pa-30 w-100">
-        <div class="test__details mb-30">
-          <BlockWrap
-            width-auto
-            class="align-center test__details-item"
-            :count="isMobileSmall ? 2 : 1"
-            offset-x="15"
-            offset-y="15"
+          <AppText
+            :size="isMobileSmall ? 16 : 20"
+            :line-height="isMobileSmall ? 20 : 24"
+            weight="700"
+            class="mb-30"
           >
-            <AppText size="16" weight="700"> Sinfni tanlang </AppText>
+            Fan mavzularini tanlang
+          </AppText>
 
+          <div class="test__details mb-20">
             <BaseSelect
-              :options-prop="classes"
-              v-model="selectedClass"
-            ></BaseSelect>
-          </BlockWrap>
-
-          <BlockWrap
-            width-auto
-            class="align-center test__details-item"
-            :count="isMobileSmall ? 2 : 1"
-            offset-x="15"
-            offset-y="15"
-          >
-            <AppText size="16" weight="700"> Savollar soni: </AppText>
+              v-model="questionsCount"
+              label="Savollar soni"
+              :options-prop="questionsCountSelect"
+              hideDetails
+              :append="true"
+            >
+              <template #append>
+                <svg
+                  class="Dropdown_self__FtxaI"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style="height: 1rem; width: 1rem"
+                >
+                  <path
+                    d="M13.2797 5.9668L8.93306 10.3135C8.41973 10.8268 7.57973 10.8268 7.06639 10.3135L2.71973 5.9668"
+                    stroke="rgb(51, 54, 57)"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </template>
+            </BaseSelect>
 
             <BaseSelect
               v-model="questionsCount"
-              :options-prop="questionsCountSelect"
-            ></BaseSelect>
-          </BlockWrap>
-
-          <BlockWrap
-            width-auto
-            class="align-center test__details-item"
-            :count="isMobileSmall ? 2 : 1"
-            offset-x="15"
-            offset-y="15"
-          >
-            <AppText size="16" weight="700"> Umumiy vaqt </AppText>
+              label="Sinfni tanlang"
+              :options-prop="classes"
+              hideDetails
+              :append="true"
+            >
+              <template #append>
+                <svg
+                  class="Dropdown_self__FtxaI"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style="height: 1rem; width: 1rem"
+                >
+                  <path
+                    d="M13.2797 5.9668L8.93306 10.3135C8.41973 10.8268 7.57973 10.8268 7.06639 10.3135L2.71973 5.9668"
+                    stroke="rgb(51, 54, 57)"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </template>
+            </BaseSelect>
             <BaseInput
               v-model="questionTotalTime"
               hide-details=""
+              label="Umumiy vaqt"
               disabled
-            ></BaseInput>
-          </BlockWrap>
+            >
+            </BaseInput>
+          </div>
+          <AppButton
+            theme="secondary"
+            sides="20"
+            @click="getQuestionBySelectedParameters"
+          >
+            <img src="/icons/play.svg" alt="" style="margin-right: 10px" />
+            Testni boshlash
+          </AppButton>
         </div>
-        <AppButton
-          theme="secondary"
-          sides="20"
-          @click="getQuestionBySelectedParameters"
-        >
-          <img src="/icons/play.svg" alt="" style="margin-right: 10px" />
-          Testni boshlash
-        </AppButton>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </template>
 
 <script>
-import BlockWrap from "../../../components/shared-components/BlockWrap";
 import AppSmallCard from "../../../components/shared-components/AppSmallCard";
 import AppText from "../../../components/shared-components/AppText";
 import BaseSelect from "../../../components/shared-components/BaseSelect";
@@ -101,13 +123,12 @@ import test from "../../../constants/test";
 import { mapMutations } from "vuex";
 
 export default {
-  name: "index",
+  name: "choose-subject-school",
   components: {
     BaseInput,
     AppButton,
     BaseSelect,
     AppSmallCard,
-    BlockWrap,
     AppText,
   },
   data() {
@@ -319,6 +340,7 @@ export default {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  gap: 10px;
   width: 100%;
   &-item {
     margin-right: 30px;

@@ -184,6 +184,7 @@ export default {
         this.setCurrentSubjectQuestionCount(this.rawTests.questions.length);
         this.mandatorySubjectsQuestions = [];
         this.mainSubjectsQuestions = [];
+        this.setSelectedQuestionIndex(0);
         this.questions.forEach((q, index) => {
           if (index <= 2) {
             this.mandatorySubjectsQuestions.push(q);
@@ -255,7 +256,7 @@ export default {
         finished_time: "2021-09-09 22:05:30",
       };
       answers.push(additionalData);
-      this.$http.post(`tests/exam-tests/done`, answers).then((res) => {
+      this.$http.post(`tests/exam-tests/done/`, answers).then((res) => {
         if (!res.error) {
           this.onlineTestAnswers = true;
           this.onlineTestResult = res.result;
@@ -310,15 +311,6 @@ export default {
   mounted() {
     this.selectedSubjectIdItem = this.selectedSubjectId;
     this.testTypeProperty = this.testType;
-    console.log([
-      {
-        ...JSON.parse(localStorage.getItem("answers")),
-      },
-      {
-        started_time: "2023-09-09 22:02:20",
-        finished_time: "2021-09-09 22:05:30",
-      },
-    ]);
   },
   created() {
     this.setTimer();
@@ -370,7 +362,7 @@ export default {
     transition: 0.3s;
     color: #000;
     box-shadow: 0px 0px 10px rgba(2, 64, 51, 0.2);
-    border-radius: 10px;
+    border-radius: 0.5rem;
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -397,7 +389,7 @@ export default {
       margin-left: 10px;
       background: #ffffff;
       box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
-      border-radius: 10px;
+      border-radius: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;

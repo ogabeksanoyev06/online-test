@@ -1,111 +1,60 @@
 <template>
-  <div class="container">
-    <section class="py-40">
-      <div class="section__top" :class="isMobile ? 'mb-10' : 'mb-30'">
-        <app-text
-          :size="isMobileSmall ? 22 : isMobile ? 26 : 30"
-          :line-height="isMobileSmall ? 26 : isMobile ? 30 : 36"
-          weight="700"
-          class="mb-10"
-        >
-          Test olinadigan fanni tanlang
-        </app-text>
-      </div>
+  <div style="background-color: rgb(242 242 242)">
+    <div class="container">
+      <section class="py-40">
+        <div class="section__top" :class="isMobile ? 'mb-10' : 'mb-20'">
+          <app-text
+            :size="isMobileSmall ? 22 : isMobile ? 26 : 30"
+            :line-height="isMobileSmall ? 26 : isMobile ? 30 : 36"
+            weight="700"
+            class="mb-10"
+          >
+            Test olinadigan fanni tanlang
+          </app-text>
+        </div>
 
-      <AppSmallCard
-        v-for="(item, idx) in 4"
-        :key="idx"
-        :title="item.name + '(' + item.allQuestionCount + ')'"
-        :photo="item.photo"
-        style="cursor: pointer"
-        :class="selectedSubject.subject.id === item.id ? '' : ''"
-        @click="selectSubject(item)"
-      />
-
-      <div class="shadowed bordered radius pa-30 w-100">
-        <AppText
-          :size="isMobileSmall ? 16 : 20"
-          :line-height="isMobileSmall ? 20 : 24"
-          weight="700"
-          class="mb-30"
-        >
-          Fan mavzularini tanlang
-        </AppText>
-
-        <div class="choose-test-topics mb-30">
-          <BaseCheckbox
-            size="18"
-            v-for="(item, index) in subjectSectionList"
+        <div class="bg-white radius" :class="isMobileSmall ? 'pa-10' : 'pa-20'">
+          <AppSmallCard
+            v-for="(item, idx) in subjects"
+            :key="idx"
             :title="item.name"
-            class="mb-20"
-            :key="index"
-            style="display: flex"
-            @change="sectionChanged(item.id)"
-            :checked="!selectedSubjectSections.includes(item.id)"
+            style="cursor: pointer"
+            :class="selectedSubject.subject.id === item.id ? '' : ''"
+            @click="selectSubject(item)"
           />
         </div>
 
-        <div class="test__details mb-30">
-          <BlockWrap
-            width-auto
-            class="align-center test__details-item"
-            :count="isMobileSmall ? 2 : 1"
-            offset-x="15"
-            offset-y="15"
+        <div
+          class="bg-white radius w-100 mt-20"
+          :class="isMobileSmall ? 'pa-10' : 'pa-20'"
+        >
+          <AppText
+            :size="isMobileSmall ? 16 : 20"
+            :line-height="isMobileSmall ? 20 : 24"
+            weight="700"
+            class="mb-30"
           >
-            <AppText size="16" weight="700"> Savollar soni: </AppText>
+            Fan mavzularini tanlang
+          </AppText>
+
+          <div class="choose-test-topics mb-20">
+            <BaseCheckbox
+              size="18"
+              v-for="(item, index) in subjectSectionList"
+              :title="item.name"
+              class="mb-20"
+              :key="index"
+              style="display: flex"
+              @change="sectionChanged(item.id)"
+              :checked="!selectedSubjectSections.includes(item.id)"
+            />
+          </div>
+
+          <div class="test__details mb-20">
             <BaseSelect
               v-model="questionsCount"
+              label="Savollar soni"
               :options-prop="questionsCountSelect"
-              hideDetails
-              :append="true"
-            >
-              <template #append>
-                <svg
-                  class="Dropdown_self__FtxaI"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style="height: 1rem; width: 1rem"
-                >
-                  <path
-                    d="M13.2797 5.9668L8.93306 10.3135C8.41973 10.8268 7.57973 10.8268 7.06639 10.3135L2.71973 5.9668"
-                    stroke="rgb(51, 54, 57)"
-                    stroke-width="1.5"
-                    stroke-miterlimit="10"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg> </template
-            ></BaseSelect>
-          </BlockWrap>
-
-          <BlockWrap
-            width-auto
-            class="align-center test__details-item"
-            :count="isMobileSmall ? 2 : 1"
-            offset-x="15"
-            offset-y="15"
-          >
-            <AppText size="16" weight="700"> Umumiy vaqt </AppText>
-            <BaseInput
-              v-model="questionTotalTime"
-              hide-details=""
-              disabled
-            ></BaseInput>
-          </BlockWrap>
-          <BlockWrap
-            width-auto
-            class="align-center test__details-item"
-            :count="isMobileSmall ? 2 : 1"
-            offset-x="15"
-            offset-y="15"
-          >
-            <AppText size="16" weight="700"> Darajasi </AppText>
-
-            <BaseSelect
-              :options-prop="questionLevelList"
-              v-model="questionSelectedLevel"
               hideDetails
               :append="true"
             >
@@ -128,40 +77,74 @@
                 </svg>
               </template>
             </BaseSelect>
-          </BlockWrap>
+
+            <BaseSelect
+              v-model="questionsCount"
+              label="Sinfni tanlang"
+              :options-prop="classes"
+              hideDetails
+              :append="true"
+            >
+              <template #append>
+                <svg
+                  class="Dropdown_self__FtxaI"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style="height: 1rem; width: 1rem"
+                >
+                  <path
+                    d="M13.2797 5.9668L8.93306 10.3135C8.41973 10.8268 7.57973 10.8268 7.06639 10.3135L2.71973 5.9668"
+                    stroke="rgb(51, 54, 57)"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </template>
+            </BaseSelect>
+            <BaseInput
+              v-model="questionTotalTime"
+              hide-details=""
+              label="Umumiy vaqt"
+              disabled
+            >
+            </BaseInput>
+          </div>
+          <AppButton
+            theme="secondary"
+            sides="20"
+            @click="getQuestionBySelectedParameters"
+          >
+            <img src="/icons/play.svg" alt="" style="margin-right: 10px" />
+            Testni boshlash
+          </AppButton>
         </div>
-        <AppButton
-          theme="secondary"
-          sides="20"
-          @click="getQuestionBySelectedParameters"
-        >
-          <img src="/icons/play.svg" alt="" style="margin-right: 10px" />
-          Testni boshlash
-        </AppButton>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </template>
 
 <script>
-import BlockWrap from "../../../components/shared-components/BlockWrap";
 import AppSmallCard from "../../../components/shared-components/AppSmallCard";
 import AppText from "../../../components/shared-components/AppText";
 import BaseSelect from "../../../components/shared-components/BaseSelect";
 import AppButton from "../../../components/shared-components/AppButton";
-import BaseInput from "../../../components/shared-components/BaseInput";
 import test from "../../../constants/test";
 import { mapMutations } from "vuex";
+import BaseCheckbox from "@/components/shared-components/BaseCheckbox.vue";
+import BaseInput from "@/components/shared-components/BaseInput.vue";
 
 export default {
   name: "AppIndex",
   components: {
-    BaseInput,
     AppButton,
     BaseSelect,
     AppSmallCard,
-    BlockWrap,
     AppText,
+    BaseCheckbox,
+    BaseInput,
   },
   data() {
     return {
@@ -214,6 +197,36 @@ export default {
           name: 30,
         },
       ],
+      classes: [
+        {
+          id: 5,
+          name: 5,
+        },
+        {
+          id: 6,
+          name: 6,
+        },
+        {
+          id: 7,
+          name: 7,
+        },
+        {
+          id: 8,
+          name: 8,
+        },
+        {
+          id: 9,
+          name: 9,
+        },
+        {
+          id: 10,
+          name: 10,
+        },
+        {
+          id: 11,
+          name: 11,
+        },
+      ],
       questionTime: 0,
     };
   },
@@ -227,9 +240,9 @@ export default {
     },
     getSubjects() {
       try {
-        this.$api.get(`main/Home/Test/SubjectList`).then((res) => {
-          if (!res.error) {
-            this.subjects = res.result;
+        this.$http.get(`tests/sciences/`).then((res) => {
+          if (res) {
+            this.subjects = res;
             this.subjects.forEach((s) => {
               s.photo = "/icons/sciences.svg";
             });
@@ -341,6 +354,7 @@ export default {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  gap: 10px;
   width: 100%;
 
   &-item {

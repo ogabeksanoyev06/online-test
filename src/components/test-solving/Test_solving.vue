@@ -1,20 +1,40 @@
 <template>
   <div class="test__body" id="test_solving_component">
     <TestPagination class="mb-10" :questions-prop="questions.questions" />
+
+    <!-- <AppText
+      :size="isMobileSmall ? 14 : 16"
+      :line-height="isMobileSmall ? 20 : 20"
+      weight="500"
+      class="color-main text-right mb-10"
+    >
+      {{ questions.questions.length }} savollar
+    </AppText> -->
     <div class="test__questions mb-30">
       <AppText
         :size="isMobileSmall ? 14 : 16"
-        :line-height="isMobileSmall ? 20 : 22"
+        :line-height="isMobileSmall ? 18 : 20"
         class="mb-20"
       >
-        <span id="test_question" v-html="reserved" style="font-weight: 500">
-        </span>
+        <span v-html="reserved" id="test_question"></span>
       </AppText>
-      <div class="test__photo">
-        <img src="/images/math.jpg" alt="" />
+      <div class="test__photo" v-if="selectedQuestion.questionImage">
+        <img
+          :src="baseURL + 'testimages/' + selectedQuestion.questionImage"
+          alt=""
+        />
       </div>
     </div>
     <div class="test__answers">
+      <AppText
+        :size="isMobileSmall ? 14 : 18"
+        :line-height="isMobileSmall ? 20 : 26"
+        class="mb-20 color-main"
+        weight="600"
+      >
+        Berilgan javoblar:
+      </AppText>
+
       <div class="test__options">
         <AppRadioGroup :options="options" name="roundTrip" v-model="radio" />
       </div>
@@ -33,6 +53,7 @@ export default {
   props: {
     questionsProp: {
       id: null,
+      maxBall: 0,
       quesCount: 0,
       questions: [],
       subjectName: null,
@@ -51,24 +72,6 @@ export default {
       radio: "A",
       options: [
         {
-          label: "A",
-          radioValue: "A",
-          string: "Lb = 2La",
-          imgPath: "/images/math.jpg",
-        },
-        {
-          label: "B",
-          radioValue: "B",
-          string: "Lb = 2La",
-          imgPath: "/images/math.jpg",
-        },
-        {
-          label: "C",
-          radioValue: "C",
-          string: "Lb = 2La",
-          imgPath: "/images/math.jpg",
-        },
-        {
           label: "D",
           radioValue: "D",
           string: "Lb = 2La",
@@ -78,6 +81,8 @@ export default {
       questions: {
         questions: [],
         subjectName: null,
+        maxBall: null,
+        quesCount: null,
         selectedSubjectId: 0,
         selectedQuestionId: null,
       },
@@ -88,10 +93,11 @@ export default {
         answers: [],
         questionImage: null,
       },
-      answers: [],
       answerLabels: ["A", "B", "C", "D", "E", "F", "G", "H"],
       questionHtml: null,
       reserved: null,
+      exam_id: null,
+      answers: [],
     };
   },
   computed: {
@@ -99,8 +105,8 @@ export default {
   },
   methods: {
     selectQuestion() {
-      this.selectedQuestion.number = this.selectedQuestionIndex + 1;
       this.setInitialSelectedQuestion();
+      this.selectedQuestion.number = this.selectedQuestionIndex;
     },
     async setInitialSelectedQuestion() {
       this.questions = this.questionsProp;
@@ -177,6 +183,7 @@ export default {
             "testimages/" +
             imageParts[1].replace("}", "").toLowerCase();
         }
+
         this.options.push(answerModel);
       });
     },
@@ -202,4 +209,21 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.katex-display {
+  overflow: auto hidden !important;
+}
+
+.katex-display > .katex {
+  white-space: normal !important;
+}
+
+/* Add space between broken lines: */
+.katex-display > .base {
+  margin: 0.25em 0 !important;
+}
+
+.katex-display {
+  margin: 0.5em 0 !important;
+}
+</style>

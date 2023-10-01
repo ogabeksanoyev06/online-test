@@ -196,7 +196,7 @@
   justify-content: space-between;
   border: 1px solid $border-color;
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   transition: 0.3s;
   &:hover {
     border-color: transparent;
@@ -207,10 +207,10 @@
   background-color: #e7eef5;
 }
 .radius {
-  border-radius: 10px;
+  border-radius: 0.5rem;
 }
 .shadowed {
-  box-shadow: 0 8px 20px rgba(70, 93, 122, 0.08);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 .bordered {
   border: 1px solid $border-color !important;

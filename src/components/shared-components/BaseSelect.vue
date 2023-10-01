@@ -9,7 +9,11 @@
     v-slot="{ errors }"
     :hideDetails="hideDetails"
   >
-    <div class="input__block" :class="disabled ? 'disabled' : ''">
+    <div
+      class="input__block"
+      :class="disabled ? 'disabled' : ''"
+      @click="dropdownVisible = !dropdownVisible"
+    >
       <label class="input__block-label">
         <span v-if="label" class="input__block-title">{{ label }}</span>
         <div
@@ -26,6 +30,7 @@
             <slot name="append"></slot>
           </div>
           <input
+            style="cursor: pointer !important"
             ref="input"
             readonly="readonly"
             :disabled="disabled"
@@ -161,29 +166,22 @@ export default {
 .dropdown-items {
   position: absolute;
   background: #fff;
-  border-radius: 4px;
+  border-radius: 0.5rem;
   box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
   margin: 10px 0 0;
   opacity: 0;
   padding: 10px;
-  position: absolute;
   left: 0;
   top: 100%;
   width: 100%;
+  height: 170px;
   -webkit-transform: translateY(-10px);
   transform: translateY(-10px);
   transition: visibility 0s linear 0.2s, opacity 0.2s, transform 0.2s;
   visibility: hidden;
   z-index: 99999;
   overflow-y: auto;
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 8px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #d9d9da;
-    border-radius: 5px;
-  }
+
   &.active {
     opacity: 1;
     -webkit-transform: translateY(0);
@@ -194,7 +192,7 @@ export default {
 }
 .dropdown-item {
   align-items: center;
-  border-radius: 6px;
+  border-radius: 0.5rem;
   color: #000;
   display: flex;
   font-size: 12px;

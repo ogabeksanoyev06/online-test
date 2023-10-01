@@ -1,7 +1,7 @@
 <template>
   <!--  Add active class to app small card in order to show green borders in card-->
   <div class="app-small-card" @click="clickMe">
-    <p>O'zbekiston tarixi</p>
+    <p>{{ title }}</p>
   </div>
 </template>
 
@@ -28,15 +28,14 @@ export default {
   display: inline-block;
   border: 1px solid #e3e1e1;
   padding: 10px 20px;
-  margin-right: 16px;
-  margin-bottom: 16px;
-  border-radius: 100px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 0.5rem;
   transition: 0.1s;
   cursor: pointer;
   p {
     font-weight: 500;
     font-size: 16px;
-    line-height: 24px;
     color: #222;
     width: max-content;
   }

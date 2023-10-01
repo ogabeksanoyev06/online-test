@@ -91,7 +91,7 @@ export default {
   $self: &;
   display: flex;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 0.5rem;
   margin-bottom: 10px;
   background-color: rgb(245 247 249);
   padding: 0.75rem 1rem;

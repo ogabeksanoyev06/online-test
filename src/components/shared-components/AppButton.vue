@@ -34,7 +34,7 @@ export default {
     },
     radius: {
       type: [Number, String],
-      default: 5,
+      default: 8,
     },
     fontSize: {
       type: [Number, String],

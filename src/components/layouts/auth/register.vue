@@ -390,7 +390,7 @@ export default {
   grid-template-columns: 1fr 1fr;
   height: 100%;
   background-color: #e9ecef;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   z-index: 1;
 }
 .switch-label {
@@ -407,7 +407,7 @@ export default {
   font-size: 16px;
   cursor: pointer;
   transition: 0.2s;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   &.active {
     color: #fff;
     background-color: #3165cb;

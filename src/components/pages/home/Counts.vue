@@ -50,7 +50,7 @@ export default {
     position: relative;
     text-align: center;
     background: #fff;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     .icon {
       position: absolute;
       top: -25px;

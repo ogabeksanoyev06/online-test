@@ -42,6 +42,9 @@
   .color-#{$name} {
     color: #{$color};
   }
+  .bg-#{$name} {
+    background-color: #{$color};
+  }
 }
 .nowrap {
   white-space: nowrap;

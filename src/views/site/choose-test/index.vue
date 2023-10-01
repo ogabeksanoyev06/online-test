@@ -311,7 +311,6 @@ export default {
         return;
       }
       this.selectedDirectionId = item.id;
-      localStorage.setItem("directionId", item.id);
       this.getSubjectsByDirectionId(this.selectedDirectionId);
     },
     getSubjectsByDirectionId(directionId) {
@@ -349,7 +348,7 @@ export default {
       this.$router.push({ path: "/choose-subject" });
     },
     startClassTest() {
-      console.log("aa");
+      this.$router.push({ path: "/choose-subject-school" });
     },
     startOnlineTest() {
       this.clearTestPropertiesFromLocalStorage();

@@ -3,11 +3,11 @@
   width: 270px;
   max-width: 100%;
   position: relative;
-  border-radius: 6px;
+  border-radius: 0.5rem;
   outline: none;
   &:before {
     display: block;
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
@@ -24,7 +24,7 @@
     cursor: pointer;
     user-select: none;
     border-radius: inherit;
-    background: #FFFFFF;
+    background: #ffffff;
     border: 1px solid rgba(24, 24, 24, 0.2);
     font-size: rem(20px);
     line-height: 34px;
@@ -43,12 +43,12 @@
     &:after {
       flex-shrink: 0;
       display: block;
-      content: '';
+      content: "";
       width: 20px;
       height: 20px;
       margin-left: 20px;
-      background: url('~/assets/icons/arrow-down.svg') center/contain no-repeat;
-      transition: transform .15s ease-out;
+      background: url("~/assets/icons/arrow-down.svg") center/contain no-repeat;
+      transition: transform 0.15s ease-out;
     }
   }
   &__menu {
@@ -59,7 +59,7 @@
     top: calc(100% + 10px);
     left: 0;
     width: 100%;
-    background: #FFFFFF;
+    background: #ffffff;
     border: 1px solid rgba(24, 24, 24, 0.1);
     box-shadow: 10px 10px 60px rgba(0, 0, 0, 0.1);
     border-radius: inherit;
@@ -68,7 +68,7 @@
   &__list-item {
     cursor: pointer;
     user-select: none;
-    transition: color .15s linear;
+    transition: color 0.15s linear;
     font-weight: 600;
     margin-bottom: 10px;
     &--active,
@@ -87,10 +87,12 @@
     }
   }
 
-  &-enter-active, &-leave-active {
-    transition: transform .15s ease-out, opacity .15s linear;
+  &-enter-active,
+  &-leave-active {
+    transition: transform 0.15s ease-out, opacity 0.15s linear;
   }
-  &-enter, &-leave-to {
+  &-enter,
+  &-leave-to {
     transform: translateY(-10px);
     opacity: 0;
   }

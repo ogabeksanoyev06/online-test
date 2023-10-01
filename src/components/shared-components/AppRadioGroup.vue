@@ -61,10 +61,9 @@ export default {
   methods: {
     ...mapMutations(["setSelectedQuestionIndex"]),
     alreadySelected(questionId) {
+      let examId = parseInt(localStorage.getItem("exam_id"));
       let examEntry = this.selectedAnswers.find(
-        (entry) =>
-          entry.exam_id === parseInt(localStorage.getItem("exam_id")) &&
-          entry.directionId === parseInt(localStorage.getItem("directionId"))
+        (entry) => entry.exam_id === examId
       );
       if (examEntry) {
         let questionEntry = examEntry.questions.find(
@@ -75,10 +74,9 @@ export default {
       return -1;
     },
     selectAnswer(questionId, answerKey) {
+      let examId = parseInt(localStorage.getItem("exam_id"));
       let examEntry = this.selectedAnswers.find(
-        (entry) =>
-          entry.exam_id === parseInt(localStorage.getItem("exam_id")) &&
-          entry.directionId === parseInt(localStorage.getItem("directionId"))
+        (entry) => entry.exam_id === examId
       );
 
       if (examEntry) {
@@ -101,11 +99,9 @@ export default {
       this.goToNextQuestion();
     },
     fillSelectedAnswersArray(questionId, answerKey) {
+      let examId = parseInt(localStorage.getItem("exam_id"));
       let model = {
-        exam_id: parseInt(localStorage.getItem("exam_id")),
-        directionId: parseInt(localStorage.getItem("directionId")),
-        started_time: "2023-09-09 22:02:20",
-        finished_time: "2021-09-09 22:05:30",
+        exam_id: examId,
         questions: [
           {
             question_id: questionId,

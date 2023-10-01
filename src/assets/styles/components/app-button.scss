@@ -54,7 +54,7 @@
       height: #{$height}px;
     }
   }
-  @each $radius in (5, 10, 15, 20, 25, 28, 50, 100) {
+  @each $radius in (5, 8, 10, 15, 20, 25, 28, 50, 100) {
     &--rd-#{$radius} {
       border-radius: #{$radius}px;
     }

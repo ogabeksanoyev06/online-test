@@ -33,6 +33,11 @@ const routes = [
         component: () => import("../views/site/choose-subject"),
       },
       {
+        path: "/choose-subject-school",
+        name: "choose-subject-school",
+        component: () => import("../views/site/choose-subject/school.vue"),
+      },
+      {
         path: "/video-course",
         name: "video-course",
         component: () => import("../views/site/video-course"),
