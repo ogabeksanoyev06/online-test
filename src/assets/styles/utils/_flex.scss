@@ -16,10 +16,16 @@
 .align-center {
   align-items: center;
 }
+.align-start {
+  align-items: flex-start;
+}
 
 .flex-wrap {
   flex-wrap: wrap;
 }
 .flex-column {
   flex-direction: column;
+}
+.flex-row {
+  flex-direction: row;
 }

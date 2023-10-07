@@ -1,14 +1,15 @@
 <template>
-  <div id="app" @mouseup="actionUser">
+  <div id="app" @mouseup="handleUserAction">
     <router-view />
   </div>
 </template>
+
 <script>
 import { mapMutations } from "vuex";
 import TokenService from "./service/TokenService";
+
 export default {
   name: "App",
-  components: {},
   data() {
     return {
       isLoading: true,
@@ -16,48 +17,46 @@ export default {
   },
   methods: {
     ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
-    actionUser() {
-      let dif = 60;
-      let currentTime = new Date() / 1000;
-      let token = TokenService.getToken();
-      let expDate =
+    handleUserAction() {
+      const token = TokenService.getToken();
+      if (!token) return;
+      const currentTime = Math.floor(Date.now() / 1000);
+      const expirationTime =
         TokenService.getTokenCreationTime() + TokenService.getTokenExpireDate();
-      console.log(
-        TokenService.getTokenCreationTime(),
-        "    ",
-        TokenService.getTokenExpireDate()
-      );
-      if (token) {
-        console.log(currentTime);
-        if (currentTime > expDate - dif && currentTime < expDate) {
-          this.RefreshToken();
-        } else if (currentTime > expDate) {
-          this.logOut();
-        }
+      const warningTime = expirationTime - 60;
+      if (currentTime > warningTime && currentTime < expirationTime) {
+        this.refreshToken();
+      } else if (currentTime >= expirationTime) {
+        this.logOut();
       }
     },
-    RefreshToken() {
-      this.$http("users/token/refresh/", {
-        refresh: TokenService.getRefreshToken(),
-      })
-        .then((res) => {
-          if (res) {
-            this.TokenService.saveToken(res.access);
-            this.TokenService.tokenExpireDate(
-              +new Date().getTime() / 1000 + 86400
+    refreshToken() {
+      this.$http
+        .post("users/token/refresh/", {
+          refresh: TokenService.getRefreshToken(),
+        })
+        .then((response) => {
+          if (response && response.access) {
+            TokenService.saveToken(response.access);
+            TokenService.saveTokenExpireDate(
+              Math.floor(new Date().getTime() / 1000) + 86400
             );
           }
         })
-        .catch(() => {});
+        .catch((error) => {
+          console.error("Error refreshing token:", error);
+        });
     },
+
     logOut() {
       this.setAccessToken(null);
       this.setIsLoggedOn(false);
-      localStorage.clear();
+      TokenService.clearTokens();
     },
   },
-  mounted() {},
-  created() {},
 };
 </script>
-<style></style>
+
+<style>
+/* Your styles here */
+</style>

@@ -22,7 +22,7 @@ const TokenService = {
   getTokenCreationTime() {
     return parseInt(localStorage.getItem(FRONT_TOKEN_CREATION_TIME));
   },
-  tokenExpireDate(expireTime) {
+  saveTokenExpireDate(expireTime) {
     localStorage.setItem(FRONT_TOKEN_EXPIRE, expireTime);
   },
   getTokenExpireDate() {

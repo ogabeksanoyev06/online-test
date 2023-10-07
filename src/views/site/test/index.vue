@@ -1,83 +1,183 @@
 <template>
-  <section class="py-20">
+  <section class="py-20" style="background-color: rgb(242 242 242)">
     <div class="container">
       <div class="test">
-        <div class="test__left">
-          <Test_solving :questions-prop="rawTests"></Test_solving>
-        </div>
-        <div class="test__right">
-          <div class="test__top-item">
-            <AppText
-              size="14"
-              line-height="26"
-              weight="700"
-              v-if="testTypeProperty === 'online'"
-            >
-              Majburiy fanlar
-            </AppText>
-            <div class="test__wrap">
-              <button
-                class="test__item"
-                @click="selectSubjectQuestions(mandatory.id)"
-                v-for="(mandatory, index) in mandatorySubjectsQuestions"
-                :key="index"
-                :class="selectedSubjectIdItem === mandatory.id ? 'active' : ''"
-              >
-                {{ mandatory.name }}
-              </button>
-            </div>
-          </div>
-          <div class="test__top-item" v-if="testTypeProperty === 'online'">
-            <AppText
-              size="14"
-              line-height="26"
-              weight="700"
-              v-if="testTypeProperty === 'online'"
-            >
-              Asosiy fanlar
-            </AppText>
-            <div class="test__wrap">
-              <button
-                class="test__item"
-                @click="selectSubjectQuestions(main.id)"
-                v-for="(main, index) in mainSubjectsQuestions"
-                :key="index"
-                :class="selectedSubjectIdItem === main.id ? 'active' : ''"
-              >
-                {{ main.name }}
-              </button>
-            </div>
-          </div>
-          <div class="test__bottom">
-            <div class="test__details">
+        <div class="test__left radius">
+          <div
+            class="test__body"
+            v-for="test in rawTests"
+            :key="test.id"
+            :ref="'test_' + test.id"
+          >
+            <div class="test__subject">
               <div
-                class="test__details-item"
+                class="test__title bg-white radius"
                 style="
-                  cursor: unset;
-                  font-size: 1.2rem;
-                  max-width: 150px;
-                  width: 100%;
-                  color: #00b74a;
+                  position: sticky;
+                  top: -0.5px;
+                  right: 0;
+                  left: 0;
+                  z-index: 10;
                 "
               >
-                <span> {{ timerFormat(testTimer) }} </span>
-              </div>
-              <div class="test__details-item" @click="testFinish">
-                <div class="test__details-icon">
-                  <img src="/icons/finish.svg" alt="" />
-                </div>
-                <AppText
-                  size="14"
-                  line-height="26"
-                  weight="700"
-                  class="color-danger"
-                  @click="testFinish()"
+                <div
+                  class="d-flex align-center justify-space-between"
+                  :class="isDesktopSmall ? 'pa-10' : 'pa-20'"
                 >
-                  Tugatish
-                </AppText>
+                  <AppText :size="isMobile ? 14 : 16" weight="600">
+                    {{ test.name }}
+                  </AppText>
+                  <AppText :size="14" weight="400">
+                    {{ answeredQuestionsCount(test.id) }} /
+                    {{ test?.questions?.length }} savollar
+                  </AppText>
+                </div>
+              </div>
+              <div
+                class="test__question bg-white radius"
+                :class="isDesktopSmall ? 'pa-10' : 'pa-20'"
+                v-for="(question, s) in test.questions"
+                :key="s"
+                :ref="'question_' + test.id + '_' + question.id"
+              >
+                <span class="test__question-title d-flex mb-10">
+                  <AppText
+                    class="mr-10"
+                    :size="isMobile ? 14 : 16"
+                    :line-height="isMobile ? 20 : 28"
+                    weight="600"
+                  >
+                    {{ s + 1 }}.
+                  </AppText>
+                  <AppText
+                    :size="isMobile ? 14 : 16"
+                    :line-height="isMobile ? 20 : 28"
+                    weight="500"
+                  >
+                    {{ question.question }}
+                  </AppText>
+                </span>
+                <div class="test__answers">
+                  <div
+                    class="test__answers-title d-flex radius pointer"
+                    v-for="(answer, i) in question.answers"
+                    @click="selectAnswer(test.id, question.id, i + 1)"
+                    :class="{
+                      active: alreadySelected(test.id, question.id) === i + 1,
+                    }"
+                    :key="i"
+                  >
+                    <AppText
+                      :size="isMobile ? 14 : 16"
+                      :line-height="isMobile ? 20 : 24"
+                      weight="600"
+                      class="mr-5"
+                    >
+                      {{ answerLabels[i] }}.
+                    </AppText>
+                    <AppText
+                      :size="isMobile ? 14 : 14"
+                      :line-height="isMobile ? 20 : 24"
+                      weight="500"
+                    >
+                      {{ answer }}
+                    </AppText>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+        <div class="test__right">
+          <div
+            class="bg-white radius mb-10"
+            :class="isDesktopSmall ? 'pa-10' : 'pa-20'"
+          >
+            <div class="d-flex justify-space-between align-center">
+              <div
+                class="d-flex flex-column justify-content-center text-start"
+                style="gap: 0.25rem; min-width: 110px"
+              >
+                <AppText
+                  :size="isMobile ? 16 : 24"
+                  :line-height="isMobile ? 16 : 24"
+                  weight="600"
+                  class="color-main"
+                >
+                  {{ timerFormat(testTimer) }}
+                </AppText>
+                <AppText
+                  :size="isMobile ? 12 : 14"
+                  :line-height="isMobile ? 12 : 14"
+                  weight="500"
+                >
+                  Qolgan vaqt
+                </AppText>
+              </div>
+              <AppButton
+                theme="red"
+                :font-size="isMobileSmall ? 14 : isMobile ? 14 : 16"
+                :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
+                :radius="isMobileSmall ? '8' : '50'"
+                :height="isMobileSmall ? '40' : '50'"
+                @click="testFinish"
+              >
+                Tugatish
+              </AppButton>
+            </div>
+          </div>
+          <section :style="isDesktopSmall ? 'display:none' : ''">
+            <div class="block-pagination__links">
+              <div
+                class="bg-white radius"
+                :class="isDesktopSmall ? 'pa-10' : 'pa-20'"
+                v-for="test in rawTests"
+                :key="test.id"
+              >
+                <div>
+                  <div class="block-pagination__header mb-10">
+                    <div class="d-flex align-center justify-space-between">
+                      <AppText
+                        class="pointer mr-10 color-main"
+                        :size="isMobile ? 16 : 18"
+                        :line-height="isMobile ? 20 : 28"
+                        weight="600"
+                        @click.prevent="scrollToTest(test.id)"
+                      >
+                        {{ test.name }}
+                      </AppText>
+                      <AppText
+                        :size="isMobile ? 14 : 16"
+                        :line-height="isMobile ? 20 : 28"
+                        weight="500"
+                      >
+                        3.1 ball
+                      </AppText>
+                    </div>
+                  </div>
+                  <ul>
+                    <li
+                      class="pqitem"
+                      v-for="(question, index) in test.questions"
+                      :key="question.id"
+                      @click.prevent="scrollToQuestion(test.id, question.id)"
+                      :class="{
+                        active: alreadySelected(test.id, question.id) !== -1,
+                      }"
+                    >
+                      <a
+                        class="pq"
+                        :href="'#question_' + (index + 1)"
+                        :id="'pq_' + question.id"
+                      >
+                        {{ index + 1 }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>
@@ -85,15 +185,13 @@
 </template>
 
 <script>
-// import AppButton from "../../../components/shared-components/AppButton";
-import Test_solving from "../../../components/test-solving/Test_solving";
+import AppButton from "@/components/shared-components/AppButton.vue";
 import { mapGetters, mapMutations } from "vuex";
-// import AppModal from "../../../components/shared-components/AppModal";
 import test from "../../../constants/test";
 
 export default {
   name: "AppTest",
-  components: { Test_solving },
+  components: { AppButton },
   data() {
     return {
       questions: [
@@ -130,18 +228,22 @@ export default {
         maxBall: null,
         quesCount: null,
       },
-      selectedSubjectIdItem: null,
       onlineTestAnswers: false,
       blockTestAnswers: false,
       testTypeProperty: test.TYPE_ONLINE,
       onlineTestResult: [
         {
-          maxBall: 0,
-          quesCount: 0,
-          subjectName: null,
-          subjectStatusName: null,
-          userAnsCount: 0,
-          userTestBall: 0,
+          science: "Matematika",
+          correct_ans: 0,
+          incorrect_ans: 0,
+          total_ball: 0.0,
+          questions: [
+            {
+              question_id: 9,
+              picked: false,
+              isTrue: false,
+            },
+          ],
         },
       ],
       testResultTotals: {
@@ -151,6 +253,8 @@ export default {
         rightAnswersBalls: 0,
       },
       testTimer: 0,
+      answerLabels: ["A", "B", "C", "D", "E", "F", "G", "H"],
+      selectedAnswers: [],
     };
   },
   computed: {
@@ -165,26 +269,27 @@ export default {
       "setSelectedSubjectId",
       "setCurrentSubjectQuestionCount",
     ]),
-    selectSubjectQuestions(subjectId) {
-      this.setSelectedQuestionIndex(0);
-      this.setQuestionIndexToStorage(0);
-      this.setSelectedSubjectId(subjectId);
-      this.setSelectedSubjectIdMixin(subjectId);
-      localStorage.setItem("exam_id", subjectId);
-      let index = this.questions.findIndex((q) => q.id === subjectId);
-      if (index === -1) return;
-      this.rawTests = this.questions[index];
-      this.setCurrentSubjectQuestionCount(this.rawTests.questions.length);
+    scrollToTest(testId) {
+      const testElement = this.$refs["test_" + testId][0];
+      if (testElement) {
+        testElement.scrollIntoView({ behavior: "smooth" });
+      }
     },
+    scrollToQuestion(testId, questionId) {
+      const questionElement =
+        this.$refs["question_" + testId + "_" + questionId][0];
+      if (questionElement) {
+        questionElement.scrollIntoView({ behavior: "smooth" });
+      }
+    },
+
     readQuestionsFromStorage() {
       let questions = JSON.parse(localStorage.getItem("questions"));
       if (questions.length > 0) {
         this.questions = questions;
-        this.rawTests = questions[this.questionsInitialIndex()];
-        this.setCurrentSubjectQuestionCount(this.rawTests.questions.length);
+        this.rawTests = questions;
         this.mandatorySubjectsQuestions = [];
         this.mainSubjectsQuestions = [];
-        this.setSelectedQuestionIndex(0);
         this.questions.forEach((q, index) => {
           if (index <= 2) {
             this.mandatorySubjectsQuestions.push(q);
@@ -192,27 +297,66 @@ export default {
             this.mainSubjectsQuestions.push(q);
           }
         });
-        if (!this.selectedSubjectId) {
-          this.setSelectedSubjectId(this.questions[0].id);
-          localStorage.setItem("exam_id", this.questions[0].id);
+      }
+    },
+
+    alreadySelected(testId, questionId) {
+      let examEntry = this.selectedAnswers.find(
+        (entry) => entry.exam_id === testId
+      );
+      if (examEntry) {
+        let questionEntry = examEntry.questions.find(
+          (q) => q.question_id === questionId
+        );
+        return questionEntry ? questionEntry.answer : -1;
+      }
+      return -1;
+    },
+    selectAnswer(testId, questionId, answerKey = null) {
+      let examEntry = this.selectedAnswers.find(
+        (entry) => entry.exam_id === testId
+      );
+      if (examEntry) {
+        let questionEntry = examEntry.questions.find(
+          (q) => q.question_id === questionId
+        );
+        if (questionEntry) {
+          questionEntry.answer = answerKey;
+        } else {
+          examEntry.questions.push({
+            question_id: questionId,
+            answer: answerKey,
+          });
         }
+      } else {
+        this.fillSelectedAnswersArray(testId, questionId, answerKey);
       }
+      localStorage.removeItem("answers");
+      localStorage.setItem("answers", JSON.stringify(this.selectedAnswers));
     },
-    questionsInitialIndex() {
-      let selectedSubjectId = this.getSelectedSubjectIdMixin();
-      if (!selectedSubjectId) {
-        return 0;
-      }
-      return this.questionIndexBySubjectId(selectedSubjectId);
+    fillSelectedAnswersArray(testId, questionId, answerKey = null) {
+      let model = {
+        exam_id: testId,
+        questions: [
+          {
+            question_id: questionId,
+            answer: answerKey,
+          },
+        ],
+      };
+      this.selectedAnswers.push(model);
     },
-    questionIndexBySubjectId(subjectId) {
-      let index = this.questions.findIndex((q) => q.id === subjectId);
-      if (index === -1) return 0;
-      return index;
+    answeredQuestionsCount(testId) {
+      const examEntry = this.selectedAnswers.find(
+        (entry) => entry.exam_id === testId
+      );
+      return examEntry ? examEntry.questions.length : 0;
     },
+
     testFinish() {
       try {
         let answers = JSON.parse(localStorage.getItem("answers"));
+        let questions = JSON.parse(localStorage.getItem("questions"));
         if (!answers || answers.length <= 0) {
           this.errorNotification(
             "Sizda belgilangan javoblar yo`q",
@@ -228,7 +372,7 @@ export default {
             this.subjectTestResults(answers);
             return;
           case test.TYPE_ONLINE:
-            this.onlineTestResults(answers);
+            this.onlineTestResults(questions, answers);
             return;
           default:
             return null;
@@ -236,6 +380,25 @@ export default {
       } catch (e) {
         console.log(e.response.data.error.message);
       }
+    },
+    onlineTestResults(questions, answers) {
+      const additionalData = {
+        started_time: "2023-09-09 22:02:20",
+        finished_time: "2021-09-09 22:05:30",
+      };
+      this.completeAnswers(questions, answers); // Bu yerda funksiyani chaqirib, answersni yangilaymiz
+      answers.push(additionalData);
+      this.$http.post(`tests/exam-tests/done/`, answers).then((res) => {
+        if (res) {
+          this.onlineTestResult = res;
+          // this.setTestResultTotals();
+          localStorage.setItem(
+            "testResult",
+            JSON.stringify(this.onlineTestResult)
+          );
+          this.$router.push({ name: "result-test" });
+        }
+      });
     },
     subjectTestResults(answers) {
       this.$api
@@ -250,20 +413,7 @@ export default {
           }
         });
     },
-    onlineTestResults(answers) {
-      const additionalData = {
-        started_time: "2023-09-09 22:02:20",
-        finished_time: "2021-09-09 22:05:30",
-      };
-      answers.push(additionalData);
-      this.$http.post(`tests/exam-tests/done/`, answers).then((res) => {
-        if (!res.error) {
-          this.onlineTestAnswers = true;
-          this.onlineTestResult = res.result;
-          // this.setTestResultTotals();
-        }
-      });
-    },
+
     setTimer() {
       let _this = this;
       this.testTimer = parseInt(localStorage.getItem("testTime")) * 60;
@@ -293,12 +443,14 @@ export default {
       }
       return hours + ":" + minutes + ":" + seconds;
     },
+
     closeModal() {
       this.onlineTestAnswers = false;
     },
     closeBlockTestResultModal() {
       this.blockTestAnswers = false;
     },
+
     setTestResultTotals() {
       this.onlineTestResult.forEach((t) => {
         this.testResultTotals.testCount += t.quesCount;
@@ -307,19 +459,50 @@ export default {
         this.testResultTotals.rightAnswersBalls += t.userTestBall;
       });
     },
+
+    completeAnswers(questions, answers) {
+      questions.forEach((questionItem) => {
+        // Agar bu test answersda mavjud bo'lmasa, yangi exam_id ni qo'shadi
+        let foundExam = answers.find(
+          (answerItem) => answerItem.exam_id === questionItem.id
+        );
+        if (!foundExam) {
+          foundExam = {
+            exam_id: questionItem.id,
+            questions: [],
+          };
+          answers.push(foundExam);
+        }
+
+        // Har bir savol uchun tekshirish
+        questionItem.questions.forEach((q) => {
+          let foundQuestion = (foundExam.questions || []).find(
+            (a) => a.question_id === q.id
+          );
+
+          if (!foundQuestion) {
+            // Agar savol javoblarda mavjud bo'lmasa, uni null qiymati bilan qo'shadi
+            foundExam.questions.push({
+              question_id: q.id,
+              answer: null,
+            });
+          }
+        });
+      });
+    },
   },
   mounted() {
-    this.selectedSubjectIdItem = this.selectedSubjectId;
     this.testTypeProperty = this.testType;
+    let storedAnswers = localStorage.getItem("answers");
+    if (storedAnswers) {
+      this.selectedAnswers = JSON.parse(storedAnswers);
+    }
   },
   created() {
     this.setTimer();
     this.readQuestionsFromStorage();
   },
   watch: {
-    selectedSubjectId() {
-      this.selectedSubjectIdItem = this.selectedSubjectId;
-    },
     testType() {
       this.testTypeProperty = this.testType;
     },
@@ -331,94 +514,63 @@ export default {
 @import "../../../assets/styles/abstracts/variables";
 
 .test {
-  background-color: white;
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  height: calc(100vh - 130px);
+  gap: 2rem;
   &__left {
-    max-width: 60%;
-    width: 100%;
+    height: calc(100vh - 130px);
+    flex-grow: 1;
+    overflow: auto;
+    order: 1;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   &__right {
-    max-width: 40%;
-    width: 100%;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    border-radius: 15px;
-    padding: 10px 20px;
+  }
+  &__body {
+  }
+  &__subject {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  &__title {
+    box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
+  }
+  &__question {
+    &-title {
+    }
+  }
+  &__answers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    &-title {
+      background-color: rgb(245, 247, 249);
+      padding: 0.75rem 1rem;
+      transition-property: color, background-color, border-color,
+        text-decoration-color, fill, stroke;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 0.15s;
+      font-style: italic;
+      &:hover {
+        background-color: #e8faed;
+      }
+      &.active {
+        background-color: #22ae5f;
+        color: #fff !important;
+      }
+    }
   }
   &__wrap {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
   }
-
-  &__item {
-    cursor: pointer;
-    background-color: white;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 1.5;
-    padding: 10px 15px;
-    transition: 0.3s;
-    color: #000;
-    box-shadow: 0px 0px 10px rgba(2, 64, 51, 0.2);
-    border-radius: 0.5rem;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    min-height: 40px;
-    &.active {
-      background-color: #024033;
-      color: #fff;
-      box-shadow: 0px 0px 0px rgba(2, 64, 51, 0.2);
-    }
-  }
-
-  &__body {
-    padding: 0 30px;
-  }
-
-  &__details {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 10px 0;
-    width: 100%;
-    &-item {
-      margin-left: 10px;
-      background: #ffffff;
-      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
-      border-radius: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 15px;
-      cursor: pointer;
-
-      &:first-child {
-        margin-left: 0;
-      }
-    }
-
-    &-icon {
-      margin-right: 12px;
-      max-width: 15px;
-      max-height: 15px;
-      display: flex;
-      justify-content: center;
-      // overflow: hidden;
-
-      img {
-        width: 100%;
-        object-fit: contain;
-      }
-    }
-  }
-
-  &__questions {
-  }
-
   &__photo {
     max-width: 270px;
     max-height: 700px;
@@ -429,41 +581,74 @@ export default {
       object-fit: contain;
     }
   }
-
-  &__answers {
-  }
-
-  &__options {
-  }
-  .mandatory__btn {
-    width: 3.5rem;
-    height: 3.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #3165cb;
-    border-radius: 50%;
-    cursor: pointer;
+  .block-pagination {
+    &__links {
+      display: grid;
+      gap: 0.75rem;
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        li {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.5rem;
+          height: 2.5rem;
+          color: #22ae5f;
+          background-color: #e8faed;
+          border-radius: 50%;
+          -webkit-transition: all 0.1s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+          overflow: hidden;
+          &:hover {
+            background-color: #22ae5f;
+            color: #fff;
+            border: none;
+          }
+          &.active {
+            background-color: #22ae5f;
+            color: #fff;
+            border: none;
+          }
+          a {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+    }
+    &__subject {
+    }
   }
 }
 
-@media (max-width: 991px) {
+@media (min-width: 1024px) {
   .test {
-    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: row;
     &__left {
-      max-width: 100%;
+      width: 70%;
+      position: sticky;
+      top: 104px;
+      order: 0;
     }
     &__right {
-      max-width: 100%;
-      margin-top: 30px;
-    }
-  }
-}
-@media (max-width: 576px) {
-  .test {
-    padding: 0;
-    &__body {
-      padding: 0;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      width: 30%;
+      height: calc(100vh - 130px);
+      section {
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
     }
   }
 }

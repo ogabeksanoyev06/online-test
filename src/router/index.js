@@ -38,6 +38,26 @@ const routes = [
         component: () => import("../views/site/choose-subject/school.vue"),
       },
       {
+        path: "/President-school-test",
+        name: "president-school-test",
+        component: () => import("../views/site/President-school-test"),
+      },
+      {
+        path: "/pirls-test",
+        name: "pirls-test",
+        component: () => import("../views/site/Pirls-test"),
+      },
+      {
+        path: "/pisa-test",
+        name: "pisa-test",
+        component: () => import("../views/site/Pisa-test"),
+      },
+      {
+        path: "/Timss-test",
+        name: "timss-test",
+        component: () => import("../views/site/Timss-test"),
+      },
+      {
         path: "/video-course",
         name: "video-course",
         component: () => import("../views/site/video-course"),
@@ -66,6 +86,11 @@ const routes = [
         path: "/test",
         name: "test",
         component: () => import("../views/site/test"),
+      },
+      {
+        path: "result-test",
+        name: "result-test",
+        component: () => import("../views/site/result-test"),
       },
       {
         path: "/my-favourites",

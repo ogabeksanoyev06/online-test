@@ -1,6 +1,6 @@
 <template>
   <!--  Add active class to app small card in order to show green borders in card-->
-  <div class="app-small-card" @click="clickMe">
+  <div class="app-small-card" @click="clickMe" :class="active ? 'active' : ''">
     <p>{{ title }}</p>
   </div>
 </template>
@@ -12,6 +12,7 @@ export default {
   props: {
     title: String,
     photo: String,
+    active: Boolean,
   },
   methods: {
     clickMe(event) {
@@ -33,6 +34,10 @@ export default {
   border-radius: 0.5rem;
   transition: 0.1s;
   cursor: pointer;
+  &.active {
+    background-color: #024033;
+    color: #fff;
+  }
   p {
     font-weight: 500;
     font-size: 16px;

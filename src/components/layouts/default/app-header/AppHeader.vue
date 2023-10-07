@@ -26,10 +26,7 @@
               />
             </svg>
             <router-link to="/" class="logo">
-              <img
-                src="https://topskill.uz/_next/static/media/main-logo-svg.0c512e66.svg"
-                alt="logo"
-              />
+              <img src="/svg/logo1.svg" alt="logo" />
             </router-link>
             <ul class="header__menu" v-if="!isDesktopMedium">
               <li
@@ -181,7 +178,6 @@
 import "./header.scss";
 import NavigationDrawer from "./NavigationDrawer";
 import AppButton from "../../../shared-components/AppButton";
-import TokenService from "../../../../service/TokenService";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
@@ -192,16 +188,16 @@ export default {
       activeId: null,
       subActiveId: null,
       menu: [
-        {
-          id: 1,
-          title: "Yoʻriqnoma",
-          link: "/guide",
-        },
-        {
-          id: 2,
-          title: "Nashrlar",
-          link: "/publication",
-        },
+        // {
+        //   id: 1,
+        //   title: "Yoʻriqnoma",
+        //   link: "/guide",
+        // },
+        // {
+        //   id: 2,
+        //   title: "Nashrlar",
+        //   link: "/publication",
+        // },
         {
           id: 3,
           title: "Testlar",
@@ -263,23 +259,6 @@ export default {
     },
     hideLanguageDropdown() {
       this.languageDropdown = false;
-    },
-    logout() {
-      this.$api
-        .delete(
-          "auth/Login/logout?refreshtoken=" + TokenService.getRefreshToken()
-        )
-        .then((data) => {
-          if (data.statusCode === 200) {
-            TokenService.removeToken();
-            TokenService.removeRefreshToken();
-            localStorage.clear();
-            this.setToken();
-          }
-        })
-        .catch((error) => {
-          console.log(error, " error");
-        });
     },
     setToken() {
       this.setAccessToken(null);

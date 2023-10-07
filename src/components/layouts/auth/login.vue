@@ -75,20 +75,20 @@
               >
                 Tizimga kirish
               </app-button>
-              <app-button
-                theme="secondary"
-                type="submit"
-                :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
-                :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
-                :height="45"
-                class="w-100"
-                @click="$router.push({ name: 'register' })"
-              >
-                Ro'yxatdan o'tish
-              </app-button>
             </div>
           </form>
         </ValidationObserver>
+        <app-button
+          theme="secondary"
+          type="submit"
+          :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+          :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
+          :height="45"
+          class="w-100"
+          @click="$router.push({ name: 'register' })"
+        >
+          Ro'yxatdan o'tish
+        </app-button>
       </div>
     </div>
   </div>
@@ -130,20 +130,23 @@ export default {
       this.$http
         .post("users/login/", this.request)
         .then((data) => {
-          if (data) {
-            TokenService.saveToken(data.access);
-            TokenService.saveRefreshToken(data.refresh);
-            TokenService.tokenExpireDate(3600);
-            TokenService.saveTokenCreationTime(new Date() / 1000);
-            this.$router.push({ name: "home" });
-            this.successNotification("Tizimga kirildi");
-            this.request.password = "";
+          if (!data || !data.access || !data.refresh) {
+            throw new Error("Invalid response from the server");
           }
+
+          TokenService.saveToken(data.access);
+          TokenService.saveRefreshToken(data.refresh);
+          TokenService.saveTokenExpireDate(3600); // Assuming token expires in 3600 seconds
+          TokenService.saveTokenCreationTime(Math.floor(Date.now() / 1000));
+
+          this.$router.push({ name: "home" });
+          this.successNotification("Tizimga kirildi");
+          this.request.password = "";
         })
         .catch((err) => {
-          if (err.response && err.response.data && err.response.data.detail) {
-            this.errorNotification(err.response.data.detail);
-          }
+          const errorMessage =
+            err.response?.data?.detail || "An error occurred while logging in";
+          this.errorNotification(errorMessage);
           this.request.login = "";
           this.request.password = "";
         });

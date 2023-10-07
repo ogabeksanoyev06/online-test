@@ -21,7 +21,7 @@ Vue.mixin({
       return mediaHelper(this.windowWidth, 991);
     },
     isMobileMedium() {
-      return mediaHelper(this.windowWidth, 650);
+      return mediaHelper(this.windowWidth, 768);
     },
     isMobileSmall() {
       return mediaHelper(this.windowWidth, 500);

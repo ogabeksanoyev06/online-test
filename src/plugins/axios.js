@@ -2,45 +2,50 @@ import axios from "axios";
 import TokenService from "../service/TokenService";
 import router from "../router/index";
 
-export const baseURL = "http://api.chay-chay.uz/api/";
+const baseURL = "http://api.chay-chay.uz/api/";
 
-export const http = axios.create({
+const http = axios.create({
   baseURL: baseURL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
 });
 
-function setConfiguration(provider) {
-  provider.interceptors.request.use(
-    (config) => {
-      let token = TokenService.getToken();
-      if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`;
-      }
-      config.headers["Accept"] = "application/json";
-      config.headers["Content-Type"] = "application/json";
-      return config;
-    },
-    (error) => Promise.reject(error)
-  );
-  provider.interceptors.response.use(
-    (res) => res.data,
-    (error) => {
-      if (error.response && error.response.status === 401) {
-        localStorage.clear();
-        router
-          .push({ name: "home" })
-          .then(() => {})
-          .catch(() => {
-            if (error.response.status === 401) {
-              this.errorNotification("Token is expired");
-            }
-          });
-      } else if (error.response && error.response.status === 403) {
-        router.push({ path: "/403" }).then();
-      }
+http.interceptors.request.use(
+  (config) => {
+    const token = TokenService.getToken();
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+http.interceptors.response.use(
+  (response) => response.data,
+  (error) => {
+    if (!error.response) {
       return Promise.reject(error);
     }
-  );
+    switch (error.response.status) {
+      case 401:
+        handleTokenExpiry();
+        break;
+      case 403:
+        router.push({ path: "/403" });
+        break;
+    }
+    return Promise.reject(error);
+  }
+);
+
+function handleTokenExpiry() {
+  localStorage.clear();
+  router.push({ name: "home" }).catch((err) => {
+    console.error("Router Error:", err);
+  });
 }
-setConfiguration(http);
 
 export default http;

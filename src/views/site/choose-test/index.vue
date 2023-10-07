@@ -118,6 +118,37 @@
             Testni boshlash
           </AppButton>
         </div>
+        <div
+          class="block__item bordered"
+          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
+        >
+          <div>
+            <block-wrap count="2" width-auto class="align-center mb-20">
+              <div class="block__icon">
+                <img src="/svg/school-exams.svg" alt="icon" />
+              </div>
+              <app-text size="18" line-height="24" weight="700">
+                Prezident maktabi testlari
+              </app-text>
+            </block-wrap>
+            <AppText size="14" line-height="20" class="color-text mb-20">
+              Ushbu bo'limda maktab o'quvchilari uchun tanlangan fan va undagi
+              mavzular ro'yxatidan bir nechta mavzuni tanlab olish va ular
+              asosida ko'rsatilgan sondagi testlarni yechish imkoniga ega
+              bo'lasiz.
+            </AppText>
+          </div>
+
+          <AppButton
+            @click="startPresidentTest"
+            theme="main"
+            sides="20"
+            :font-size="isMobileSmall ? 14 : 16"
+            :height="isMobileSmall ? 40 : 50"
+          >
+            Testni boshlash
+          </AppButton>
+        </div>
       </BlockWrap>
       <AppModal
         @close="closeModal"
@@ -132,6 +163,7 @@
             :options-prop="specList"
             v-model="selectedDirection"
             @itemSelected="directionChange"
+            :disabled="isLoading"
           >
             <template #append>
               <svg
@@ -152,7 +184,9 @@
               </svg>
             </template>
           </BaseSelect>
-
+          <span class="d-flex justify-content-center" v-if="isLoading">
+            <loader />
+          </span>
           <AppText
             size="14"
             line-height="24"
@@ -257,7 +291,9 @@
             :font-size="isMobileSmall ? 14 : 16"
             :height="isMobileSmall ? 40 : 50"
             style="width: 100%"
-            :disabled="startTestButtonState"
+            :disabled="
+              startTestButtonState || (!startTestButtonState && isLoading),
+            "
           >
             Testni boshlash
           </AppButton>
@@ -266,7 +302,7 @@
       <div
         class="overlay"
         :class="{ visible: chooseTestModal }"
-        @close="closeModal"
+        @click="closeModal"
       ></div>
     </div>
   </section>
@@ -279,11 +315,13 @@ import BaseSelect from "@/components/shared-components/BaseSelect.vue";
 import BaseInput from "@/components/shared-components/BaseInput.vue";
 import test from "../../../constants/test";
 import { mapActions, mapGetters, mapMutations } from "vuex";
+import Loader from "@/components/shared-components/Loader.vue";
 export default {
   name: "AppTests",
-  components: { AppButton, BlockWrap, AppModal, BaseSelect, BaseInput },
+  components: { AppButton, BlockWrap, AppModal, BaseSelect, BaseInput, Loader },
   data() {
     return {
+      isLoading: false,
       chooseTestModal: false,
       selectedDirection: null,
       selectedDirectionId: null,
@@ -314,30 +352,39 @@ export default {
       this.getSubjectsByDirectionId(this.selectedDirectionId);
     },
     getSubjectsByDirectionId(directionId) {
-      try {
-        this.$http
-          .get("tests/exam-tests/?spec_id=" + directionId)
-          .then((res) => {
-            if (res) {
-              this.directionMainSubjects = [];
-              this.directionMandatorySubjects = [];
-              this.examsOverAllTime = 0;
-              this.examsOverAllBall = 0;
-              res.forEach((item) => {
-                if (item.type === "compulsory") {
-                  this.directionMandatorySubjects.push(item);
-                } else {
-                  this.directionMainSubjects.push(item);
-                }
-                this.examsOverAllBall += item.quesCount * item.quesBall;
-                this.examsOverAllTime += item.duration_time;
-              });
-            }
+      this.isLoading = true;
+      this.$http
+        .get("tests/exam-tests/?spec_id=" + directionId)
+        .then((res) => {
+          if (res.length > 0) {
+            this.directionMainSubjects = [];
+            this.directionMandatorySubjects = [];
+            this.examsOverAllTime = 0;
+            this.examsOverAllBall = 0;
+            res.forEach((item) => {
+              if (item.type === "compulsory") {
+                this.directionMandatorySubjects.push(item);
+              } else {
+                this.directionMainSubjects.push(item);
+              }
+              this.examsOverAllBall += item.quesCount * item.quesBall;
+              this.examsOverAllTime += item.duration_time;
+            });
             this.startTestButtonState = false;
-          });
-      } catch (e) {
-        this.errorNotification(e.response.data.error.message);
-      }
+          } else {
+            this.directionMainSubjects = [];
+            this.directionMandatorySubjects = [];
+            this.examsOverAllTime = 0;
+            this.examsOverAllBall = 0;
+            this.startTestButtonState = true;
+          }
+        })
+        .catch(() => {
+          //
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     chooseTest() {
       this.chooseTestModal = true;
@@ -350,7 +397,17 @@ export default {
     startClassTest() {
       this.$router.push({ path: "/choose-subject-school" });
     },
+    startPresidentTest() {
+      this.$router.push({ path: "/President-school-test" });
+    },
     startOnlineTest() {
+      if (!this.isLoggedOn) {
+        this.warningNotification(
+          "Test ishlash uchun tizimga kirishingiz shart!"
+        );
+        this.$router.push({ name: "login" });
+        return;
+      }
       this.clearTestPropertiesFromLocalStorage();
       this.storeTestTimeToStorage(this.examsOverAllTime);
       this.directionMandatorySubjects.forEach((s) => {
@@ -361,24 +418,24 @@ export default {
       });
       this.setTestType(test.TYPE_ONLINE);
       this.setTestTypeToStorage(test.TYPE_ONLINE);
-      try {
-        this.$http
-          .post("tests/exam-tests/start/", {
-            exam_ids: this.selectedSubjectsForOnlineTest,
-            started_time: new Date(),
-          })
-          .then((res) => {
-            if (res) {
-              localStorage.setItem("questions", JSON.stringify(res));
-              this.$router.push({ name: "test" });
-            }
-          })
-          .catch((err) => {
-            this.errorNotification(err.response.data);
-          });
-      } catch (e) {
-        // this.errorNotification(e.response.data.error.message);
-      }
+      this.isLoading = true;
+      this.$http
+        .post("tests/exam-tests/start/", {
+          exam_ids: this.selectedSubjectsForOnlineTest,
+          started_time: new Date(),
+        })
+        .then((res) => {
+          if (res) {
+            localStorage.setItem("questions", JSON.stringify(res));
+            this.$router.push({ name: "test" });
+          }
+        })
+        .catch((err) => {
+          this.errorNotification(err.response.data);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     closeModal() {
       this.chooseTestModal = false;

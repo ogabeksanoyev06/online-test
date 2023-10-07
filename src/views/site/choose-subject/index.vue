@@ -12,76 +12,30 @@
             Test olinadigan fanni tanlang
           </app-text>
         </div>
-
+        <span class="d-flex justify-content-center mb-20" v-if="false">
+          <loader />
+        </span>
         <div class="bg-white radius" :class="isMobileSmall ? 'pa-10' : 'pa-20'">
           <AppSmallCard
             v-for="(item, idx) in subjects"
             :key="idx"
             :title="item.name"
             style="cursor: pointer"
-            :class="selectedSubject.subject.id === item.id ? '' : ''"
+            :active="selectedSubject.subject.id === item.id"
             @click="selectSubject(item)"
           />
         </div>
-
         <div
           class="bg-white radius w-100 mt-20"
           :class="isMobileSmall ? 'pa-10' : 'pa-20'"
         >
-          <AppText
-            :size="isMobileSmall ? 16 : 20"
-            :line-height="isMobileSmall ? 20 : 24"
-            weight="700"
-            class="mb-30"
-          >
-            Fan mavzularini tanlang
-          </AppText>
-
-          <div class="choose-test-topics mb-20">
-            <BaseCheckbox
-              size="18"
-              v-for="(item, index) in subjectSectionList"
-              :title="item.name"
-              class="mb-20"
-              :key="index"
-              style="display: flex"
-              @change="sectionChanged(item.id)"
-              :checked="!selectedSubjectSections.includes(item.id)"
-            />
-          </div>
-
           <div class="test__details mb-20">
             <BaseSelect
-              v-model="questionsCount"
-              label="Savollar soni"
-              :options-prop="questionsCountSelect"
-              hideDetails
-              :append="true"
-            >
-              <template #append>
-                <svg
-                  class="Dropdown_self__FtxaI"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style="height: 1rem; width: 1rem"
-                >
-                  <path
-                    d="M13.2797 5.9668L8.93306 10.3135C8.41973 10.8268 7.57973 10.8268 7.06639 10.3135L2.71973 5.9668"
-                    stroke="rgb(51, 54, 57)"
-                    stroke-width="1.5"
-                    stroke-miterlimit="10"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
-              </template>
-            </BaseSelect>
-
-            <BaseSelect
-              v-model="questionsCount"
-              label="Sinfni tanlang"
-              :options-prop="classes"
+              v-model="selectedLevelValue"
+              label="Darajani tanlang"
+              placeholder="Darajani tanlang"
+              :options-prop="questionLevelList"
+              @itemSelected="selectedClassValue"
               hideDetails
               :append="true"
             >
@@ -112,6 +66,26 @@
             >
             </BaseInput>
           </div>
+          <AppText
+            :size="isMobileSmall ? 16 : 20"
+            :line-height="isMobileSmall ? 20 : 24"
+            weight="700"
+            class="mb-30"
+          >
+            Fan mavzularini tanlang
+          </AppText>
+          <div class="choose-test-topics mb-20">
+            <BaseCheckbox
+              size="18"
+              v-for="(item, index) in subjectSectionList"
+              :title="item.name"
+              class="mb-20"
+              :key="index"
+              style="display: flex"
+              @change="sectionChanged(item.id)"
+              :checked="!selectedSubjectSections.includes(item.id)"
+            />
+          </div>
           <AppButton
             theme="secondary"
             sides="20"
@@ -135,6 +109,7 @@ import test from "../../../constants/test";
 import { mapMutations } from "vuex";
 import BaseCheckbox from "@/components/shared-components/BaseCheckbox.vue";
 import BaseInput from "@/components/shared-components/BaseInput.vue";
+import Loader from "@/components/shared-components/Loader.vue";
 
 export default {
   name: "AppIndex",
@@ -145,9 +120,11 @@ export default {
     AppText,
     BaseCheckbox,
     BaseInput,
+    Loader,
   },
   data() {
     return {
+      isLoading: false,
       subjects: [
         {
           name: "Maths",
@@ -160,6 +137,8 @@ export default {
           name: null,
         },
       },
+      subject_id: 1,
+      selectedLevelValue: "beginner",
       subjectSectionList: [
         {
           id: null,
@@ -167,64 +146,23 @@ export default {
         },
       ],
       selectedSubjectSections: [],
-      questionLevelList: [],
-      questionSelectedLevel: 1,
       questionTotalTime: 0,
-      questionsCount: 5,
-      questionsCountSelect: [
+      questionsCount: 1,
+      questionLevelList: [
         {
-          id: 5,
-          name: 5,
+          id: 0,
+          valeu: "beginner",
+          name: "beginner",
         },
         {
-          id: 10,
-          name: 10,
+          id: 1,
+          valeu: "medium",
+          name: "bedium",
         },
         {
-          id: 15,
-          name: 15,
-        },
-        {
-          id: 20,
-          name: 20,
-        },
-        {
-          id: 25,
-          name: 25,
-        },
-        {
-          id: 30,
-          name: 30,
-        },
-      ],
-      classes: [
-        {
-          id: 5,
-          name: 5,
-        },
-        {
-          id: 6,
-          name: 6,
-        },
-        {
-          id: 7,
-          name: 7,
-        },
-        {
-          id: 8,
-          name: 8,
-        },
-        {
-          id: 9,
-          name: 9,
-        },
-        {
-          id: 10,
-          name: 10,
-        },
-        {
-          id: 11,
-          name: 11,
+          id: 2,
+          valeu: "advanced",
+          name: "advanced",
         },
       ],
       questionTime: 0,
@@ -236,7 +174,6 @@ export default {
       this.selectedSubject.selected = true;
       this.selectedSubject.subject = subject;
       this.getSubjectSectionList(this.selectedSubject.subject.id);
-      this.questionMinute(this.selectedSubject.subject.id);
     },
     getSubjects() {
       try {
@@ -254,15 +191,11 @@ export default {
     },
     getSubjectSectionList(subjectId) {
       try {
-        this.$api
-          .get(`main/Home/Test/SubjectSectionList?subjectId=` + subjectId)
+        this.$http
+          .get(`tests/subjects/?science_id=` + subjectId)
           .then((res) => {
-            if (!res.error) {
-              this.subjectSectionList = res.result;
-              this.subjectSectionList.forEach((s) => {
-                s.name = s.name.replaceAll("_x000d_", "");
-                s.name = s.name.replaceAll(".", ".<br>");
-              });
+            if (res) {
+              this.subjectSectionList = res;
             }
           });
       } catch (e) {
@@ -277,17 +210,6 @@ export default {
         this.selectedSubjectSections.push(sectionId);
       } else {
         this.selectedSubjectSections.splice(index, 1);
-      }
-    },
-    testLevelList() {
-      try {
-        this.$api.get(`main/Home/Test/LevelList`).then((res) => {
-          if (!res.error) {
-            this.questionLevelList = res.result;
-          }
-        });
-      } catch (e) {
-        this.errorNotification(e.response.data.error.message);
       }
     },
     questionMinute(subjectId) {
@@ -332,10 +254,12 @@ export default {
         this.errorNotification(e.response.data.error.message);
       }
     },
+    selectedClassValue(item) {
+      this.selectedLevelValue = item.name;
+    },
   },
   created() {
     this.getSubjects();
-    this.testLevelList();
     this.removeTestAttributesFromStorage();
   },
   watch: {

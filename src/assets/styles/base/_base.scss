@@ -235,7 +235,7 @@
   cursor: pointer;
   visibility: hidden;
   transition: opacity 0.15s linear, visibility 0.15s linear;
-  z-index: 999;
+  z-index: 49;
   &.visible {
     opacity: 0.5;
     visibility: visible;

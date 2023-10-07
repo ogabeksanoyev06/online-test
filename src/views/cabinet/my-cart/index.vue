@@ -247,17 +247,8 @@
                 <span>Qiymati:</span><span>19 054 000 so'm</span>
               </div>
               <div class="sidebar-form__detail-row">
-                <span>Promokod:</span><span>0 so'm</span>
-              </div>
-              <div class="sidebar-form__detail-row">
-                <span>Ishlatilgan bonus:</span><span>0 so'm</span>
-              </div>
-              <div class="sidebar-form__detail-row">
                 <span>Naqd pul to'lash uchun komissiya miqdori:</span
                 ><span>0 %</span>
-              </div>
-              <div class="sidebar-form__detail-row">
-                <span>Yetkazib berish summasi:</span><span>0 so'm</span>
               </div>
             </div>
             <hr

@@ -46,6 +46,7 @@
             sides="20"
             :font-size="isMobileSmall ? 14 : 16"
             :height="isMobileSmall ? 40 : 50"
+            @click="startPirlsTest"
           >
             Testni boshlash
           </AppButton>
@@ -75,6 +76,7 @@
             sides="20"
             :font-size="isMobileSmall ? 14 : 16"
             :height="isMobileSmall ? 40 : 50"
+            @click="startTimssTest"
           >
             Testni boshlash
           </app-button>
@@ -105,6 +107,7 @@
             sides="20"
             :font-size="isMobileSmall ? 14 : 16"
             :height="isMobileSmall ? 40 : 50"
+            @click="startPisaTest"
           >
             Testni boshlash
           </AppButton>
@@ -121,6 +124,17 @@ export default {
   components: { AppButton, BlockWrap },
   data() {
     return {};
+  },
+  methods: {
+    startPisaTest() {
+      this.$router.push({ path: "/Pisa-test" });
+    },
+    startPirlsTest() {
+      this.$router.push({ path: "/Pirls-test" });
+    },
+    startTimssTest() {
+      this.$router.push({ path: "/Timss-test" });
+    },
   },
 };
 </script>

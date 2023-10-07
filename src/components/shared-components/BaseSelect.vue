@@ -13,17 +13,14 @@
       class="input__block"
       :class="disabled ? 'disabled' : ''"
       @click="dropdownVisible = !dropdownVisible"
+      v-on-click-outside:excludedClass="hideSelectDropdown"
     >
       <label class="input__block-label">
         <span v-if="label" class="input__block-title">{{ label }}</span>
-        <div
-          class="input__block-wrap"
-          :class="errors[0] ? 'error' : ''"
-          v-on-click-outside:excludedClass="hideSelectDropdown"
-        >
+        <div class="input__block-wrap" :class="errors[0] ? 'error' : ''">
           <div
             class="input__block-append"
-            :class="[dropdownVisible ? 'active' : '']"
+            :class="dropdownVisible ? 'active' : ''"
             @click="dropdownVisible = !dropdownVisible"
             v-if="append"
           >
@@ -53,11 +50,7 @@
                 item.name === value || item.number === value ? 'active' : ''
               "
             >
-              {{
-                selectType === "school"
-                  ? item.number + " - " + item.name
-                  : item.name
-              }}
+              {{ selectType === "classes" ? item.number : item.name }}
             </div>
           </div>
         </div>
@@ -140,12 +133,9 @@ export default {
       this.dropdownVisible = false;
     },
     selectItem(item) {
-      this.selectedValue = item;
-      this.dropdownVisible = false;
       this.$emit("input", item.name);
       this.$emit("change", item.name);
       this.$emit("itemSelected", item);
-      this.dropdownVisible = false;
     },
   },
   mounted() {
@@ -174,14 +164,16 @@ export default {
   left: 0;
   top: 100%;
   width: 100%;
-  height: 170px;
+  height: 160px;
   -webkit-transform: translateY(-10px);
   transform: translateY(-10px);
   transition: visibility 0s linear 0.2s, opacity 0.2s, transform 0.2s;
   visibility: hidden;
-  z-index: 99999;
+  z-index: 999;
   overflow-y: auto;
-
+  &::-webkit-scrollbar {
+    display: none;
+  }
   &.active {
     opacity: 1;
     -webkit-transform: translateY(0);

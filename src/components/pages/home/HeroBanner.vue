@@ -1,8 +1,40 @@
 <template>
-  <div>
-    <div class="hero-banner" style="margin-top: 10px">
+  <kinesis-container>
+    <div class="hero-banner">
       <div class="container">
-        <div class="swiper-container" style="border-radius: 12px">
+        <div class="hero-banner__inner">
+          <div class="hero-banner__content">
+            <app-text
+              :size="isMobileMedium ? '24' : '50'"
+              :line-height="isMobileMedium ? '32' : '60'"
+              max-width="768"
+              weight="700"
+              class="color-white text-center mb-20"
+            >
+              O’z kelajagingizni iTestify bilan birga quring!
+            </app-text>
+
+            <app-text
+              :size="isMobileMedium ? '16' : '18'"
+              :line-height="isMobileMedium ? '24' : '26'"
+              weight="500"
+              max-width="600"
+              class="color-white text-center mb-30"
+            >
+              Ijodkorlik va bilim muhim omillardir muvaffaqiyat va o'z-o'zini
+              rivojlantirish
+            </app-text>
+          </div>
+          <div class="hero-banner__photo">
+            <kinesis-element class="layer" :strength="10">
+              <img
+                src="https://topskill.uz/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fmain_slider.af41b9be.png&w=3840&q=75"
+                alt=""
+              />
+            </kinesis-element>
+          </div>
+        </div>
+        <!-- <div class="swiper-container" style="border-radius: 12px">
           <swiper :effect="'fade'" ref="mySwiper" :options="swiperOptions">
             <swiper-slide v-for="n in 5" :key="n">
               <div class="swiper-content">
@@ -23,20 +55,23 @@
               </div>
             </swiper-slide>
           </swiper>
-        </div>
+        </div> -->
       </div>
     </div>
-  </div>
+  </kinesis-container>
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+// import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import { KinesisContainer, KinesisElement } from "vue-kinesis";
 import "swiper/css/swiper.css";
 export default {
   name: "HeroBanner",
   components: {
-    Swiper,
-    SwiperSlide,
+    // Swiper,
+    // SwiperSlide,
+    "kinesis-container": KinesisContainer,
+    "kinesis-element": KinesisElement,
   },
   data() {
     return {
@@ -54,18 +89,40 @@ export default {
       },
     };
   },
-  computed: {
-    swiper() {
-      return this.$refs.mySwiper.$swiper;
-    },
-  },
-  mounted() {
-    this.swiper.slideTo(1, 1000, false);
-  },
+  computed: {},
+  mounted() {},
 };
 </script>
 
 <style scoped lang="scss">
+.hero-banner {
+  background-color: #024033;
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: calc(100vh - 90px);
+    width: 100%;
+  }
+  &__content {
+    max-width: calc(50% - 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  &__photo {
+    max-width: calc(50% - 20px);
+    padding: 20px;
+
+    img {
+      max-width: 530px;
+      width: 100%;
+      object-fit: contain;
+      margin-left: auto;
+    }
+  }
+}
 .swiper-container {
   border-radius: 12px;
 }
@@ -109,43 +166,24 @@ export default {
 }
 
 @media (max-width: 991px) {
-  .swiper-content {
+  .hero-banner__inner {
     flex-wrap: wrap;
     padding: 50px 30px;
     justify-content: unset;
-    &__info {
-      max-width: 100%;
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-      order: 2;
-      &-title {
-        font-weight: 700;
-        font-size: 32px;
-        line-height: 114%;
-      }
-      &-text {
-        font-weight: 400;
-        font-size: 22px;
-        line-height: 140%;
-        letter-spacing: -0.02em;
-        margin-top: 20px;
-      }
-    }
-    &__photo {
-      margin-left: auto;
-      margin-right: auto;
-      order: 1;
-      max-width: 80%;
-      margin-bottom: 20px;
-      img {
-        max-width: 530px;
-        width: 100%;
-        -o-object-fit: contain;
-        object-fit: contain;
-        margin-left: auto;
-      }
-    }
+  }
+
+  .hero-banner__content {
+    max-width: 100%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    order: 2;
+  }
+  .hero-banner__photo {
+    margin-left: auto;
+    margin-right: auto;
+    order: 1;
+    max-width: 100%;
   }
 }
 @media (max-width: 500px) {

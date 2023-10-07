@@ -1,3 +1,4 @@
+import "../../plugins/mixins/mixin";
 const state = {
   specList: [],
   selectedQuestionIndex: 0,
@@ -26,14 +27,22 @@ const actions = {
   async getSpecList({ commit }) {
     try {
       await this._vm.$http
-        .get("tests/specialists")
+        .get("tests/specialists/")
         .then((data) => {
           if (data) {
             commit("setSpecList", data);
           }
         })
-        .catch((error) => {
-          console.log("Error on getting sepclist: " + error);
+        .catch((e) => {
+          if (e.message === "Network Error") {
+            this.errorNotification(
+              "Internet ulanishingizni tekshirib ko'ring."
+            );
+          } else if (e.response && e.response.data && e.response.data.error) {
+            this.errorNotification(e.response.data.error.message);
+          } else {
+            this.errorNotification("Noma'lum xato yuz berdi.");
+          }
         })
         .finally(() => {});
     } catch (e) {
