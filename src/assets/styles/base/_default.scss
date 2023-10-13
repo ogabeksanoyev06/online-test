@@ -75,19 +75,3 @@ ul li {
     margin-bottom: 0;
   }
 }
-
-/* width */
-::-webkit-scrollbar {
-  height: 10px;
-  width: 8px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f9f9f9;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background-color: #024033;
-}

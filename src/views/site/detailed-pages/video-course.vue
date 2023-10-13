@@ -23,7 +23,7 @@
             qismini ishlab chiqasiz.
           </AppText>
           <app-button
-            theme="main"
+            theme="info"
             :font-size="16"
             :sides="20"
             :height="isDesktopSmall ? '40' : '50'"
@@ -33,7 +33,7 @@
             Kursni sotib olish
           </app-button>
           <app-button
-            theme="secondary"
+            theme="orange"
             :font-size="16"
             :sides="20"
             :height="isDesktopSmall ? '40' : '50'"
@@ -529,14 +529,14 @@ export default {
     font-weight: 500;
     font-size: 32px;
     line-height: 143%;
-    color: #024033;
+    color: #119c75;
   }
   &-wrap {
     padding: 15px 30px 15px 30px;
   }
 
   &-numb {
-    background-color: #024033;
+    background-color: #119c75;
     color: #fff;
     font-weight: 500;
     display: flex;
@@ -598,7 +598,7 @@ export default {
       font-weight: 500;
       font-size: 20px;
       line-height: 143%;
-      color: #024033;
+      color: #119c75;
     }
     &-numb {
       font-size: 11px;

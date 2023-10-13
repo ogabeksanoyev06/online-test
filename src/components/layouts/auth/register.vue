@@ -120,7 +120,7 @@
             </div>
             <div class="text-center">
               <app-button
-                theme="main"
+                theme="info"
                 type="submit"
                 :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
                 :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
@@ -174,7 +174,7 @@
                 Orqaga
               </app-button>
               <app-button
-                theme="main"
+                theme="info"
                 type="submit"
                 :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
                 :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"

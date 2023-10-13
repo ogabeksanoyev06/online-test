@@ -54,7 +54,7 @@
                     :line-height="isMobile ? 20 : 28"
                     weight="500"
                   >
-                    {{ question.question }}
+                    <span v-html="question.question"></span>
                   </AppText>
                 </span>
                 <div class="test__answers">
@@ -151,7 +151,7 @@
                         :line-height="isMobile ? 20 : 28"
                         weight="500"
                       >
-                        3.1 ball
+                        {{ test.question_ball }} ball
                       </AppText>
                     </div>
                   </div>
@@ -386,12 +386,11 @@ export default {
         started_time: "2023-09-09 22:02:20",
         finished_time: "2021-09-09 22:05:30",
       };
-      this.completeAnswers(questions, answers); // Bu yerda funksiyani chaqirib, answersni yangilaymiz
+      this.completeAnswers(questions, answers);
       answers.push(additionalData);
       this.$http.post(`tests/exam-tests/done/`, answers).then((res) => {
         if (res) {
           this.onlineTestResult = res;
-          // this.setTestResultTotals();
           localStorage.setItem(
             "testResult",
             JSON.stringify(this.onlineTestResult)
@@ -416,11 +415,16 @@ export default {
 
     setTimer() {
       let _this = this;
-      this.testTimer = parseInt(localStorage.getItem("testTime")) * 60;
+      this.testTimer = localStorage.getItem("testTime")
+        ? parseInt(localStorage.getItem("testTime")) * 60
+        : 0;
       let testTimerInterval = setInterval(function () {
-        if (_this.testTimer / 60 <= 0) {
+        const roundedTime = Math.round(_this.testTimer / 60);
+        localStorage.setItem("testTime", roundedTime);
+        if (_this.testTimer <= 0) {
           _this.testFinish();
           clearInterval(testTimerInterval);
+          localStorage.removeItem("testTime");
           return;
         }
         _this.testTimer--;
@@ -431,7 +435,6 @@ export default {
       let hours = Math.floor(sec_num / 3600);
       let minutes = Math.floor((sec_num - hours * 3600) / 60);
       let seconds = sec_num - hours * 3600 - minutes * 60;
-
       if (hours < 10) {
         hours = "0" + hours;
       }
@@ -449,15 +452,6 @@ export default {
     },
     closeBlockTestResultModal() {
       this.blockTestAnswers = false;
-    },
-
-    setTestResultTotals() {
-      this.onlineTestResult.forEach((t) => {
-        this.testResultTotals.testCount += t.quesCount;
-        this.testResultTotals.testAnswerBalls += t.maxBall;
-        this.testResultTotals.rightAnswersCount += t.userAnsCount;
-        this.testResultTotals.rightAnswersBalls += t.userTestBall;
-      });
     },
 
     completeAnswers(questions, answers) {
@@ -489,6 +483,38 @@ export default {
           }
         });
       });
+    },
+    parseQuestion(question) {
+      const formatMappings = [
+        { search: /\\ldots/g, replace: "..." },
+        { search: /\\par\s+/g, replace: "<br>" },
+        { search: /~/g, replace: " " },
+        { search: /{\\bf(.*?)}/g, replace: "<strong>$1</strong>" },
+        { search: /\\textit{(.*?)}/g, replace: "<i>$1</i>" },
+        {
+          search: /\\frac{(.*?)}{(.*?)}/g,
+          replace: "<sup>$1</sup>&frasl;<sub>$2</sub>",
+        },
+        { search: /\^(.*?)}{(.*?)}/g, replace: "<sup>$1</sup>" },
+        { search: /\\begin{table}/g, replace: "<table>" },
+        { search: /\\end{table}/g, replace: "</table>" },
+        { search: /\\begin{tabular}/g, replace: "<tbody>" },
+        { search: /\\end{tabular}/g, replace: "</tbody>" },
+        { search: /\\begin{figure}/g, replace: "" },
+        { search: /\\end{figure}/g, replace: "" },
+        {
+          search: /\\includegraphics\[.*?\]{(.*?)}/g,
+          replace: "<img src='$1' alt='Image'>",
+        },
+      ];
+
+      let processed = question;
+
+      formatMappings.forEach((mapping) => {
+        processed = processed.replace(mapping.search, mapping.replace);
+      });
+
+      return processed;
     },
   },
   mounted() {
@@ -599,7 +625,7 @@ export default {
           background-color: #e8faed;
           border-radius: 50%;
           -webkit-transition: all 0.1s ease;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           cursor: pointer;
           overflow: hidden;
           &:hover {

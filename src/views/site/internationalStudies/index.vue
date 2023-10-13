@@ -42,7 +42,7 @@
           </div>
 
           <AppButton
-            theme="main"
+            theme="info"
             sides="20"
             :font-size="isMobileSmall ? 14 : 16"
             :height="isMobileSmall ? 40 : 50"
@@ -72,7 +72,7 @@
           </div>
 
           <app-button
-            theme="main"
+            theme="orange"
             sides="20"
             :font-size="isMobileSmall ? 14 : 16"
             :height="isMobileSmall ? 40 : 50"
@@ -103,7 +103,7 @@
           </div>
 
           <AppButton
-            theme="main"
+            theme="purple"
             sides="20"
             :font-size="isMobileSmall ? 14 : 16"
             :height="isMobileSmall ? 40 : 50"

@@ -1,85 +1,117 @@
 <template>
-  <div class="lds-ring">
-    <span class="ant-spin-dot ant-spin-dot-spin">
-      <i class="ant-spin-dot-item"></i>
-      <i class="ant-spin-dot-item"></i>
-      <i class="ant-spin-dot-item"></i>
-      <i class="ant-spin-dot-item"></i>
-    </span>
+  <div class="loader">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 </template>
-
 <script>
 export default {
-  name: "AppLoader",
+  name: "PreLoader",
 };
 </script>
-
-<style scoped>
-.lds-ring {
+<style>
+.loader {
+  position: fixed;
+  z-index: 2000;
+  background-color: hsla(0, 0%, 100%, 0.9);
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.lds-roller {
   display: inline-block;
   position: relative;
+  width: 80px;
+  height: 80px;
 }
-.ant-spin-dot {
-  position: relative;
-  display: inline-block;
-  font-size: 20px;
-  width: 1em;
-  height: 1em;
-
-  transform: rotate(45deg);
-  animation-name: css-pr0fja-antRotate;
-  animation-duration: 1.2s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
 }
-.ant-spin-dot-item {
-  position: absolute;
+.lds-roller div:after {
+  content: " ";
   display: block;
-  width: 9px;
-  height: 9px;
-  background-color: #1677ff;
-  border-radius: 100%;
-  transform: scale(0.75);
-  transform-origin: 50% 50%;
-  opacity: 0.3;
-  animation-name: css-pr0fja-antSpinMove;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-  animation-direction: alternate;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22ae5f;
+  margin: -4px 0 0 -4px;
 }
-
-.ant-spin-dot-item:nth-child(1) {
-  top: 0;
-  inset-inline-start: 0;
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
 }
-
-.ant-spin-dot-item:nth-child(2) {
-  top: 0;
-  inset-inline-end: 0;
-  animation-delay: 0.4s;
+.lds-roller div:nth-child(1):after {
+  top: 63px;
+  left: 63px;
 }
-
-.ant-spin-dot-item:nth-child(3) {
-  inset-inline-end: 0;
-  bottom: 0;
-  animation-delay: 0.8s;
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
 }
-.ant-spin-dot-item:nth-child(4) {
-  bottom: 0;
-  inset-inline-start: 0;
-  animation-delay: 1.2s;
+.lds-roller div:nth-child(2):after {
+  top: 68px;
+  left: 56px;
 }
-
-@keyframes css-pr0fja-antSpinMove {
-  100% {
-    opacity: 1;
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 71px;
+  left: 48px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 71px;
+  left: 32px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 68px;
+  left: 24px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 63px;
+  left: 17px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12px;
+}
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
   }
-}
-@keyframes css-pr0fja-antRotate {
   100% {
-    transform: rotate(405deg);
+    transform: rotate(360deg);
   }
 }
 </style>

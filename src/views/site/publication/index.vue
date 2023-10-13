@@ -47,7 +47,7 @@
 
             <div class="header__auth mr-20">
               <AppButton
-                theme="main"
+                theme="green"
                 :font-size="isMobileSmall ? 14 : 16"
                 :sides="isMobileSmall ? 20 : 30"
               >
@@ -90,7 +90,7 @@
 
             <div class="header__auth mr-20" v-if="!userIsLoggedOn">
               <AppButton
-                theme="main"
+                theme="green"
                 :font-size="isMobileSmall ? 14 : 16"
                 :sides="isMobileSmall ? 20 : 30"
                 class=""

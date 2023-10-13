@@ -1,29 +1,28 @@
 <template>
   <div>
     <AppHeader />
-    <div class="page__wrap">
-      <router-view />
+    <div class="container">
+      <div class="page__wrap">
+        <router-view />
+      </div>
     </div>
-    <AppFooter v-if="$route.name !== 'test'" />
+    <AppFooter />
   </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 import AppFooter from "../components/layouts/default/app-footer/AppFooter";
 import AppHeader from "../components/layouts/default/app-header/AppHeader";
-import { mapGetters, mapMutations } from "vuex";
-import TokenService from "@/service/TokenService";
+import TokenService from "../service/TokenService";
 
 export default {
-  name: "MainLayout",
+  name: "ErrorPage",
   components: { AppHeader, AppFooter },
+
   methods: {
-    ...mapMutations([
-      "setWindowWidth",
-      "setAccessToken",
-      "setIsLoggedOn",
-      "setTestType",
-    ]),
+    ...mapMutations(["setWindowWidth", "setAccessToken", "setIsLoggedOn"]),
     setWidth() {
       this.setWindowWidth(document.documentElement.clientWidth);
     },
@@ -37,17 +36,11 @@ export default {
         this.setIsLoggedOn(false);
       }
     },
-    setTestTypeInLayout() {
-      this.setTestType(this.getTestTypeFromStorage());
-    },
   },
-  computed: {
-    ...mapGetters(["windowWidth"]),
-  },
+
   mounted() {
-    this.setWidth();
     this.setToken();
-    this.setTestTypeInLayout();
+    this.setWidth();
     window.addEventListener("resize", this.setWidth);
   },
   beforeDestroy() {
@@ -60,17 +53,14 @@ export default {
 .page {
   &__wrap {
     min-height: calc(100vh - 402px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
-</style>
 
-<style>
-.vue-notification {
-  padding: 10px;
-  margin: 5px 5px 5px;
-  font-size: 16px;
-  color: #ffffff;
-  background: #44a4fc;
-  border-left: 5px solid #187fe7;
+.error {
+  padding: 30px;
+  text-align: center;
 }
 </style>

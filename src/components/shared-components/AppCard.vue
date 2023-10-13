@@ -92,7 +92,7 @@
           <p class="course-card-body-name">Muhammad Jumayev</p>
           <p class="course-card-body-price">{{ currencyFormat(price) }}</p>
           <AppButton
-            theme="secondary"
+            theme="green"
             :font-size="16"
             :sides="20"
             :height="40"

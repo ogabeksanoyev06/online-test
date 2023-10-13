@@ -13,7 +13,8 @@
           </app-text>
         </div>
       </div>
-      <div class="tab__main">
+      <loader v-if="loading" />
+      <div class="tab__main" v-else>
         <div class="section__top">
           <div class="section__top-left">
             <div class="tab">
@@ -70,9 +71,10 @@
 import { mapActions, mapGetters } from "vuex";
 import AppCard from "@/components/shared-components/AppCard.vue";
 import BlockWrap from "@/components/shared-components/BlockWrap.vue";
+import Loader from "@/components/shared-components/Loader.vue";
 export default {
   name: "VideoCourse",
-  components: { AppCard, BlockWrap },
+  components: { AppCard, BlockWrap, Loader },
   data() {
     return {
       list: [],
@@ -153,7 +155,7 @@ export default {
       transition: 0.1s;
       cursor: pointer;
       &:hover {
-        background-color: #024033;
+        background-color: #3e78ff;
         color: rgb(255, 255, 255);
         border: 1px solid transparent;
         span {
@@ -166,7 +168,7 @@ export default {
         }
       }
       &.active {
-        background-color: #024033;
+        background-color: #3e78ff;
         color: rgb(255, 255, 255);
         border: 1px solid transparent;
         span {

@@ -100,7 +100,7 @@
             </BaseInput>
           </div>
           <AppButton
-            theme="secondary"
+            theme="light-green"
             sides="20"
             @click="getQuestionBySelectedParameters"
           >

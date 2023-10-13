@@ -3,7 +3,6 @@
     <AppText size="16" line-height="20" weight="700" class="color-main mb-20">
       Asosiy malumotlar
     </AppText>
-    {{ districtsId }}{{ schoolId }}{{ regionId }}
     <div class="cabinet__content">
       <ValidationObserver v-slot="{ handleSubmit }">
         <form @submit.prevent="handleSubmit(updateProfile)">
@@ -164,7 +163,7 @@
             </div>
           </div>
           <AppButton
-            theme="main"
+            theme="green"
             radius="10"
             :font-size="16"
             :sides="20"
@@ -225,10 +224,11 @@ export default {
     },
     getDistricts(region_id) {
       this.$http
-        .get(`common/districts/?region_id=${region_id}/`)
+        .get(`common/districts/?region_id=${region_id}`)
         .then((response) => {
           if (response) {
             this.districts = response;
+            this.user.district = null;
           } else {
             console.error("Xatolik: Serverdan ma'lumotlar topilmadi");
           }
@@ -236,16 +236,18 @@ export default {
     },
     getSchools(district_id) {
       this.$http
-        .get(`common/schools/?district_id=${district_id}/`)
+        .get(`common/schools/?district_id=${district_id}`)
         .then((response) => {
           if (response) {
             this.schools = response;
+            this.user.school = null;
           } else {
             console.error("Xatolik: Serverdan ma'lumotlar topilmadi");
           }
         });
     },
     async regionsId(region_item) {
+      console.log(region_item);
       this.regionId = region_item.id;
       await this.getDistricts(region_item.id);
       this.districts_select = false;

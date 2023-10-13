@@ -35,8 +35,8 @@ export default {
   transition: 0.1s;
   cursor: pointer;
   &.active {
-    background-color: #024033;
-    color: #fff;
+    background-color: #e9fcf6;
+    color: #119c75;
   }
   p {
     font-weight: 500;
@@ -46,19 +46,18 @@ export default {
   }
 
   &.active {
-    border-color: transparent;
-    background-color: $color-main;
+    border-color: #119c75;
     p {
-      color: #fff;
+      color: #119c75;
     }
   }
 }
 
 .app-small-card:hover {
-  border-color: transparent;
-  background-color: $color-main;
+  border-color: #119c75;
+  background-color: #e9fcf6;
   p {
-    color: #fff;
+    color: #119c75;
   }
 }
 </style>

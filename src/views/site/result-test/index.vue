@@ -55,7 +55,7 @@
                     weight="600"
                     class="color-orange"
                   >
-                    120.8
+                    {{ parseFloat(totalScore().toFixed(1)) }}
                   </AppText>
                   <AppText :size="14" :line-height="20" weight="400">
                     Umumiy ball
@@ -81,17 +81,32 @@
                 <div
                   v-for="subject in testResult"
                   :key="subject.science"
-                  class="results__answers-list bg-white radius bordered pa-10"
+                  class="results__answers-list bg-white radius bordered"
+                  :class="
+                    isMobileSmall ? 'pa-10' : isMobile ? 'pa-20' : 'pa-30'
+                  "
                 >
-                  <AppText
-                    :size="16"
-                    :line-height="20"
-                    weight="500"
-                    class="color-main mb-10"
+                  <div
+                    class="d-flex align-center justify-space-between flex-wrap gap-10 mb-10"
                   >
-                    {{ subject.science }}
-                  </AppText>
-                  <div class="d-flex flex-wrap" style="gap: 5px">
+                    <AppText
+                      :size="16"
+                      :line-height="20"
+                      weight="600"
+                      class="color-green"
+                    >
+                      {{ subject.science }}
+                    </AppText>
+                    <AppText
+                      :size="18"
+                      :line-height="24"
+                      weight="600"
+                      class="color-orange"
+                    >
+                      {{ parseFloat(subject.total_ball.toFixed(1)) }} ball
+                    </AppText>
+                  </div>
+                  <div class="d-flex flex-wrap gap-8" style="max-width: 576px">
                     <div
                       class="results__answers-item"
                       v-for="(answer, i) in subject.questions"
@@ -151,6 +166,15 @@ export default {
         count += subject.questions.filter((q) => q.picked && q.isTrue).length;
       });
       return count;
+    },
+    totalScore() {
+      let total = 0;
+      if (this.testResult) {
+        this.testResult.forEach((s) => {
+          total += s.total_ball;
+        });
+      }
+      return total;
     },
   },
   mounted() {

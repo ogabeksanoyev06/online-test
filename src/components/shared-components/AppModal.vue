@@ -1,6 +1,6 @@
 <template>
-  <div class="modal" :style="style" :class="className">
-    <div class="modal__content">
+  <div class="modal">
+    <div class="modal__content" :style="style" :class="className">
       <div class="modal__wrap">
         <div class="modal__header">
           <span> <slot name="modalHeader"></slot> </span>

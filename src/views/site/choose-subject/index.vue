@@ -31,11 +31,39 @@
         >
           <div class="test__details mb-20">
             <BaseSelect
-              v-model="selectedLevelValue"
+              v-model="questionsCount"
+              label="Savollar sonini"
+              placeholder="Savollar sonini tanlang"
+              :options-prop="questionsCountSelect"
+              @itemSelected="selectedCountValue"
+              hideDetails
+              :append="true"
+            >
+              <template #append>
+                <svg
+                  class="Dropdown_self__FtxaI"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style="height: 1rem; width: 1rem"
+                >
+                  <path
+                    d="M13.2797 5.9668L8.93306 10.3135C8.41973 10.8268 7.57973 10.8268 7.06639 10.3135L2.71973 5.9668"
+                    stroke="rgb(51, 54, 57)"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </template>
+            </BaseSelect>
+            <BaseSelect
+              v-model="questionSelectedLevel"
               label="Darajani tanlang"
               placeholder="Darajani tanlang"
-              :options-prop="questionLevelList"
-              @itemSelected="selectedClassValue"
+              :options-prop="levelList"
+              @itemSelected="selectedLevelValue"
               hideDetails
               :append="true"
             >
@@ -60,34 +88,37 @@
             </BaseSelect>
             <BaseInput
               v-model="questionTotalTime"
-              hide-details=""
+              :hide-details="true"
               label="Umumiy vaqt"
               disabled
             >
             </BaseInput>
           </div>
-          <AppText
-            :size="isMobileSmall ? 16 : 20"
-            :line-height="isMobileSmall ? 20 : 24"
-            weight="700"
-            class="mb-30"
-          >
-            Fan mavzularini tanlang
-          </AppText>
-          <div class="choose-test-topics mb-20">
-            <BaseCheckbox
-              size="18"
-              v-for="(item, index) in subjectSectionList"
-              :title="item.name"
-              class="mb-20"
-              :key="index"
-              style="display: flex"
-              @change="sectionChanged(item.id)"
-              :checked="!selectedSubjectSections.includes(item.id)"
-            />
+          <div v-if="selectedSubject.selected && subjectSectionList.length > 0">
+            <AppText
+              :size="isMobileSmall ? 16 : 20"
+              :line-height="isMobileSmall ? 20 : 24"
+              weight="700"
+              class="mb-30"
+            >
+              Fan mavzularini tanlang
+            </AppText>
+            <div class="choose-test-topics mb-20">
+              <BaseCheckbox
+                size="18"
+                v-for="(item, index) in subjectSectionList"
+                :title="item.name"
+                class="mb-20"
+                :key="index"
+                style="display: flex"
+                @change="sectionChanged(item.id)"
+                :checked="!selectedSubjectSections.includes(item.id)"
+              />
+            </div>
           </div>
+
           <AppButton
-            theme="secondary"
+            theme="light-green"
             sides="20"
             @click="getQuestionBySelectedParameters"
           >
@@ -137,8 +168,8 @@ export default {
           name: null,
         },
       },
-      subject_id: 1,
-      selectedLevelValue: "beginner",
+      subject_id: null,
+      questionSelectedLevel: "beginner",
       subjectSectionList: [
         {
           id: null,
@@ -147,25 +178,48 @@ export default {
       ],
       selectedSubjectSections: [],
       questionTotalTime: 0,
-      questionsCount: 1,
-      questionLevelList: [
+      questionsCount: 5,
+      questionsCountSelect: [
         {
-          id: 0,
-          valeu: "beginner",
-          name: "beginner",
+          id: 5,
+          name: 5,
         },
         {
-          id: 1,
-          valeu: "medium",
-          name: "bedium",
+          id: 10,
+          name: 10,
         },
         {
-          id: 2,
-          valeu: "advanced",
-          name: "advanced",
+          id: 15,
+          name: 15,
+        },
+        {
+          id: 20,
+          name: 20,
+        },
+        {
+          id: 25,
+          name: 25,
+        },
+        {
+          id: 30,
+          name: 30,
         },
       ],
-      questionTime: 0,
+      levelList: [
+        {
+          id: "beginner",
+          name: "Beginner",
+        },
+        {
+          id: "medium",
+          name: "Bedium",
+        },
+        {
+          id: "advanced",
+          name: "Advanced",
+        },
+      ],
+      questionTime: 1,
     };
   },
   methods: {
@@ -173,6 +227,7 @@ export default {
     selectSubject(subject) {
       this.selectedSubject.selected = true;
       this.selectedSubject.subject = subject;
+      this.subject_id = this.selectedSubject.subject.id;
       this.getSubjectSectionList(this.selectedSubject.subject.id);
     },
     getSubjects() {
@@ -202,6 +257,7 @@ export default {
         this.errorNotification(e.response.data.error.message);
       }
     },
+
     sectionChanged(sectionId) {
       let index = this.selectedSubjectSections.findIndex(
         (s) => s === sectionId
@@ -212,29 +268,19 @@ export default {
         this.selectedSubjectSections.splice(index, 1);
       }
     },
-    questionMinute(subjectId) {
-      try {
-        this.$api
-          .get(`main/Home/Test/QuestionMinute?subjectId=` + subjectId)
-          .then((res) => {
-            if (!res.error) {
-              this.questionTime = res.result.questionMinute;
-            }
-          });
-      } catch (e) {
-        this.errorNotification(e.response.data.error.message);
-      }
-    },
+
     getQuestionBySelectedParameters() {
       let paramtersModel = {};
-      paramtersModel.subjectId = this.selectedSubject.subject.id;
-      paramtersModel.sectionList = this.selectedSubjectSections;
-      paramtersModel.testCount = this.questionsCount;
-      paramtersModel.testLevel = this.questionSelectedLevel;
+      paramtersModel.science_id = this.selectedSubject.subject.id;
+      paramtersModel.subject_list = [2, 4];
+      paramtersModel.test_count = this.questionsCount;
+      paramtersModel.test_score = this.questionSelectedLevel;
+      paramtersModel.started_time = new Date();
+      paramtersModel.finished_time = new Date();
       this.storeTestTimeToStorage(this.questionTotalTime);
       try {
-        this.$api
-          .post(`main/BlockTest/TestList`, paramtersModel)
+        this.$http
+          .post(`tests/sciences-tests/start/`, paramtersModel)
           .then((res) => {
             if (!res.error) {
               this.setTestType(test.TYPE_BLOCK);
@@ -248,14 +294,18 @@ export default {
             }
           })
           .catch((e) => {
-            this.errorNotification(e.response.data.error.message);
+            this.errorNotification(e.response.data.message);
           });
       } catch (e) {
         this.errorNotification(e.response.data.error.message);
       }
     },
-    selectedClassValue(item) {
-      this.selectedLevelValue = item.name;
+
+    selectedLevelValue(item) {
+      this.questionSelectedLevel = item.id;
+    },
+    selectedCountValue(item) {
+      this.questionsCount = item.id;
     },
   },
   created() {
@@ -263,7 +313,7 @@ export default {
     this.removeTestAttributesFromStorage();
   },
   watch: {
-    questionTime() {
+    subject_id() {
       this.questionTotalTime = this.questionTime * this.questionsCount;
     },
     questionsCount() {

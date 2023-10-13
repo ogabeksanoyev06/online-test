@@ -17,6 +17,13 @@
     margin-top: #{$marginT}px;
   }
 }
+@each $gap
+  in (5, 8, 10, 15, 16, 20, 30, 40, 50, 60, 70, 75, 78, 100, 110, 120, 140, 160)
+{
+  .gap-#{$gap} {
+    gap: #{$gap}px;
+  }
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;

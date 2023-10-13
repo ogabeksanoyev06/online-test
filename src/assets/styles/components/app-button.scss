@@ -54,12 +54,12 @@
       height: #{$height}px;
     }
   }
-  @each $radius in (5, 8, 10, 15, 20, 25, 28, 50, 100) {
+  @each $radius in (5, 8, 10, 15, 16, 20, 25, 28, 50, 100) {
     &--rd-#{$radius} {
       border-radius: #{$radius}px;
     }
   }
-  @each $sidesPadding in (0, 10, 20, 30, 50) {
+  @each $sidesPadding in (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50) {
     &--sd-#{$sidesPadding} {
       padding: 0 #{$sidesPadding}px;
     }
@@ -81,13 +81,94 @@
     $cl-a
       in (
         (
-          "main",
-          #024033,
-          lighten(#024033, 5%),
-          darken(#024033, 5%),
+          "light-green",
+          #e9fcf6,
+          lighten(#e9fcf6, 5%),
+          darken(#e9fcf6, 5%),
+          #119c75,
+          #119c75,
+          #119c75
+        ),
+        (
+          "light-info",
+          #f2f7ff,
+          lighten(#f2f7ff, 5%),
+          darken(#f2f7ff, 5%),
+          #0067fb,
+          #0067fb,
+          #0067fb
+        ),
+        (
+          "light-orange",
+          #fef9e6,
+          lighten(#fef9e6, 5%),
+          darken(#fef9e6, 5%),
+          #daab00,
+          #daab00,
+          #daab00
+        ),
+        (
+          "light-purple",
+          #f7f0fe,
+          lighten(#f7f0fe, 5%),
+          darken(#f7f0fe, 5%),
+          #802fde,
+          #802fde,
+          #802fde
+        ),
+        (
+          "light-pumpkin",
+          #fff2f9,
+          lighten(#fff2f9, 5%),
+          darken(#fff2f9, 5%),
+          #ff0096,
+          #ff0096,
+          #ff0096
+        ),
+        (
+          "info",
+          #0066ff,
+          lighten(#0066ff, 5%),
+          darken(#0066ff, 5%),
           white,
           white,
           white
+        ),
+        (
+          "green",
+          #119c75,
+          lighten(#119c75, 5%),
+          darken(#119c75, 5%),
+          white,
+          white,
+          white
+        ),
+        (
+          "orange",
+          #daab00,
+          lighten(#daab00, 5%),
+          darken(#daab00, 5%),
+          white,
+          white,
+          white
+        ),
+        (
+          "purple",
+          #802fde,
+          lighten(#802fde, 5%),
+          darken(#802fde, 5%),
+          #fff,
+          #fff,
+          #fff
+        ),
+        (
+          "pumpkin",
+          #ff0096,
+          lighten(#ff0096, 5%),
+          darken(#ff0096, 5%),
+          #fff,
+          #fff,
+          #fff
         ),
         (
           "white",
@@ -99,15 +180,6 @@
           $text-color-default
         ),
         (
-          "secondary",
-          #18a058,
-          lighten(#18a058, 5%),
-          darken(#18a058, 5%),
-          #fff,
-          #fff,
-          #fff
-        ),
-        (
           "transparent",
           transparent,
           rgba($color-main, 0.1),
@@ -116,15 +188,7 @@
           inherit,
           inherit
         ),
-        (
-          "grey",
-          #edf5ff,
-          #edf5ff,
-          darken(#edf5ff, 5%),
-          #95abc6,
-          #95abc6,
-          #95abc6
-        ),
+        ("gray", #f2f2f3, #f2f2f3, darken(#f2f2f3, 5%), #000, #000, #000),
         (
           "red",
           rgb(244 44 44),
@@ -192,13 +256,5 @@
     &:active {
       transform: none;
     }
-  }
-
-  &--th-main {
-    background: #024033;
-  }
-
-  &--th-secondary {
-    background: #18a058;
   }
 }

@@ -3,8 +3,8 @@
     <header
       class="header"
       :class="{
+        _scroll: scrolled,
         header__shadow: $route.path !== '/',
-        hidden: isHeaderHidden,
       }"
     >
       <div class="container">
@@ -129,22 +129,34 @@
                 </transition>
               </div>
             </div>
-            <div class="header__auth">
+            <div class="header__auth" v-if="!userIsLoggedOn">
               <AppButton
-                v-if="!userIsLoggedOn"
-                theme="main"
-                :font-size="16"
-                :sides="20"
-                :height="isMobileSmall ? '40' : '45'"
-                weight="500"
-                class="header__login d-flex align-center"
+                :theme="scrolled ? 'light-info' : 'info'"
+                :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+                :sides="isMobileSmall ? 10 : isMobile ? 15 : 20"
+                :height="isMobile ? '40' : '45'"
+                class="header__login mr-10"
+                v-if="!isMobileSmall"
                 @click="$router.push({ path: '/sign-in' })"
               >
-                Tizimga kirish
+                Kirish
               </AppButton>
               <AppButton
+                :theme="scrolled ? 'light-orange' : 'orange'"
+                @click="$router.push({ path: '/sign-up' })"
+                :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+                :sides="isMobileSmall ? 10 : isMobile ? 15 : 20"
+                :height="isMobile ? '40' : '45'"
+                class="header__register"
+                v-if="!isMobileSmall"
+              >
+                Ro'yxatdan o'tish
+              </AppButton>
+            </div>
+            <div class="header__account">
+              <AppButton
                 v-if="userIsLoggedOn"
-                theme="main"
+                theme="info"
                 radius="10"
                 :font-size="16"
                 :sides="isMobileSmall ? '10' : '20'"
@@ -179,12 +191,14 @@ import "./header.scss";
 import NavigationDrawer from "./NavigationDrawer";
 import AppButton from "../../../shared-components/AppButton";
 import { mapActions, mapGetters, mapMutations } from "vuex";
+import TokenService from "@/service/TokenService";
 
 export default {
   name: "AppHeader",
   components: { AppButton, NavigationDrawer },
   data() {
     return {
+      scrolled: false,
       activeId: null,
       subActiveId: null,
       menu: [
@@ -261,23 +275,30 @@ export default {
       this.languageDropdown = false;
     },
     setToken() {
-      this.setAccessToken(null);
-      this.setIsLoggedOn(false);
+      let accessToken = TokenService.getToken();
+      if (accessToken !== null) {
+        this.setAccessToken(accessToken);
+        this.setIsLoggedOn(true);
+      } else {
+        this.setAccessToken(null);
+        this.setIsLoggedOn(false);
+      }
     },
-  },
-  async mounted() {
-    if (this.userIsLoggedOn) {
-      await this.getUser();
-    }
-  },
-
-  watch: {
-    async isLoggedOn() {
-      if (this.userIsLoggedOn) {
-        await this.getUser();
+    handleScroll() {
+      if (window.scrollY > 100) {
+        this.scrolled = true;
+      } else {
+        this.scrolled = false;
       }
     },
   },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+  watch: {},
 };
 </script>
 

@@ -47,12 +47,13 @@ export default {
           console.error("Error refreshing token:", error);
         });
     },
-
     logOut() {
       this.setAccessToken(null);
       this.setIsLoggedOn(false);
-      TokenService.clearTokens();
     },
+  },
+  created() {
+    setInterval(this.handleUserAction, 10000);
   },
 };
 </script>

@@ -12,7 +12,6 @@ import "./plugins/directives/click-outside";
 import "./plugins/mixins/mixin";
 import "vue-toastification/dist/index.css";
 import http from "./plugins/axios";
-
 Vue.config.productionTip = false;
 Vue.component("AppText", AppText);
 Vue.use(VueMask);
