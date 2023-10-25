@@ -1,21 +1,19 @@
 <template>
   <div class="course" :class="{ 'news-card--medium': medium }">
     <div class="course-card">
-      <div class="course-card-header" @click="goToLink(i)">
-        <img
-          :src="photo"
-          style="
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            inset: 0px;
-            color: transparent;
-          "
-        />
-        <div class="d-flex justify-space-between align-center">
-          <p class="mb-0">7 modullar | 134 darslar</p>
-          <div class="course-icons-hover d-flex align-center">
-            <span>
+      <div class="bg-shadow"></div>
+      <div class="course-card-header">
+        <div class="d-flex justify-space-between align-center mb-10">
+          <AppText
+            size="14"
+            line-height="20"
+            weight="600"
+            class="color-green-2"
+          >
+            {{ modules_count }} modullar | {{ lessons_count }} darslar
+          </AppText>
+          <div class="course-icons-hover d-flex align-center gap-10">
+            <span class="icon" @click="addToCart">
               <svg
                 class="mx-0"
                 width="24"
@@ -45,75 +43,143 @@
                 </defs>
               </svg>
             </span>
-            <svg
-              class="like-icon"
-              width="22"
-              height="19"
-              viewBox="0 0 22 19"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              style="margin-left: 10px"
-            >
-              <path
-                d="M15.8375 1.5C16.3836 1.49954 16.9242 1.6081 17.4278 1.81931C17.9313 2.03052 18.3877 2.34014 18.77 2.73C19.5578 3.52979 19.9994 4.60737 19.9994 5.73C19.9994 6.85264 19.5578 7.93022 18.77 8.73L11 16.5975L3.23001 8.73C2.4422 7.93022 2.00061 6.85264 2.00061 5.73C2.00061 4.60737 2.4422 3.52979 3.23001 2.73C3.61258 2.34042 4.06895 2.03096 4.57245 1.81972C5.07595 1.60848 5.6165 1.49968 6.16251 1.49968C6.70853 1.49968 7.24908 1.60848 7.75258 1.81972C8.25608 2.03096 8.71245 2.34042 9.09501 2.73L11 4.68L12.8975 2.745C13.2787 2.35049 13.7355 2.0369 14.2407 1.82298C14.7458 1.60906 15.2889 1.49921 15.8375 1.5ZM15.8375 2.01214e-06C15.0917 -0.000630028 14.3533 0.147643 13.6656 0.436128C12.9779 0.724614 12.3547 1.1475 11.8325 1.68L11 2.52L10.1675 1.68C9.64473 1.14846 9.02136 0.726309 8.33376 0.438145C7.64615 0.149981 6.90806 0.00157307 6.16251 0.00157307C5.41697 0.00157307 4.67888 0.149981 3.99127 0.438145C3.30367 0.726309 2.6803 1.14846 2.15751 1.68C1.09392 2.76272 0.497986 4.21977 0.497986 5.7375C0.497986 7.25523 1.09392 8.71228 2.15751 9.795L11 18.75L19.8425 9.795C20.9061 8.71228 21.502 7.25523 21.502 5.7375C21.502 4.21977 20.9061 2.76272 19.8425 1.68C19.3199 1.14818 18.6966 0.725734 18.0089 0.437298C17.3213 0.148862 16.5832 0.000207074 15.8375 2.01214e-06Z"
-                fill="white"
-              ></path>
-            </svg>
+            <span class="icon" @click="addToFavourite">
+              <svg
+                class="like-icon"
+                :class="isFavourite ? 'active' : ''"
+                width="22"
+                height="19"
+                viewBox="0 0 22 19"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.8375 1.5C16.3836 1.49954 16.9242 1.6081 17.4278 1.81931C17.9313 2.03052 18.3877 2.34014 18.77 2.73C19.5578 3.52979 19.9994 4.60737 19.9994 5.73C19.9994 6.85264 19.5578 7.93022 18.77 8.73L11 16.5975L3.23001 8.73C2.4422 7.93022 2.00061 6.85264 2.00061 5.73C2.00061 4.60737 2.4422 3.52979 3.23001 2.73C3.61258 2.34042 4.06895 2.03096 4.57245 1.81972C5.07595 1.60848 5.6165 1.49968 6.16251 1.49968C6.70853 1.49968 7.24908 1.60848 7.75258 1.81972C8.25608 2.03096 8.71245 2.34042 9.09501 2.73L11 4.68L12.8975 2.745C13.2787 2.35049 13.7355 2.0369 14.2407 1.82298C14.7458 1.60906 15.2889 1.49921 15.8375 1.5ZM15.8375 2.01214e-06C15.0917 -0.000630028 14.3533 0.147643 13.6656 0.436128C12.9779 0.724614 12.3547 1.1475 11.8325 1.68L11 2.52L10.1675 1.68C9.64473 1.14846 9.02136 0.726309 8.33376 0.438145C7.64615 0.149981 6.90806 0.00157307 6.16251 0.00157307C5.41697 0.00157307 4.67888 0.149981 3.99127 0.438145C3.30367 0.726309 2.6803 1.14846 2.15751 1.68C1.09392 2.76272 0.497986 4.21977 0.497986 5.7375C0.497986 7.25523 1.09392 8.71228 2.15751 9.795L11 18.75L19.8425 9.795C20.9061 8.71228 21.502 7.25523 21.502 5.7375C21.502 4.21977 20.9061 2.76272 19.8425 1.68C19.3199 1.14818 18.6966 0.725734 18.0089 0.437298C17.3213 0.148862 16.5832 0.000207074 15.8375 2.01214e-06Z"
+                  fill="white"
+                ></path>
+              </svg>
+            </span>
           </div>
         </div>
-        <p class="course__lang">
-          Ta'lim tili <br />
-          <span class="course__lang-title">O'zbekcha</span>
-        </p>
+        <div class="course-card-photo mb-10">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="150"
+            height="150"
+            viewBox="0 0 150 150"
+            fill="none"
+          >
+            <path
+              d="M75.1753 75C75.1753 61.193 86.3682 50.0001 100.175 50.0001C113.982 50.0001 125.175 61.1933 125.175 75C125.175 88.8073 113.982 99.9999 100.175 99.9999C86.3679 99.9999 75.1753 88.807 75.1753 75Z"
+              fill="#00BCFF"
+            />
+            <path
+              d="M25.1753 125C25.1753 111.193 36.3682 100 50.1752 100L63.498 92.9663L75.1751 100V125C75.1751 138.807 63.9822 150 50.1752 150C36.3682 150 25.1753 138.807 25.1753 125Z"
+              fill="#00CF7F"
+            />
+            <path
+              d="M75.1755 0L61.5718 23.6338L75.1755 49.9998H99.8247C113.632 49.9998 124.825 38.8069 124.825 24.9999C124.825 11.1929 113.632 0 99.8247 0H75.1755Z"
+              fill="#FF7361"
+            />
+            <path
+              d="M24.8242 24.9999C24.8242 38.8069 36.0171 49.9998 49.8241 49.9998L63.0859 55.1221L75.1747 49.9998V0H49.8238C36.0171 0 24.8242 11.1929 24.8242 24.9999Z"
+              fill="#FF4D12"
+            />
+            <path
+              d="M25.1753 75C25.1753 88.8073 36.3682 99.9999 50.1752 99.9999H75.1751V49.9998H50.1752C36.3682 49.9998 25.1753 61.193 25.1753 75Z"
+              fill="#B659FF"
+            />
+          </svg>
+        </div>
+        <div>
+          <AppText
+            size="14"
+            line-height="20"
+            weight="500"
+            class="color-green-2"
+          >
+            Ta'lim tili
+          </AppText>
+          <AppText
+            size="16"
+            line-height="24"
+            weight="600"
+            class="color-green-2"
+          >
+            {{ language }}
+          </AppText>
+        </div>
       </div>
       <div class="course-card-body">
-        <h3 class="course-card-body-title">{{ title }}</h3>
+        <AppText
+          class="color-green-2 pointer"
+          :size="isMobileSmall ? 18 : isMobile ? 20 : 22"
+          :class="isMobileSmall ? 'mb-5' : 'mb-10'"
+          weight="700"
+          @click="goToLink(i)"
+        >
+          {{ title }}
+        </AppText>
         <div>
-          <div class="d-flex align-center course-card-body-count">
+          <div class="d-flex align-center mb-10">
             <svg
-              viewBox="0 0 16 16"
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
               fill="none"
-              height="16"
-              width="16"
               xmlns="http://www.w3.org/2000/svg"
-              class="mr-10"
+              class="mr-5"
             >
               <path
-                d="M8.00033 7.99992C9.84127 7.99992 11.3337 6.50753 11.3337 4.66658C11.3337 2.82564 9.84127 1.33325 8.00033 1.33325C6.15938 1.33325 4.66699 2.82564 4.66699 4.66658C4.66699 6.50753 6.15938 7.99992 8.00033 7.99992Z"
-                fill="currentColor"
-              ></path>
-              <path
-                d="M8.00043 9.66675C4.66043 9.66675 1.94043 11.9067 1.94043 14.6667C1.94043 14.8534 2.0871 15.0001 2.27376 15.0001H13.7271C13.9138 15.0001 14.0604 14.8534 14.0604 14.6667C14.0604 11.9067 11.3404 9.66675 8.00043 9.66675Z"
-                fill="currentColor"
-              ></path>
+                d="M9.45478 13.25C12.2016 13.25 14.6035 14.4313 15.9101 16.1935L14.5286 16.847C13.4653 15.5868 11.5903 14.75 9.45478 14.75C7.3192 14.75 5.44423 15.5868 4.38093 16.847L3 16.1929C4.30665 14.431 6.70831 13.25 9.45478 13.25ZM9.45478 2C11.5258 2 13.2048 3.67894 13.2048 5.75V8C13.2048 10.0166 11.6131 11.6614 9.61745 11.7466L9.45478 11.75C7.38369 11.75 5.70476 10.071 5.70476 8V5.75C5.70476 3.73344 7.29649 2.08864 9.2921 2.00347L9.45478 2ZM9.45478 3.5C8.2565 3.5 7.27701 4.43669 7.20857 5.6178L7.20475 5.75V8C7.20475 9.24267 8.2121 10.25 9.45478 10.25C10.6531 10.25 11.6325 9.31332 11.701 8.13223L11.7048 8V5.75C11.7048 4.50736 10.6974 3.5 9.45478 3.5Z"
+                fill="#222"
+              />
             </svg>
-            <p>257 o'quvchi</p>
+            <AppText size="14" line-height="20" weight="600">
+              <span style="color: #222"> {{ student_count }} o'quvchi</span>
+            </AppText>
           </div>
-          <p class="course-card-body-name">Muhammad Jumayev</p>
-          <p class="course-card-body-price">{{ currencyFormat(price) }}</p>
+          <AppText
+            :size="isMobileSmall ? '16' : '18'"
+            :line-height="isMobileSmall ? '22' : '24'"
+            :class="isMobileSmall ? 'mb-10' : 'mb-20'"
+            weight="600"
+            class="color-green-2 mb-5"
+          >
+            {{ teacher }}
+          </AppText>
+          <AppText
+            :size="isMobileSmall ? '16' : '18'"
+            :line-height="isMobileSmall ? '24' : '26'"
+            weight="600"
+            class="color-orange mb-20"
+          >
+            {{ currencyFormat(price) }}
+          </AppText>
           <AppButton
             theme="green"
             :font-size="16"
             :sides="20"
-            :height="40"
-            weight="500"
+            :height="45"
             :radius="50"
-            class="d-flex align-center"
+            weight="500"
+            class="d-flex align-center justify-content-center"
             :disabled="trailerBtn"
           >
             <svg
-              class="mr-10"
-              width="18"
-              height="14"
-              viewBox="0 0 18 14"
-              fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 25 25"
+              fill="none"
+              class="mr-10"
             >
               <path
-                d="M12.125 13.25H1.5C1.16848 13.25 0.850537 13.1183 0.616116 12.8839C0.381696 12.6495 0.25 12.3315 0.25 12V2C0.25 1.66848 0.381696 1.35054 0.616116 1.11612C0.850537 0.881696 1.16848 0.75 1.5 0.75H12.125C12.4565 0.75 12.7745 0.881696 13.0089 1.11612C13.2433 1.35054 13.375 1.66848 13.375 2V4.5375L16.7625 2.11875C16.8558 2.05233 16.9655 2.01282 17.0797 2.00452C17.1939 1.99623 17.3082 2.01947 17.4101 2.07171C17.512 2.12395 17.5976 2.20318 17.6576 2.30075C17.7175 2.39833 17.7495 2.51049 17.75 2.625V11.375C17.7495 11.4895 17.7175 11.6017 17.6576 11.6992C17.5976 11.7968 17.512 11.8761 17.4101 11.9283C17.3082 11.9805 17.1939 12.0038 17.0797 11.9955C16.9655 11.9872 16.8558 11.9477 16.7625 11.8812L13.375 9.4625V12C13.375 12.3315 13.2433 12.6495 13.0089 12.8839C12.7745 13.1183 12.4565 13.25 12.125 13.25ZM1.5 2V12H12.125V8.25C12.1255 8.13549 12.1575 8.02333 12.2174 7.92575C12.2774 7.82818 12.363 7.74895 12.4649 7.69671C12.5668 7.64447 12.6811 7.62123 12.7953 7.62952C12.9095 7.63782 13.0192 7.67733 13.1125 7.74375L16.5 10.1625V3.8375L13.1125 6.25625C13.0192 6.32267 12.9095 6.36218 12.7953 6.37048C12.6811 6.37877 12.5668 6.35553 12.4649 6.30329C12.363 6.25105 12.2774 6.17182 12.2174 6.07425C12.1575 5.97667 12.1255 5.86451 12.125 5.75V2H1.5Z"
-                fill="#fff"
-              ></path></svg
-            >Treylerni ko'rish
+                d="M16.6665 4.16669C17.2418 4.16669 17.7082 4.63306 17.7082 5.20835V9.58335L23.1387 5.78201C23.3743 5.61705 23.6991 5.67436 23.864 5.91002C23.9253 5.99756 23.9582 6.10183 23.9582 6.2087V18.7914C23.9582 19.079 23.7249 19.3122 23.4373 19.3122C23.3305 19.3122 23.2262 19.2793 23.1387 19.218L17.7082 15.4167V19.7917C17.7082 20.367 17.2418 20.8334 16.6665 20.8334H2.08317C1.50788 20.8334 1.0415 20.367 1.0415 19.7917V5.20835C1.0415 4.63306 1.50788 4.16669 2.08317 4.16669H16.6665ZM15.6248 6.25002H3.12484V18.75H15.6248V6.25002ZM7.70817 9.19655C7.78741 9.19655 7.86501 9.21915 7.93187 9.26169L12.4683 12.1485C12.6624 12.272 12.7196 12.5296 12.5961 12.7238C12.5634 12.7751 12.5197 12.8188 12.4683 12.8516L7.93187 15.7384C7.73772 15.8619 7.48019 15.8047 7.35665 15.6105C7.3141 15.5437 7.2915 15.4661 7.2915 15.3868V9.61322C7.2915 9.3831 7.47806 9.19655 7.70817 9.19655ZM21.8748 9.20972L17.7082 12.1261V12.874L21.8748 15.7903V9.20972Z"
+                fill="white"
+              />
+            </svg>
+            Treylerni ko'rish
           </AppButton>
         </div>
       </div>
@@ -122,6 +188,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import "../../assets/styles/components/app-card.scss";
 import AppButton from "./AppButton.vue";
 
@@ -129,32 +196,95 @@ export default {
   name: "AppCard",
   components: { AppButton },
   props: {
-    id: Number,
-    link: String,
+    courseId: Number,
     title: String,
-    subtitle: String,
-    photo: String,
-    medium: Boolean,
+    modules_count: Number,
+    lessons_count: Number,
+    image: String,
+    language: String,
+    trailer: String,
+    student_count: {
+      type: Number,
+      default: 0,
+    },
+    teacher: Number,
     trailerBtn: Boolean,
-    value: null,
+    level: String,
+    isFree: Boolean,
     price: {
       type: [String, Number],
       default: "",
     },
   },
+  computed: {
+    inBasket() {
+      return this.isCourseInBasketSolid(this.courseId);
+    },
+    isFavourite() {
+      return this.isCourseInFavouritesList(this.courseId);
+    },
+  },
   methods: {
+    ...mapMutations([
+      "setCoursesOnBasket",
+      "setFavouriteCourses",
+      "removeCoursesOnBasket",
+      "removefavouriteCourses",
+    ]),
     goToLink() {
       this.$router.push({
         name: "detailed-page",
-        params: { course_id: this.id },
+        params: { course_id: this.courseId },
       });
+    },
+    addToFavourite() {
+      if (this.isFavourite) {
+        this.removefavouriteCourses(this.courseId);
+        this.warningNotification("Kurs sevimlilardan o'chirildi");
+      } else {
+        const courseData = {
+          id: this.courseId,
+          title: this.title,
+          modules_count: this.modules_count,
+          lessons_count: this.lessons_count,
+          language: this.language,
+          teacher: this.teacher,
+          trailer: this.trailer,
+          image: this.image,
+          price: this.price,
+        };
+        this.setFavouriteCourses({
+          courseId: this.courseId,
+          data: courseData,
+        });
+        this.successNotification("Kurs sevimlilarga qo'shildi");
+      }
+    },
+    addToCart() {
+      if (this.inBasket) {
+        this.removeCoursesOnBasket(this.courseId);
+        this.warningNotification("Kurs savatdan o'chirildi");
+      } else {
+        const courseData = {
+          id: this.courseId,
+          title: this.title,
+          modules_count: this.modules_count,
+          lessons_count: this.lessons_count,
+          language: this.language,
+          teacher: this.teacher,
+          trailer: this.trailer,
+          image: this.image,
+          price: this.price,
+        };
+        this.setCoursesOnBasket({
+          courseId: this.courseId,
+          data: courseData,
+        });
+        this.successNotification("Kurs savatga qo'shildi");
+      }
     },
   },
 };
 </script>
 
-<style scoped>
-.hover-title:hover {
-  cursor: pointer;
-}
-</style>
+<style scoped></style>

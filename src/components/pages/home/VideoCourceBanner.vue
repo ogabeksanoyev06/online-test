@@ -1,37 +1,37 @@
 <template>
-  <section class="section py-30" :class="isMobile ? 'mt-30' : 'mt-60'">
-    <div class="v-tutorial">
-      <div class="container">
-        <div class="v-tutorial__content">
-          <div class="v-tutorial__player">
-            <iframe
-              width="100%"
-              height="315"
-              src="https://www.youtube.com/embed/TggjL2itDvk"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen="allowfullscreen"
-            ></iframe>
-          </div>
-          <div class="v-tutorial__info" :class="isMobile ? 'pa-30' : 'pa-60'">
-            <p class="title" :class="isMobile ? 'mb-20' : 'mb-30'">
-              Videokurslar
-            </p>
-            <p class="text" :class="isMobile ? 'mb-20' : 'mb-30'">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptates pariatur labore, ipsam nulla nostrum magni earum
-              sapiente illum quo nesciunt libero possimus maxime, consequatur
-              nisi laudantium ratione, esse expedita quibusdam!
-            </p>
-            <app-button theme="main" sides="30" font-size="16">
-              Barcha videokurslar
-            </app-button>
-          </div>
+  <div class="v-tutorial">
+    <div class="container">
+      <div class="v-tutorial__content">
+        <div class="v-tutorial__player">
+          <iframe
+            width="100%"
+            height="315"
+            src="https://www.youtube.com/embed/TggjL2itDvk"
+            title="YouTube video
+            player"
+            frameborder="0"
+            allow="accelerometer; autoplay;
+            clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen="allowfullscreen"
+          />
+        </div>
+        <div class="v-tutorial__info" :class="isMobile ? 'pa-30' : 'pa-60'">
+          <p class="title" :class="isMobile ? 'mb-20' : 'mb-30'">
+            Videokurslar
+          </p>
+          <p class="text" :class="isMobile ? 'mb-20' : 'mb-30'">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates
+            pariatur labore, ipsam nulla nostrum magni earum sapiente illum quo
+            nesciunt libero possimus maxime, consequatur nisi laudantium
+            ratione, esse expedita quibusdam!
+          </p>
+          <app-button theme="info" sides="30" font-size="16">
+            Barcha videokurslar
+          </app-button>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 <script>
 import AppButton from "@/components/shared-components/AppButton.vue";

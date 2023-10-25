@@ -1,18 +1,9 @@
 <template>
-  <div class="modal">
-    <div class="modal__content" :style="style" :class="className">
-      <div class="modal__wrap">
-        <div class="modal__header">
-          <span> <slot name="modalHeader"></slot> </span>
-          <button class="modal__close" @click="close">
-            <img src="/icons/close.svg" alt="" />
-          </button>
-        </div>
-        <div class="modal__body">
-          <slot name="modalBody"></slot>
-        </div>
-      </div>
+  <div class="modal" :class="{ visible: !hidden }">
+    <div class="modal__wrap" :class="{ visible: !hidden }">
+      <slot name="body" />
     </div>
+    <div class="overlay" :class="{ visible: !hidden }" @click="close"></div>
   </div>
 </template>
 <script>
@@ -20,33 +11,16 @@ import "../../assets/styles/components/app-modal.scss";
 
 export default {
   name: "AppModal",
+  props: {
+    value: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       hidden: true,
     };
-  },
-  props: {
-    width: {
-      type: [Number, String],
-    },
-  },
-  computed: {
-    className() {
-      const name = "modal__content--";
-      const className = [];
-
-      if (this.width) {
-        className.push(name + "wd");
-      }
-      return className;
-    },
-    style() {
-      const styles = {};
-      if (this.width) {
-        styles["--wd"] = this.width + "px";
-      }
-      return styles;
-    },
   },
   methods: {
     close() {
@@ -54,10 +28,10 @@ export default {
       this.$emit("close");
     },
   },
-  async mounted() {
-    setTimeout(() => {
-      this.hidden = false;
-    }, 10);
+  watch: {
+    value(newVal) {
+      this.hidden = newVal;
+    },
   },
 };
 </script>

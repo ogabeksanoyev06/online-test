@@ -4,10 +4,10 @@
       <div class="section__top mb-30">
         <div>
           <app-text
-            :size="isMobile ? 18 : 28"
-            :line-height="isMobile ? 28 : 36"
+            :size="isMobileSmall ? 22 : isMobile ? 26 : 30"
+            :line-height="isMobileSmall ? 26 : isMobile ? 30 : 36"
             weight="700"
-            class="color-main"
+            class="mb-10"
           >
             Videodarslar
           </app-text>
@@ -46,20 +46,24 @@
             Tanlangan yo'nalish bo'yicha kurs mavjud emas!
           </AppText>
           <BlockWrap
-            :count="isMobileSmall ? 1 : isMobile ? 2 : isDesktopMedium ? 3 : 4"
+            :count="isMobileSmall ? 1 : isMobile ? 2 : 3"
             offset-x="24"
             offset-y="24"
             class="mb-20"
           >
             <AppCard
               v-for="item in list"
-              :id="item.id"
+              :key="item.id"
+              :courseId="item.id"
               :title="item.title"
-              :subtitle="item.description"
-              :photo="item.photo"
+              :modules_count="item.modules_count"
+              :lessons_count="item.lessons_count"
+              :language="item.language"
+              :teacher="item.teacher"
+              :trailer="item.trailer"
+              :image="item.image"
               :price="item.price"
               :trailerBtn="true"
-              :key="item"
             />
           </BlockWrap>
         </div>
@@ -106,12 +110,15 @@ export default {
       }
       this.coursesBySubjectId.forEach((c) => {
         let courseModel = {
-          title: c.title.substr(0, 50),
-          subtitle: c.description,
-          photo: c && c.image ? c.image : "/images/post.jpg",
-          value: 1,
-          price: c.price + " so'm",
           id: c.id,
+          title: c.title,
+          modules_count: c.modules_count,
+          lessons_count: c.lessons_count,
+          language: c.language,
+          teacher: c.teacher,
+          trailer: c.trailer,
+          image: c && c.image ? c.image : "/images/post.jpg",
+          price: c.price + " so'm",
           link: "detailed-page/" + c.id,
         };
         this.list.push(courseModel);

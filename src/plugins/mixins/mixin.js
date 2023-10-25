@@ -9,7 +9,7 @@ Vue.mixin({
     };
   },
   computed: {
-    ...mapGetters(["isLoggedOn"]),
+    ...mapGetters(["isLoggedOn", "coursesOnBasket", "favouriteCourses"]),
     userIsLoggedOn() {
       return this.isLoggedOn;
     },
@@ -85,6 +85,16 @@ Vue.mixin({
     setTestTypeToStorage(testType) {
       localStorage.removeItem("testType");
       localStorage.setItem("testType", testType);
+    },
+    isCourseInBasketSolid(courseId) {
+      return !!this.coursesOnBasket.find(
+        (item) => parseInt(item.id) === parseInt(courseId)
+      );
+    },
+    isCourseInFavouritesList(courseId) {
+      return !!this.favouriteCourses.find(
+        (course) => parseInt(course.id) === parseInt(courseId)
+      );
     },
 
     getTestTypeFromStorage() {

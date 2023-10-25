@@ -2,22 +2,26 @@
   <div class="cta__banner mt-30">
     <div class="container">
       <div class="cta__banner-content" :class="isMobile ? 'py-30' : 'py-60'">
-        <app-text
-          :size="isMobile ? 26 : 32"
-          :line-height="isMobile ? 30 : 42"
-          weight="600"
-          class="color-main mb-10"
-        >
-          {{ title }}
-        </app-text>
-
-        <app-text class="mb-20" size="16" line-height="24">
-          {{ content }}
-        </app-text>
-
-        <app-button theme="main" sides="30" font-size="16">
-          {{ buttonText }}
-        </app-button>
+        <div data-aos="fade-up" data-aos-duration="200">
+          <app-text
+            :size="isMobile ? 26 : 28"
+            :line-height="isMobile ? 30 : 36"
+            weight="600"
+            class="color-main mb-10"
+          >
+            {{ title }}
+          </app-text>
+        </div>
+        <div data-aos="fade-up" data-aos-duration="400">
+          <app-text class="mb-20" size="16" line-height="24">
+            {{ content }}
+          </app-text>
+        </div>
+        <div data-aos="fade-up" data-aos-duration="600">
+          <app-button theme="info" sides="30" font-size="16">
+            {{ buttonText }}
+          </app-button>
+        </div>
       </div>
     </div>
   </div>

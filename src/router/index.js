@@ -43,6 +43,11 @@ const routes = [
         component: () => import("../views/site/President-school-test"),
       },
       {
+        path: "/Attestatsiya-test",
+        name: "attestatsiya-school-test",
+        component: () => import("../views/site/Attestatsiya-test"),
+      },
+      {
         path: "/pirls-test",
         name: "pirls-test",
         component: () => import("../views/site/Pirls-test"),
@@ -153,13 +158,26 @@ const routes = [
   },
   {
     path: "/sign-in",
-    name: "login",
-    component: () => import("../components/layouts/auth/login"),
+    component: () => import("../layouts/Auth"),
+    children: [
+      {
+        path: "/sign-in",
+        name: "login",
+        component: () => import("../components/layouts/auth/login"),
+      },
+    ],
   },
+
   {
     path: "/sign-up",
-    name: "register",
-    component: () => import("../components/layouts/auth/register"),
+    component: () => import("../layouts/Auth"),
+    children: [
+      {
+        path: "/sign-up",
+        name: "register",
+        component: () => import("../components/layouts/auth/register"),
+      },
+    ],
   },
 ];
 

@@ -12,31 +12,20 @@
             Test olinadigan fanni tanlang
           </app-text>
         </div>
-
         <div class="bg-white radius" :class="isMobileSmall ? 'pa-10' : 'pa-20'">
           <AppSmallCard
-            v-for="(item, idx) in subjects"
+            v-for="(item, idx) in science"
             :key="idx"
             :title="item.name"
             style="cursor: pointer"
-            :class="selectedSubject.subject.id === item.id ? '' : ''"
-            @click="selectSubject(item)"
+            :active="selectedScience.science.id === item.id"
+            @click="selectScience(item)"
           />
         </div>
-
         <div
           class="bg-white radius w-100 mt-20"
           :class="isMobileSmall ? 'pa-10' : 'pa-20'"
         >
-          <AppText
-            :size="isMobileSmall ? 16 : 20"
-            :line-height="isMobileSmall ? 20 : 24"
-            weight="700"
-            class="mb-30"
-          >
-            Fan mavzularini tanlang
-          </AppText>
-
           <div class="test__details mb-20">
             <BaseSelect
               v-model="questionsCount"
@@ -64,11 +53,37 @@
                 </svg>
               </template>
             </BaseSelect>
-
             <BaseSelect
-              v-model="questionsCount"
+              v-model="selectedClass"
               label="Sinfni tanlang"
               :options-prop="classes"
+              hideDetails
+              :append="true"
+            >
+              <template #append>
+                <svg
+                  class="Dropdown_self__FtxaI"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style="height: 1rem; width: 1rem"
+                >
+                  <path
+                    d="M13.2797 5.9668L8.93306 10.3135C8.41973 10.8268 7.57973 10.8268 7.06639 10.3135L2.71973 5.9668"
+                    stroke="rgb(51, 54, 57)"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </template>
+            </BaseSelect>
+            <BaseSelect
+              label="Darajani tanlang"
+              :options-prop="levelList"
+              v-model="questionSelectedLevel"
+              @itemSelected="selectedLevelValue"
               hideDetails
               :append="true"
             >
@@ -104,7 +119,6 @@
             sides="20"
             @click="getQuestionBySelectedParameters"
           >
-            <img src="/icons/play.svg" alt="" style="margin-right: 10px" />
             Testni boshlash
           </AppButton>
         </div>
@@ -133,27 +147,20 @@ export default {
   },
   data() {
     return {
-      subjects: [
+      science: [
         {
           name: "Maths",
           photo: "/icons/sciences.svg",
         },
       ],
-      selectedSubject: {
+      selectedScience: {
         selected: false,
-        subject: {
+        science: {
           name: null,
         },
       },
-      subjectSectionList: [
-        {
-          id: null,
-          name: null,
-        },
-      ],
-      selectedSubjectSections: [],
       questionLevelList: [],
-      questionSelectedLevel: 1,
+      questionSelectedLevel: "beginner",
       questionTotalTime: 0,
       questionsCount: 5,
       questionsCountSelect: [
@@ -182,7 +189,7 @@ export default {
           name: 30,
         },
       ],
-      questionTime: 0,
+      questionTime: 1,
       classes: [
         {
           id: 5,
@@ -214,91 +221,63 @@ export default {
         },
       ],
       selectedClass: 5,
+      levelList: [
+        {
+          id: "beginner",
+          name: "Oson",
+        },
+        {
+          id: "medium",
+          name: "O'rta",
+        },
+        {
+          id: "advanced",
+          name: "Qiyin",
+        },
+      ],
     };
   },
+
   methods: {
     ...mapMutations(["setTestType"]),
-    selectSubject(subject) {
-      this.selectedSubject.selected = true;
-      this.selectedSubject.subject = subject;
-      this.getSubjectSectionList(this.selectedSubject.subject.id);
-      this.questionMinute(this.selectedSubject.subject.id);
-    },
-    getSubjects() {
+    getScience() {
       try {
-        this.$api.get(`main/Home/Test/SubjectList`).then((res) => {
-          if (!res.error) {
-            this.subjects = res.result;
-            this.subjects.forEach((s) => {
-              s.photo = "/icons/sciences.svg";
-            });
-          }
-        });
-      } catch (e) {
-        this.errorNotification(e.response.data.error.message);
-      }
-    },
-    getSubjectSectionList(subjectId) {
-      try {
-        this.$api
-          .get(`main/Home/Test/SubjectSectionList?subjectId=` + subjectId)
+        this.$http
+          .get(`tests/sciences/`)
           .then((res) => {
-            if (!res.error) {
-              this.subjectSectionList = res.result;
-              this.subjectSectionList.forEach((s) => {
-                s.name = s.name.replaceAll("_x000d_", "");
-                s.name = s.name.replaceAll(".", ".<br>");
+            if (res) {
+              this.science = res;
+              this.science.forEach((s) => {
+                s.photo = "/icons/sciences.svg";
               });
             }
+          })
+          .catch((e) => {
+            console.log(e);
           });
       } catch (e) {
         this.errorNotification(e.response.data.error.message);
       }
     },
-    sectionChanged(sectionId) {
-      let index = this.selectedSubjectSections.findIndex(
-        (s) => s === sectionId
-      );
-      if (index === -1) {
-        this.selectedSubjectSections.push(sectionId);
-      } else {
-        this.selectedSubjectSections.splice(index, 1);
-      }
+    selectScience(science) {
+      this.selectedScience.selected = true;
+      this.selectedScience.science = science;
     },
-    testLevelList() {
-      try {
-        this.$api.get(`main/Home/Test/LevelList`).then((res) => {
-          if (!res.error) {
-            this.questionLevelList = res.result;
-          }
-        });
-      } catch (e) {
-        this.errorNotification(e.response.data.error.message);
-      }
+    selectedLevelValue(item) {
+      this.questionSelectedLevel = item.id;
     },
-    questionMinute(subjectId) {
-      try {
-        this.$api
-          .get(`main/Home/Test/QuestionMinute?subjectId=` + subjectId)
-          .then((res) => {
-            if (!res.error) {
-              this.questionTime = res.result.questionMinute;
-            }
-          });
-      } catch (e) {
-        this.errorNotification(e.response.data.error.message);
-      }
-    },
+
     getQuestionBySelectedParameters() {
       let paramtersModel = {};
-      paramtersModel.subjectId = this.selectedSubject.subject.id;
-      paramtersModel.sectionList = this.selectedSubjectSections;
-      paramtersModel.testCount = this.questionsCount;
-      paramtersModel.testLevel = this.questionSelectedLevel;
+      paramtersModel.science_id = this.selectedScience.science.id;
+      paramtersModel.class_id = this.selectedClass;
+      paramtersModel.test_count = this.questionsCount;
+      paramtersModel.test_score = this.questionSelectedLevel;
+      paramtersModel.started_time = new Date();
       this.storeTestTimeToStorage(this.questionTotalTime);
       try {
-        this.$api
-          .post(`main/BlockTest/TestList`, paramtersModel)
+        this.$http
+          .post(`tests/school-tests/start/`, paramtersModel)
           .then((res) => {
             if (!res.error) {
               this.setTestType(test.TYPE_SCHOOL);
@@ -312,25 +291,21 @@ export default {
             }
           })
           .catch((e) => {
-            this.errorNotification(e.response.data.error.message);
+            this.errorNotification(e.response.data.error);
           });
       } catch (e) {
-        this.errorNotification(e.response.data.error.message);
+        this.errorNotification(e.response.data.error);
       }
     },
   },
-  created() {
-    this.getSubjects();
-    this.testLevelList();
-    this.removeTestAttributesFromStorage();
-  },
   watch: {
-    questionTime() {
-      this.questionTotalTime = this.questionTime * this.questionsCount;
-    },
     questionsCount() {
       this.questionTotalTime = this.questionTime * this.questionsCount;
     },
+  },
+  created() {
+    this.removeTestAttributesFromStorage();
+    this.getScience();
   },
 };
 </script>

@@ -2,7 +2,7 @@ import axios from "axios";
 import TokenService from "../service/TokenService";
 import router from "../router/index";
 
-const baseURL = "http://api.chay-chay.uz/api/";
+const baseURL = "https://api.chay-chay.uz/api/";
 
 const http = axios.create({
   baseURL: baseURL,

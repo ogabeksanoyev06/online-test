@@ -12,7 +12,6 @@
             Test olinadigan fanni tanlang
           </app-text>
         </div>
-
         <div class="bg-white radius" :class="isMobileSmall ? 'pa-10' : 'pa-20'">
           <AppSmallCard
             v-for="(item, idx) in subjects"
@@ -23,6 +22,7 @@
             @click="selectSubject(item)"
           />
         </div>
+
         <div
           class="bg-white radius w-100 mt-20"
           :class="isMobileSmall ? 'pa-10' : 'pa-20'"
@@ -30,10 +30,8 @@
           <div class="test__details mb-20">
             <BaseSelect
               v-model="questionsCount"
-              label="Savollar sonini"
-              placeholder="Savollar sonini tanlang"
+              label="Savollar soni"
               :options-prop="questionsCountSelect"
-              @itemSelected="selectedCountValue"
               hideDetails
               :append="true"
             >
@@ -56,12 +54,11 @@
                 </svg>
               </template>
             </BaseSelect>
+
             <BaseSelect
-              v-model="questionSelectedLevel"
               label="Darajani tanlang"
-              placeholder="Darajani tanlang"
               :options-prop="levelList"
-              @itemSelected="selectedLevelValue"
+              v-model="questionSelectedLevel"
               hideDetails
               :append="true"
             >
@@ -86,33 +83,11 @@
             </BaseSelect>
             <BaseInput
               v-model="questionTotalTime"
-              :hide-details="true"
+              hide-details=""
               label="Umumiy vaqt"
               disabled
             >
             </BaseInput>
-          </div>
-          <div v-if="selectedSubject.selected && subjectSectionList.length > 0">
-            <AppText
-              :size="isMobileSmall ? 16 : 20"
-              :line-height="isMobileSmall ? 20 : 24"
-              weight="700"
-              class="mb-30"
-            >
-              Fan mavzularini tanlang
-            </AppText>
-            <div class="choose-test-topics mb-20">
-              <BaseCheckbox
-                size="18"
-                v-for="(item, index) in subjectSectionList"
-                :title="item.name"
-                class="mb-20"
-                :key="index"
-                style="display: flex"
-                @change="sectionChanged(item.id)"
-                :checked="!selectedSubjectSections.includes(item.id)"
-              />
-            </div>
           </div>
           <AppButton
             theme="light-green"
@@ -132,24 +107,21 @@ import AppSmallCard from "../../../components/shared-components/AppSmallCard";
 import AppText from "../../../components/shared-components/AppText";
 import BaseSelect from "../../../components/shared-components/BaseSelect";
 import AppButton from "../../../components/shared-components/AppButton";
+import BaseInput from "../../../components/shared-components/BaseInput";
 import test from "../../../constants/test";
 import { mapMutations } from "vuex";
-import BaseCheckbox from "@/components/shared-components/BaseCheckbox.vue";
-import BaseInput from "@/components/shared-components/BaseInput.vue";
 
 export default {
-  name: "AppIndex",
+  name: "choose-subject-school",
   components: {
+    BaseInput,
     AppButton,
     BaseSelect,
     AppSmallCard,
     AppText,
-    BaseCheckbox,
-    BaseInput,
   },
   data() {
     return {
-      isLoading: false,
       subjects: [
         {
           name: "Maths",
@@ -162,15 +134,9 @@ export default {
           name: null,
         },
       },
-      subject_id: null,
-      questionSelectedLevel: "beginner",
-      subjectSectionList: [
-        {
-          id: null,
-          name: null,
-        },
-      ],
       selectedSubjectSections: [],
+      questionLevelList: [],
+      questionSelectedLevel: "beginner",
       questionTotalTime: 0,
       questionsCount: 5,
       questionsCountSelect: [
@@ -199,6 +165,7 @@ export default {
           name: 30,
         },
       ],
+      questionTime: 1,
       levelList: [
         {
           id: "beginner",
@@ -213,7 +180,6 @@ export default {
           name: "Qiyin",
         },
       ],
-      questionTime: 1,
     };
   },
   methods: {
@@ -221,69 +187,45 @@ export default {
     selectSubject(subject) {
       this.selectedSubject.selected = true;
       this.selectedSubject.subject = subject;
-      this.subject_id = this.selectedSubject.subject.id;
-      this.getSubjectSectionList(this.selectedSubject.subject.id);
     },
     getSubjects() {
       try {
-        this.$http
-          .get(`tests/sciences/`)
-          .then((res) => {
-            if (res) {
-              this.subjects = res;
-              this.subjects.forEach((s) => {
-                s.photo = "/icons/sciences.svg";
-              });
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+        this.$http.get(`tests/sciences/`).then((res) => {
+          if (res) {
+            this.subjects = res;
+            this.subjects.forEach((s) => {
+              s.photo = "/icons/sciences.svg";
+            });
+          }
+        });
       } catch (e) {
         this.errorNotification(e.response.data.error.message);
       }
     },
-    getSubjectSectionList(subjectId) {
+    testLevelList() {
       try {
-        this.$http
-          .get(`tests/subjects/?science_id=` + subjectId)
-          .then((res) => {
-            if (res) {
-              this.subjectSectionList = res;
-            }
-          });
+        this.$api.get(`main/Home/Test/LevelList`).then((res) => {
+          if (!res.error) {
+            this.questionLevelList = res.result;
+          }
+        });
       } catch (e) {
         this.errorNotification(e.response.data.error.message);
       }
     },
-
-    sectionChanged(sectionId) {
-      let index = this.selectedSubjectSections.findIndex(
-        (s) => s === sectionId
-      );
-      if (index === -1) {
-        this.selectedSubjectSections.push(sectionId);
-      } else {
-        this.selectedSubjectSections.splice(index, 1);
-      }
-    },
-
     getQuestionBySelectedParameters() {
       let paramtersModel = {};
-      paramtersModel.science_id = this.selectedSubject.subject.id;
-      paramtersModel.subject_list = [2, 4];
-      paramtersModel.test_count = this.questionsCount;
-      paramtersModel.test_score = this.questionSelectedLevel;
-      paramtersModel.started_time = new Date();
-      paramtersModel.finished_time = new Date();
+      paramtersModel.subjectId = this.selectedSubject.subject.id;
+      paramtersModel.testCount = this.questionsCount;
+      paramtersModel.testLevel = this.questionSelectedLevel;
       this.storeTestTimeToStorage(this.questionTotalTime);
       try {
         this.$http
-          .post(`tests/sciences-tests/start/`, paramtersModel)
+          .post(`main/BlockTest/TestList`, paramtersModel)
           .then((res) => {
             if (!res.error) {
-              this.setTestType(test.TYPE_BLOCK);
-              this.setTestTypeToStorage(test.TYPE_BLOCK);
+              this.setTestType(test.TYPE_SCHOOL);
+              this.setTestTypeToStorage(test.TYPE_SCHOOL);
               let rawQuestions = [];
               rawQuestions.push(res.result);
               localStorage.setItem("questions", JSON.stringify(rawQuestions));
@@ -293,28 +235,19 @@ export default {
             }
           })
           .catch((e) => {
-            this.errorNotification(e.response.data.message);
+            this.errorNotification(e.response.data.error.message);
           });
       } catch (e) {
         this.errorNotification(e.response.data.error.message);
       }
     },
-
-    selectedLevelValue(item) {
-      this.questionSelectedLevel = item.id;
-    },
-    selectedCountValue(item) {
-      this.questionsCount = item.id;
-    },
   },
   created() {
     this.removeTestAttributesFromStorage();
     this.getSubjects();
+    this.testLevelList();
   },
   watch: {
-    subject_id() {
-      this.questionTotalTime = this.questionTime * this.questionsCount;
-    },
     questionsCount() {
       this.questionTotalTime = this.questionTime * this.questionsCount;
     },
@@ -329,7 +262,6 @@ export default {
   flex-wrap: wrap;
   gap: 10px;
   width: 100%;
-
   &-item {
     margin-right: 30px;
     margin-bottom: 20px;

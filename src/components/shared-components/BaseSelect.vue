@@ -126,9 +126,7 @@ export default {
     inputValue(event) {
       this.$emit("input", event.target.value);
     },
-    changeValue(event) {
-      this.$emit("change", event.target.value);
-    },
+
     focus() {
       this.$refs.input.focus();
     },
@@ -161,6 +159,8 @@ export default {
   top: 100%;
   left: 0px;
   width: 100%;
+  z-index: 99999;
+
   &-wrap {
     width: 100%;
     padding: 4px 0;
@@ -172,7 +172,6 @@ export default {
     box-shadow: 0 2px 8px #00000026;
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
-    z-index: 9999;
     max-height: 300px;
     overflow: auto;
     &::-webkit-scrollbar {

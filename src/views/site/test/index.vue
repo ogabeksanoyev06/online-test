@@ -22,7 +22,7 @@
               >
                 <div
                   class="d-flex align-center justify-space-between"
-                  :class="isDesktopSmall ? 'pa-10' : 'pa-20'"
+                  :class="isDesktopSmall ? 'pa-15' : 'pa-30'"
                 >
                   <AppText :size="isMobile ? 14 : 16" weight="600">
                     {{ test.name }}
@@ -35,7 +35,7 @@
               </div>
               <div
                 class="test__question bg-white radius"
-                :class="isDesktopSmall ? 'pa-10' : 'pa-20'"
+                :class="isDesktopSmall ? 'pa-15' : 'pa-30'"
                 v-for="(question, s) in test.questions"
                 :key="s"
                 :ref="'question_' + test.id + '_' + question.id"
@@ -80,7 +80,7 @@
                       :line-height="isMobile ? 20 : 24"
                       weight="500"
                     >
-                      {{ answer }}
+                      <span v-html="answer"></span>
                     </AppText>
                   </div>
                 </div>
@@ -101,8 +101,8 @@
                 <AppText
                   :size="isMobile ? 16 : 24"
                   :line-height="isMobile ? 16 : 24"
-                  weight="600"
-                  class="color-main"
+                  weight="700"
+                  class="color-secondary"
                 >
                   {{ timerFormat(testTimer) }}
                 </AppText>
@@ -138,10 +138,10 @@
                   <div class="block-pagination__header mb-10">
                     <div class="d-flex align-center justify-space-between">
                       <AppText
-                        class="pointer mr-10 color-main"
+                        class="pointer mr-10"
                         :size="isMobile ? 16 : 18"
                         :line-height="isMobile ? 20 : 28"
-                        weight="600"
+                        weight="700"
                         @click.prevent="scrollToTest(test.id)"
                       >
                         {{ test.name }}
@@ -149,7 +149,7 @@
                       <AppText
                         :size="isMobile ? 14 : 16"
                         :line-height="isMobile ? 20 : 28"
-                        weight="500"
+                        weight="600"
                       >
                         {{ test.question_ball }} ball
                       </AppText>
@@ -192,6 +192,7 @@ import test from "../../../constants/test";
 export default {
   name: "AppTest",
   components: { AppButton },
+
   data() {
     return {
       questions: [
@@ -388,19 +389,24 @@ export default {
       };
       this.completeAnswers(questions, answers);
       answers.push(additionalData);
-      this.$http.post(`tests/exam-tests/done/`, answers).then((res) => {
-        if (res) {
-          this.onlineTestResult = res;
-          localStorage.setItem(
-            "testResult",
-            JSON.stringify(this.onlineTestResult)
-          );
-          this.$router.push({ name: "result-test" });
-        }
-      });
+      this.$http
+        .post(`tests/exam-tests/done/`, answers)
+        .then((res) => {
+          if (res) {
+            this.onlineTestResult = res;
+            localStorage.setItem(
+              "testResult",
+              JSON.stringify(this.onlineTestResult)
+            );
+            this.$router.push({ name: "result-test" });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     subjectTestResults(answers) {
-      this.$api
+      this.$http
         .post(`main/BlockTest/TestDone`, {
           answers,
         })
@@ -410,24 +416,26 @@ export default {
             this.onlineTestResult = res.result;
             this.setTestResultTotals();
           }
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
-
+    getStoredTime() {
+      let storedTime = localStorage.getItem("testTime");
+      return storedTime ? parseInt(storedTime) : 0;
+    },
     setTimer() {
       let _this = this;
-      this.testTimer = localStorage.getItem("testTime")
-        ? parseInt(localStorage.getItem("testTime")) * 60
-        : 0;
+      _this.testTimer = _this.getStoredTime();
       let testTimerInterval = setInterval(function () {
-        const roundedTime = Math.round(_this.testTimer / 60);
-        localStorage.setItem("testTime", roundedTime);
         if (_this.testTimer <= 0) {
           _this.testFinish();
           clearInterval(testTimerInterval);
-          localStorage.removeItem("testTime");
           return;
         }
         _this.testTimer--;
+        localStorage.setItem("testTime", _this.testTimer);
       }, 1000);
     },
     timerFormat(time) {
@@ -435,16 +443,12 @@ export default {
       let hours = Math.floor(sec_num / 3600);
       let minutes = Math.floor((sec_num - hours * 3600) / 60);
       let seconds = sec_num - hours * 3600 - minutes * 60;
-      if (hours < 10) {
-        hours = "0" + hours;
-      }
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      if (seconds < 10) {
-        seconds = "0" + seconds;
-      }
-      return hours + ":" + minutes + ":" + seconds;
+
+      let formattedHours = hours < 10 ? "0" + hours : hours;
+      let formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+      let formattedSeconds = seconds < 10 ? "0" + seconds : seconds;
+
+      return formattedHours + ":" + formattedMinutes + ":" + formattedSeconds;
     },
 
     closeModal() {
@@ -456,7 +460,6 @@ export default {
 
     completeAnswers(questions, answers) {
       questions.forEach((questionItem) => {
-        // Agar bu test answersda mavjud bo'lmasa, yangi exam_id ni qo'shadi
         let foundExam = answers.find(
           (answerItem) => answerItem.exam_id === questionItem.id
         );
@@ -507,14 +510,17 @@ export default {
           replace: "<img src='$1' alt='Image'>",
         },
       ];
-
       let processed = question;
-
       formatMappings.forEach((mapping) => {
         processed = processed.replace(mapping.search, mapping.replace);
       });
-
       return processed;
+    },
+  },
+
+  watch: {
+    testType() {
+      this.testTypeProperty = this.testType;
     },
   },
   mounted() {
@@ -527,11 +533,6 @@ export default {
   created() {
     this.setTimer();
     this.readQuestionsFromStorage();
-  },
-  watch: {
-    testType() {
-      this.testTypeProperty = this.testType;
-    },
   },
 };
 </script>
@@ -584,10 +585,10 @@ export default {
       transition-duration: 0.15s;
       font-style: italic;
       &:hover {
-        background-color: #e8faed;
+        background-color: rgba(0, 76, 151, 0.08);
       }
       &.active {
-        background-color: #22ae5f;
+        background-color: #004c97;
         color: #fff !important;
       }
     }
@@ -621,20 +622,20 @@ export default {
           justify-content: center;
           width: 2.5rem;
           height: 2.5rem;
-          color: #22ae5f;
-          background-color: #e8faed;
-          border-radius: 50%;
+          color: #004c97;
+          background-color: rgba(0, 76, 151, 0.08);
+          border-radius: 10px;
           -webkit-transition: all 0.1s ease;
           transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           cursor: pointer;
           overflow: hidden;
           &:hover {
-            background-color: #22ae5f;
+            background-color: #004c97;
             color: #fff;
             border: none;
           }
           &.active {
-            background-color: #22ae5f;
+            background-color: #004c97;
             color: #fff;
             border: none;
           }
@@ -649,6 +650,9 @@ export default {
       }
     }
     &__subject {
+    }
+    &__header {
+      color: #004c97 !important;
     }
   }
 }

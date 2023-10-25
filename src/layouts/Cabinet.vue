@@ -51,7 +51,7 @@
                 weight="700"
                 class="mb-10"
               >
-                Sanoyev Og'abek
+                {{ user.first_name + " " + user.last_name }}
               </AppText>
               <AppText
                 :size="isMobileSmall ? 14 : 16"

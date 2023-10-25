@@ -4,13 +4,18 @@
       <div class="section__top mb-30">
         <div>
           <app-text
-            :size="isMobile ? 18 : 28"
-            :line-height="isMobile ? 28 : 36"
+            :size="isMobileSmall ? 22 : isMobile ? 26 : 30"
+            :line-height="isMobileSmall ? 26 : isMobile ? 30 : 36"
             weight="700"
+            class="mb-10"
           >
             Xalqaro tadqiqotlar
           </app-text>
-          <app-text size="16" line-height="18" weight="500" class="color-text">
+          <app-text
+            :size="isMobileSmall ? 12 : 14"
+            :line-height="isMobileSmall ? 16 : 26"
+            weight="500"
+          >
             Bizning testga marhamat
           </app-text>
         </div>
@@ -20,16 +25,18 @@
         :offset-y="isMobileSmall ? 15 : 20"
         :offset-x="isMobileSmall ? 15 : 20"
       >
-        <div
-          class="block__item bordered"
-          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
-        >
+        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
           <div>
             <BlockWrap count="2" width-auto class="align-center mb-20">
               <div class="block__icon">
                 <img src="/svg/online-exams.svg" alt="icon" />
               </div>
-              <app-text size="18" line-height="24" weight="700">
+              <app-text
+                size="18"
+                line-height="24"
+                weight="700"
+                class="color-info"
+              >
                 PIRLS tadqiqoti
               </app-text>
             </BlockWrap>
@@ -40,27 +47,41 @@
               doloremque velit, iure ea. Unde.
             </AppText>
           </div>
-
-          <AppButton
-            theme="info"
-            sides="20"
-            :font-size="isMobileSmall ? 14 : 16"
-            :height="isMobileSmall ? 40 : 50"
-            @click="startPirlsTest"
-          >
-            Testni boshlash
-          </AppButton>
+          <div class="d-flex flex-wrap justify-space-between gap-5">
+            <AppButton
+              @click="startPirlsTest"
+              theme="info"
+              :sides="isMobileSmall ? 10 : 20"
+              :font-size="isMobileSmall ? 14 : 16"
+              :height="isMobileSmall ? 40 : 45"
+              :class="isMobile ? 'w-100' : ''"
+            >
+              Testni boshlash
+            </AppButton>
+            <AppButton
+              theme="gray"
+              :sides="isMobileSmall ? 10 : 20"
+              :font-size="isMobileSmall ? 14 : 16"
+              :height="isMobileSmall ? 40 : 45"
+              :class="isMobile ? 'w-100' : ''"
+              :weight="600"
+            >
+              Hisobni to'ldirish
+            </AppButton>
+          </div>
         </div>
-        <div
-          class="block__item bordered"
-          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
-        >
+        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
           <div>
             <BlockWrap count="2" width-auto class="align-center mb-20">
               <div class="block__icon">
                 <img src="/svg/block-exams.svg" alt="icon" />
               </div>
-              <app-text size="18" line-height="24" weight="700">
+              <app-text
+                size="18"
+                line-height="24"
+                weight="700"
+                class="color-orange"
+              >
                 TIMSS tadqiqoti
               </app-text>
             </BlockWrap>
@@ -70,27 +91,41 @@
               boshlash uchun boshlash tugmachasini bosing
             </AppText>
           </div>
-
-          <app-button
-            theme="orange"
-            sides="20"
-            :font-size="isMobileSmall ? 14 : 16"
-            :height="isMobileSmall ? 40 : 50"
-            @click="startTimssTest"
-          >
-            Testni boshlash
-          </app-button>
+          <div class="d-flex flex-wrap justify-space-between gap-5">
+            <AppButton
+              @click="startTimssTest"
+              theme="orange"
+              :sides="isMobileSmall ? 10 : 20"
+              :font-size="isMobileSmall ? 14 : 16"
+              :height="isMobileSmall ? 40 : 45"
+              :class="isMobile ? 'w-100' : ''"
+            >
+              Testni boshlash
+            </AppButton>
+            <AppButton
+              theme="gray"
+              :sides="isMobileSmall ? 10 : 20"
+              :font-size="isMobileSmall ? 14 : 16"
+              :height="isMobileSmall ? 40 : 45"
+              :class="isMobile ? 'w-100' : ''"
+              :weight="600"
+            >
+              Hisobni to'ldirish
+            </AppButton>
+          </div>
         </div>
-        <div
-          class="block__item bordered"
-          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
-        >
+        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
           <div>
             <block-wrap count="2" width-auto class="align-center mb-20">
               <div class="block__icon">
                 <img src="/svg/school-exams.svg" alt="icon" />
               </div>
-              <app-text size="18" line-height="24" weight="700">
+              <app-text
+                size="18"
+                line-height="24"
+                weight="700"
+                class="color-pumpkin"
+              >
                 PISA tadqiqoti
               </app-text>
             </block-wrap>
@@ -102,15 +137,28 @@
             </AppText>
           </div>
 
-          <AppButton
-            theme="purple"
-            sides="20"
-            :font-size="isMobileSmall ? 14 : 16"
-            :height="isMobileSmall ? 40 : 50"
-            @click="startPisaTest"
-          >
-            Testni boshlash
-          </AppButton>
+          <div class="d-flex flex-wrap justify-space-between gap-5">
+            <AppButton
+              @click="startPisaTest"
+              theme="pumpkin"
+              :sides="isMobileSmall ? 10 : 20"
+              :font-size="isMobileSmall ? 14 : 16"
+              :height="isMobileSmall ? 40 : 45"
+              :class="isMobile ? 'w-100' : ''"
+            >
+              Testni boshlash
+            </AppButton>
+            <AppButton
+              theme="gray"
+              :sides="isMobileSmall ? 10 : 20"
+              :font-size="isMobileSmall ? 14 : 16"
+              :height="isMobileSmall ? 40 : 45"
+              :class="isMobile ? 'w-100' : ''"
+              :weight="600"
+            >
+              Hisobni to'ldirish
+            </AppButton>
+          </div>
         </div>
       </BlockWrap>
     </div>
@@ -138,4 +186,14 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.block__item:nth-child(1) {
+  background-color: #f2f7ff;
+}
+.block__item:nth-child(2) {
+  background-color: #fef9e6;
+}
+.block__item:nth-child(3) {
+  background-color: #f7f0fe;
+}
+</style>

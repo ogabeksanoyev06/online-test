@@ -1,207 +1,226 @@
 <template>
-  <div class="auth">
-    <div class="auth__wrap" v-if="!verify">
-      <router-link to="/">
-        <div style="max-height: 50px; cursor: pointer" class="text-center">
-          <img src="/svg/logo1.svg" alt="" style="height: 50px; width: 8rem" />
-        </div>
-      </router-link>
-      <div class="auth__header">
-        <AppText
-          :size="isDesktopSmall ? 20 : 26"
-          :line-height="isDesktopSmall ? 30 : 32"
-          weight="700"
-          class="text-center mb-20"
-        >
-          Ro'yxatdan o'tish
-        </AppText>
-      </div>
-      <div class="auth__body">
-        <div class="type__buttons">
-          <label class="switch-text">
-            <div class="switch-labels">
-              <span
-                class="switch-label"
-                v-for="item in userTypes"
-                :key="item.name"
-                :class="form.type === item.label ? 'active' : ''"
-                @click="toggleSlider(item.label)"
+  <div>
+    <div class="auth__body auth__form mb-30" v-if="!verify">
+      <AppText
+        :size="isDesktopSmall ? 20 : 26"
+        :line-height="isDesktopSmall ? 30 : 32"
+        weight="700"
+        class="mb-20"
+      >
+        Ro'yxatdan o'tish
+      </AppText>
+      <ValidationObserver v-slot="{ handleSubmit }">
+        <form @submit.prevent="handleSubmit(registerUser)">
+          <div class="form-control">
+            <div class="form-group">
+              <base-select
+                vid="type"
+                label="Foydalanuvchi shakli"
+                rules="required"
+                type="text"
+                placeholder="Foydalanuvchi shakli"
+                :optionsProp="usertype"
+                v-model="userValueType"
+                @itemSelected="userType"
+                :append="true"
               >
-                {{ item.name }}
-              </span>
+                <template #append>
+                  <svg
+                    class="Dropdown_self__FtxaI"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="height: 1rem; width: 1rem"
+                  >
+                    <path
+                      d="M13.2797 5.9668L8.93306 10.3135C8.41973 10.8268 7.57973 10.8268 7.06639 10.3135L2.71973 5.9668"
+                      stroke="rgb(51, 54, 57)"
+                      stroke-width="1.5"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </svg>
+                </template>
+              </base-select>
             </div>
-          </label>
-        </div>
-        <ValidationObserver v-slot="{ handleSubmit }">
-          <form @submit.prevent="handleSubmit(registerUser)">
-            <div class="form-control">
-              <div class="form-group">
-                <base-input
-                  type="text"
-                  vid="phone"
-                  rules="required|min:9"
-                  label="Telefon raqam"
-                  placeholder="93 343-43-43"
-                  v-mask="'#########'"
-                  v-model="form.phone"
-                  :prepend="true"
-                >
-                  <template #prepend> +998 </template>
-                </base-input>
-              </div>
-              <div class="form-group">
-                <base-input
-                  type="text"
-                  vid="first_name"
-                  rules="required"
-                  label="Ismingizni kiritng"
-                  placeholder="Ism"
-                  v-model="form.first_name"
-                />
-              </div>
-              <div class="form-group">
-                <base-input
-                  type="text"
-                  vid="last_name"
-                  rules="required"
-                  label="Familiyangizni kiritng"
-                  placeholder="Familiya"
-                  v-model="form.last_name"
-                />
-              </div>
-              <ValidationObserver>
-                <base-input
-                  :type="passwordField ? 'text' : 'password'"
-                  vid="password"
-                  rules="required"
-                  label="Parolni kiriting"
-                  placeholder="Parolni kiriting"
-                  v-model="form.password"
-                  :append="true"
-                >
-                  <template #append>
-                    <i
-                      class="fas fa-eye"
-                      v-if="passwordField"
-                      @click="passwordSee"
-                    >
-                    </i>
-                    <i
-                      class="far fa-eye-slash"
-                      v-if="!passwordField"
-                      @click="passwordSee"
-                    ></i>
-                  </template>
-                </base-input>
-                <base-input
-                  :type="passwordConfirmationField ? 'text' : 'password'"
-                  vid="confirmPassword"
-                  rules="required|confirmed:password"
-                  label="Parol tasdig‘i"
-                  placeholder="Parol tasdig‘i"
-                  v-model="confirmPassword"
-                  :append="true"
-                >
-                  <template #append>
-                    <i
-                      class="fas fa-eye"
-                      v-if="passwordConfirmationField"
-                      @click="confirmationSee"
-                    >
-                    </i>
-                    <i
-                      class="far fa-eye-slash"
-                      v-if="!passwordConfirmationField"
-                      @click="confirmationSee"
-                    ></i>
-                  </template>
-                </base-input>
-              </ValidationObserver>
-            </div>
-            <div class="text-center">
-              <app-button
-                theme="info"
-                type="submit"
-                :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
-                :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
-                :height="45"
-                :class="isMobile ? 'w-100' : ''"
+            <div class="form-group">
+              <base-input
+                type="text"
+                vid="phone"
+                rules="required|min:9"
+                label="Telefon raqam"
+                placeholder="93 343-43-43"
+                v-mask="'#########'"
+                v-model="form.phone"
+                :prepend="true"
               >
-                Davom etish
-              </app-button>
+                <template #prepend> +998 </template>
+              </base-input>
             </div>
-          </form>
-        </ValidationObserver>
-      </div>
+            <div class="form-group">
+              <base-input
+                type="text"
+                vid="first_name"
+                rules="required"
+                label="Ismingizni kiritng"
+                placeholder="Ism"
+                v-model="form.first_name"
+              />
+            </div>
+            <div class="form-group">
+              <base-input
+                type="text"
+                vid="last_name"
+                rules="required"
+                label="Familiyangizni kiritng"
+                placeholder="Familiya"
+                v-model="form.last_name"
+              />
+            </div>
+            <ValidationObserver>
+              <base-input
+                :type="passwordField ? 'text' : 'password'"
+                vid="password"
+                rules="required"
+                label="Parolni kiriting"
+                placeholder="Parolni kiriting"
+                v-model="form.password"
+                :append="true"
+              >
+                <template #append>
+                  <i
+                    class="fas fa-eye"
+                    v-if="passwordField"
+                    @click="passwordSee"
+                  >
+                  </i>
+                  <i
+                    class="far fa-eye-slash"
+                    v-if="!passwordField"
+                    @click="passwordSee"
+                  ></i>
+                </template>
+              </base-input>
+              <base-input
+                :type="passwordConfirmationField ? 'text' : 'password'"
+                vid="confirmPassword"
+                rules="required|confirmed:password"
+                label="Parol tasdig‘i"
+                placeholder="Parol tasdig‘i"
+                v-model="confirmPassword"
+                :append="true"
+              >
+                <template #append>
+                  <i
+                    class="fas fa-eye"
+                    v-if="passwordConfirmationField"
+                    @click="confirmationSee"
+                  >
+                  </i>
+                  <i
+                    class="far fa-eye-slash"
+                    v-if="!passwordConfirmationField"
+                    @click="confirmationSee"
+                  ></i>
+                </template>
+              </base-input>
+            </ValidationObserver>
+          </div>
+
+          <app-button
+            theme="info"
+            type="submit"
+            :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+            :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
+            :height="45"
+            class="w-100 mb-20"
+          >
+            Davom etish
+          </app-button>
+          <div class="form-group">
+            <AppText
+              size="14"
+              weight="700"
+              line-height="17"
+              :class="isDesktopSmall ? 'text-center' : ''"
+            >
+              Akkountingiz bormi ?
+              <router-link
+                style="color: #008ae4 !important; margin-left: 5px"
+                to="/sign-in"
+              >
+                Tizimga kiring
+              </router-link>
+            </AppText>
+          </div>
+        </form>
+      </ValidationObserver>
     </div>
-    <div class="auth__wrap" style="max-width: 500px" v-if="verify">
-      <div class="auth__header">
-        <AppText
-          :size="isMobileSmall ? '16' : '20'"
-          :line-height="isMobileSmall ? '20' : '24'"
-          weight="400"
-          class="text-center mb-20"
-        >
-          Kod sms orqali quyidagi raqamga yuborildi:
-          <p class="bold-text mt-10">{{ user }}</p>
-        </AppText>
-      </div>
-      <div class="auth__body">
-        <ValidationObserver v-slot="{ handleSubmit }">
-          <form @submit.prevent="handleSubmit(verifyUser)">
-            <div class="form-control">
-              <div class="form-group">
-                <base-input
-                  type="text"
-                  vid="code"
-                  rules="required"
-                  label="Kodni kiriting"
-                  placeholder="Kodni kiritng"
-                  v-mask="'######'"
-                  v-model="verifyCode"
-                >
-                </base-input>
-              </div>
-            </div>
-            <div class="d-flex justify-space-between flex-wrap">
-              <app-button
-                theme="grey"
-                :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
-                :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
-                :height="45"
-                @click="goBack"
+    <div class="auth__body auth__form mb-30" v-if="verify">
+      <AppText
+        :size="isMobileSmall ? '16' : '20'"
+        :line-height="isMobileSmall ? '20' : '24'"
+        weight="400"
+        class="text-center mb-20"
+      >
+        Kod sms orqali quyidagi raqamga yuborildi:
+        <p class="bold-text mt-10">{{ user }}</p>
+      </AppText>
+      <ValidationObserver v-slot="{ handleSubmit }">
+        <form @submit.prevent="handleSubmit(verifyUser)">
+          <div class="form-control">
+            <div class="form-group">
+              <base-input
+                type="text"
+                vid="code"
+                rules="required"
+                label="Kodni kiriting"
+                placeholder="Kodni kiritng"
+                v-mask="'######'"
+                v-model="verifyCode"
               >
-                Orqaga
-              </app-button>
-              <app-button
-                theme="info"
-                type="submit"
-                :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
-                :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
-                :height="45"
-              >
-                Davom etish
-              </app-button>
+              </base-input>
             </div>
-            <div class="text-center mt-20">
-              <AppText
-                :size="isMobileSmall ? '14' : '16'"
-                line-height="20"
-                class="text-center color-main"
+          </div>
+          <div class="d-flex justify-space-between flex-wrap">
+            <app-button
+              theme="orange"
+              :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+              :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
+              :height="45"
+              @click="goBack"
+            >
+              Orqaga
+            </app-button>
+            <app-button
+              theme="info"
+              type="submit"
+              :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+              :sides="isMobileSmall ? 10 : isMobile ? 20 : 30"
+              :height="45"
+            >
+              Davom etish
+            </app-button>
+          </div>
+          <div class="text-center mt-20">
+            <AppText
+              :size="isMobileSmall ? '14' : '16'"
+              line-height="20"
+              class="text-center color-main"
+            >
+              <a
+                class="link-title"
+                :disabled="registerTimer !== 0"
+                @click="resendCode"
               >
-                <a
-                  class="link-title"
-                  :disabled="registerTimer !== 0"
-                  @click="resendCode"
-                >
-                  Kodni qayta yuborish
-                </a>
-                <b> {{ timerFormat() }}</b>
-              </AppText>
-            </div>
-          </form>
-        </ValidationObserver>
-      </div>
+                Kodni qayta yuborish
+              </a>
+              <b> {{ timerFormat() }}</b>
+            </AppText>
+          </div>
+        </form>
+      </ValidationObserver>
     </div>
   </div>
 </template>
@@ -212,16 +231,22 @@ import { ValidationObserver } from "vee-validate";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import BaseInput from "@/components/shared-components/BaseInput.vue";
 import AppButton from "@/components/shared-components/AppButton.vue";
+import BaseSelect from "@/components/shared-components/BaseSelect.vue";
 
 export default {
-  name: "AppLogin",
-  components: { ValidationObserver, BaseInput, AppButton },
+  name: "AppRegister",
+  components: {
+    ValidationObserver,
+    BaseInput,
+    AppButton,
+    BaseSelect,
+  },
   data() {
     return {
       form: {
         phone: "",
         password: "",
-        type: "applicant",
+        type: "",
         last_name: "",
         first_name: "",
       },
@@ -234,14 +259,15 @@ export default {
       loading: false,
       user: "",
       registerTimer: 120,
-      userTypes: [
+      userValueType: "",
+      usertype: [
         {
-          name: "Abituriyent",
-          label: "applicant",
+          value: "applicant",
+          name: "O'quvchi",
         },
         {
-          name: "O`quvchi",
-          label: "pupil",
+          value: "student",
+          name: "Abituriyent",
         },
       ],
     };
@@ -251,19 +277,13 @@ export default {
   },
   methods: {
     ...mapActions([]),
-    ...mapMutations(["setWindowWidth"]),
-    setWidth() {
-      this.setWindowWidth(document.documentElement.clientWidth);
-    },
+    ...mapMutations([]),
+
     passwordSee() {
       this.passwordField = !this.passwordField;
     },
     confirmationSee() {
       this.passwordConfirmationField = !this.passwordConfirmationField;
-    },
-    toggleSlider(type) {
-      this.isActive = !this.isActive;
-      this.form.type = type;
     },
     setTimer() {
       let _this = this;
@@ -347,14 +367,15 @@ export default {
         this.registerUser();
       }
     },
+    userType(item) {
+      this.form.type = item.value;
+      this.userValueType = item.name;
+    },
   },
-
-  mounted() {
-    this.setWidth();
-    window.addEventListener("resize", this.setWidth);
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.setWidth);
+  watch: {
+    typeValue() {
+      this.typeChanged();
+    },
   },
 };
 </script>

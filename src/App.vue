@@ -53,6 +53,13 @@ export default {
     },
   },
   created() {
+    const checkLoading = () => {
+      if (navigator.onLine && document.readyState === "complete") {
+        this.isLoading = false; // Internet va DOM yuklangan, loading animatsiyasini yopamiz
+      }
+    };
+
+    checkLoading();
     setInterval(this.handleUserAction, 10000);
   },
 };

@@ -25,9 +25,7 @@
       ("trans-02", rgba(24, 24, 24, 0.2)),
       ("trans-04", rgba(24, 24, 24, 0.4)),
       ("red", #f23d5b),
-      ("orange", #f2994a),
       ("yellow", #f2c94c),
-      ("green", #219653),
       ("blue", #2f80ed),
       ("violet", #9b51e0),
       ("green-1", #6fcf97),
@@ -36,7 +34,14 @@
       ("gray", #738699),
       ("yellow-1", #fadd56),
       ("blue-2", #2063f0),
-      ("white", #fff)
+      ("white", #fff),
+      ("black", #000),
+      ("info", #0066ff),
+      ("orange", #daab00),
+      ("puple", #802fde),
+      ("green", #119c75),
+      ("pumpkin", #ff0096),
+      ("green-2", #004e30)
     )
 {
   .color-#{$name} {

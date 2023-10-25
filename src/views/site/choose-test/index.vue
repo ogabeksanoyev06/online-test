@@ -21,22 +21,23 @@
           </app-text>
         </div>
       </div>
-
       <BlockWrap
         :count="isMobile ? 1 : isDesktopSmall ? 2 : 3"
         :offset-y="isMobileSmall ? 15 : 25"
         :offset-x="isMobileSmall ? 15 : 25"
       >
-        <div
-          class="block__item shadowed"
-          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
-        >
+        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
           <div>
             <BlockWrap count="2" width-auto class="align-center mb-20">
               <div class="block__icon">
                 <img src="/svg/online-exams.svg" alt="icon" />
               </div>
-              <app-text size="18" line-height="24" weight="700">
+              <app-text
+                size="18"
+                line-height="24"
+                weight="700"
+                class="color-info"
+              >
                 Onlayn testlar
               </app-text>
             </BlockWrap>
@@ -55,7 +56,7 @@
 
           <div class="d-flex flex-wrap justify-space-between gap-5">
             <AppButton
-              @click="chooseTest"
+              @click="closeModal"
               theme="info"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
@@ -65,7 +66,6 @@
               Testni boshlash
             </AppButton>
             <AppButton
-              @click="chooseTest"
               theme="gray"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
@@ -76,16 +76,19 @@
             </AppButton>
           </div>
         </div>
-        <div
-          class="block__item shadowed"
-          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
-        >
+        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
           <div>
             <BlockWrap count="2" width-auto class="align-center mb-20">
               <div class="block__icon">
                 <img src="/svg/block-exams.svg" alt="icon" />
               </div>
-              <app-text size="18" line-height="24" weight="700">
+
+              <app-text
+                size="18"
+                line-height="24"
+                weight="700"
+                class="color-orange"
+              >
                 Blokli testlar
               </app-text>
             </BlockWrap>
@@ -113,7 +116,6 @@
               Testni boshlash
             </AppButton>
             <AppButton
-              @click="chooseTest"
               theme="gray"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
@@ -124,16 +126,18 @@
             </AppButton>
           </div>
         </div>
-        <div
-          class="block__item shadowed"
-          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
-        >
+        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
           <div>
             <block-wrap count="2" width-auto class="align-center mb-20">
               <div class="block__icon">
                 <img src="/svg/school-exams.svg" alt="icon" />
               </div>
-              <app-text size="18" line-height="24" weight="700">
+              <app-text
+                size="18"
+                line-height="24"
+                weight="700"
+                class="color-puple"
+              >
                 Maktab o'quvchilari uchun
               </app-text>
             </block-wrap>
@@ -161,7 +165,6 @@
               Testni boshlash
             </AppButton>
             <AppButton
-              @click="chooseTest"
               theme="gray"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
@@ -172,16 +175,18 @@
             </AppButton>
           </div>
         </div>
-        <div
-          class="block__item shadowed"
-          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
-        >
+        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
           <div>
             <block-wrap count="2" width-auto class="align-center mb-20">
               <div class="block__icon">
                 <img src="/svg/school-exams.svg" alt="icon" />
               </div>
-              <app-text size="18" line-height="24" weight="700">
+              <app-text
+                size="18"
+                line-height="24"
+                weight="700"
+                class="color-green"
+              >
                 Prezident maktabi testlari
               </app-text>
             </block-wrap>
@@ -210,7 +215,6 @@
               Testni boshlash
             </AppButton>
             <AppButton
-              @click="chooseTest"
               theme="gray"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
@@ -222,16 +226,18 @@
             </AppButton>
           </div>
         </div>
-        <div
-          class="block__item shadowed"
-          :class="isMobileSmall ? 'pa-15' : 'pa-30'"
-        >
+        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
           <div>
             <block-wrap count="2" width-auto class="align-center mb-20">
               <div class="block__icon">
                 <img src="/svg/school-exams.svg" alt="icon" />
               </div>
-              <app-text size="18" line-height="24" weight="700">
+              <app-text
+                size="18"
+                line-height="24"
+                weight="700"
+                class="color-pumpkin"
+              >
                 Attestatsiya testlari
               </app-text>
             </block-wrap>
@@ -250,7 +256,7 @@
 
           <div class="d-flex flex-wrap justify-space-between gap-5">
             <AppButton
-              @click="startPresidentTest"
+              @click="startAttestatsiyaTest"
               theme="pumpkin"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
@@ -260,7 +266,6 @@
               Testni boshlash
             </AppButton>
             <AppButton
-              @click="chooseTest"
               theme="gray"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
@@ -273,13 +278,8 @@
           </div>
         </div>
       </BlockWrap>
-      <AppModal
-        @close="closeModal"
-        :class="{ visible: chooseTestModal }"
-        :width="500"
-      >
-        <template #modalHeader> Online Test </template>
-        <template #modalBody>
+      <AppModal :value="chooseTestModal" @close="closeModal">
+        <template #body>
           <BaseSelect
             :append="true"
             placeholder="Yo'nalishni tanlang"
@@ -419,11 +419,6 @@
           </AppButton>
         </template>
       </AppModal>
-      <div
-        class="overlay"
-        :class="{ visible: chooseTestModal }"
-        @click="closeModal"
-      ></div>
     </div>
   </section>
 </template>
@@ -442,7 +437,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      chooseTestModal: false,
+      chooseTestModal: true,
       selectedDirection: null,
       selectedDirectionId: null,
       directionMandatorySubjects: [],
@@ -507,11 +502,6 @@ export default {
           this.isLoading = false;
         });
     },
-    chooseTest() {
-      this.chooseTestModal = true;
-      document.body.style.overflowY = "hidden";
-      document.body.style.overflowX = "hidden";
-    },
     startBlockTest() {
       this.$router.push({ path: "/choose-subject" });
     },
@@ -520,6 +510,9 @@ export default {
     },
     startPresidentTest() {
       this.$router.push({ path: "/President-school-test" });
+    },
+    startAttestatsiyaTest() {
+      this.$router.push({ path: "/Attestatsiya-test" });
     },
     startOnlineTest() {
       if (!this.isLoggedOn) {
@@ -530,7 +523,7 @@ export default {
         return;
       }
       this.clearTestPropertiesFromLocalStorage();
-      this.storeTestTimeToStorage(this.examsOverAllTime);
+      this.storeTestTimeToStorage(this.examsOverAllTime * 60);
       this.directionMandatorySubjects.forEach((s) => {
         this.selectedSubjectsForOnlineTest.push(s.id);
       });
@@ -559,26 +552,36 @@ export default {
         });
     },
     closeModal() {
-      this.chooseTestModal = false;
-      document.body.style.overflowY = "auto";
+      this.chooseTestModal = !this.chooseTestModal;
     },
   },
   computed: {
     ...mapGetters(["specList"]),
   },
   mounted() {},
-  watch: {
-    selectedDirection() {
-      this;
-    },
-  },
+  watch: {},
   created() {
-    this.getSpecList();
     this.removeTestAttributesFromStorage();
+    this.getSpecList();
   },
 };
 </script>
 <style lang="scss" scoped>
+.block__item:nth-child(1) {
+  background-color: #f2f7ff;
+}
+.block__item:nth-child(2) {
+  background-color: #fef9e6;
+}
+.block__item:nth-child(3) {
+  background-color: #f7f0fe;
+}
+.block__item:nth-child(4) {
+  background-color: #e9fcf6;
+}
+.block__item:nth-child(5) {
+  background-color: #fff2f9;
+}
 .section {
   background-color: #fff;
 }

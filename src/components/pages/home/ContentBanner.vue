@@ -5,8 +5,8 @@
         <div class="inner">
           <div class="inner__left">
             <AppText
-              :size="isMobileSmall ? 24 : isMobile ? 28 : 42"
-              :line-height="isMobileSmall ? 28 : isMobile ? 34 : 46"
+              :size="isMobileSmall ? 24 : isMobile ? 28 : 32"
+              :line-height="isMobileSmall ? 28 : isMobile ? 34 : 40"
               weight="700"
               class="mb-30 color-main"
             >

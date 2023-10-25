@@ -11,16 +11,20 @@
         </app-text>
       </div>
       <BlockWrap
-        :count="
-          isMobileSmall ? 1 : isMobile ? 2 : isDesktopMedium ? 3 : 4
-        "
+        :count="isMobileSmall ? 1 : isMobile ? 2 : isDesktopMedium ? 3 : 4"
         offset-x="24"
         offset-y="24"
         class="mb-20"
+        v-if="favouriteCourses && favouriteCourses.length > 0"
       >
-        <AppCard v-for="item in 5" :key="item" />
+        <AppCard
+          v-for="item in favouriteCourses"
+          :key="item.id"
+          :title="item.title"
+          :photo="item.image"
+        />
       </BlockWrap>
-      <div class="empty-page">
+      <div class="empty-page" v-else>
         <div class="text-center center-content">
           <img src="/images/favourite.webp" alt="" />
           <p class="title">Hali sotib olishga tayyor emasmisiz</p>
@@ -48,9 +52,22 @@
 import AppButton from "@/components/shared-components/AppButton.vue";
 import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 import AppCard from "@/components/shared-components/AppCard.vue";
+import { mapActions, mapGetters } from "vuex";
 export default {
   components: { AppButton, BlockWrap, AppCard },
   name: "MyFavourite",
+  data() {
+    return {};
+  },
+  methods: {
+    ...mapActions(["loadfavouriteCourses"]),
+  },
+  computed: {
+    ...mapGetters(["favouriteCourses"]),
+  },
+  created() {
+    this.loadfavouriteCourses();
+  },
 };
 </script>
 

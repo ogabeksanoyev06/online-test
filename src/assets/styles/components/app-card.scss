@@ -1,29 +1,40 @@
 @import "../abstracts/variables";
 .course {
   .course-card {
-    border: 1px solid #e8e8e8;
-    border-radius: 0.5rem;
+    max-width: 330px;
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid #f0f0f0;
+    background: #fff;
     overflow: hidden;
     transition: 0.2s;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
+    position: relative;
     &:hover {
-      box-shadow: 2px 2px 10px 0 #ececec;
-      transform: translateY(-4px);
+      box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d,
+        0 12px 48px 16px #00000008;
+    }
+    .bg-shadow {
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 120px;
+      height: 120px;
+      flex-shrink: 0;
+      background-color: #b659ff;
+      filter: blur(70px);
     }
   }
   .course-card-header {
-    padding: 23px 20px 16px;
-    height: 220px;
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+    border-bottom: 1px solid #e8e8e8;
     .course-icons-hover {
       opacity: 0;
       z-index: 1;
-      transform: translateX(100%);
+      cursor: pointer;
       transition: all 0.5s;
     }
     &:hover {
@@ -32,54 +43,22 @@
         transform: translateX(0%);
       }
     }
-    p {
-      font-weight: 400;
-      font-size: 14px;
-      letter-spacing: -0.02em;
-      color: #fff;
-      z-index: 1;
-    }
-    .course__lang .course__lang-title {
-      font-weight: 700;
-    }
+  }
+  .course-card-photo {
+    display: flex;
+    justify-content: end;
   }
   .course-card-body {
     display: flex;
-    height: calc(100% - 220px);
     flex-direction: column;
     justify-content: space-between;
-    padding: 20px 20px 30px;
-    .course-card-body-title {
-      font-weight: 700;
-      font-size: 20px;
-      line-height: 160%;
-      letter-spacing: -0.02em;
-      color: #222;
-      margin-bottom: 8px;
-    }
-    .course-card-body-name {
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 156%;
-      letter-spacing: -0.02em;
-      color: #222;
-      opacity: 0.4;
-      margin-bottom: 5px;
-    }
-    .course-card-body-count {
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 156%;
-      color: #222;
-      opacity: 0.4;
-      margin-bottom: 5px;
-    }
-    .course-card-body-price {
-      font-weight: 600;
-      font-size: 18px;
-      letter-spacing: -0.01em;
-      color: #18a058;
-      margin-bottom: 15px;
-    }
+    padding: 24px 20px;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease 0s;
   }
 }

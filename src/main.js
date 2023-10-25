@@ -6,6 +6,8 @@ import AppText from "./components/shared-components/AppText.vue";
 import VueMask from "v-mask";
 import Moment from "vue-moment";
 import Toast from "vue-toastification";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import "./assets/styles/main.scss";
 import "./plugins/media/media-mixin";
 import "./plugins/directives/click-outside";
@@ -22,5 +24,16 @@ Vue.prototype.$http = http;
 new Vue({
   router,
   store,
+  created() {
+    AOS.init({
+      offset: 100,
+      delay: 50,
+      duration: 500,
+      easing: "ease-in-out",
+      once: false,
+      mirror: true,
+      anchorPlacement: "top-bottom",
+    });
+  },
   render: (h) => h(App),
 }).$mount("#app");

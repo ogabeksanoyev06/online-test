@@ -11,27 +11,31 @@
         </app-text>
         <app-button></app-button>
       </div>
-      <div class="basket-space">
+      <div
+        class="basket-space"
+        v-if="coursesOnBasket && coursesOnBasket.length > 0"
+      >
         <div>
           <div class="basket-course-cards-wrapper">
-            <div class="basket-card" v-for="item in 1" :key="item">
+            <div
+              class="basket-card"
+              v-for="(item, i) in coursesOnBasket"
+              :key="i"
+            >
               <div class="basket-card-content">
                 <div class="position-relative d-flex align-center flex-wrap">
                   <div class="basket-card-image">
-                    <img
-                      src="https://topskill.uz/_next/image?url=https%3A%2F%2Ftopskill-bucket2.s3.ap-south-1.amazonaws.com%2Fcourses%2Fbanner_files%2F01885c1e-e3d2-7b85-86c0-8db7f864ecdd.png&w=2048&q=75"
-                      class="bg-video"
-                    />
+                    <img :src="item.image" class="bg-video" />
                   </div>
                   <div v-if="isDesktopMedium">
-                    <h3 class="basket-course-title">Scratch</h3>
+                    <h3 class="basket-course-title">{{ item.title }}</h3>
                     <p class="basket-course-author">Javokhir Komiljonov</p>
                   </div>
                 </div>
                 <div>
                   <div class="d-flex justify-space-between">
                     <div v-if="!isDesktopMedium">
-                      <h3 class="basket-course-title">Scratch</h3>
+                      <h3 class="basket-course-title">{{ item.title }}</h3>
                       <p class="basket-course-author">Javokhir Komiljonov</p>
                     </div>
                     <div class="card-right">
@@ -56,109 +60,6 @@
                             </clipPath>
                           </defs>
                         </svg>
-                        <!-- <svg
-                          class="mb-auto"
-                          width="28"
-                          height="28"
-                          viewBox="0 0 28 28"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g clip-path="url(#clip0_1026_2121)">
-                            <path
-                              d="M14 1.75C11.5772 1.75 9.20877 2.46845 7.19427 3.8145C5.17977 5.16054 3.60965 7.07373 2.68248 9.31213C1.75531 11.5505 1.51272 14.0136 1.98539 16.3899C2.45805 18.7661 3.62475 20.9489 5.33795 22.6621C7.05114 24.3752 9.23388 25.542 11.6101 26.0146C13.9864 26.4873 16.4495 26.2447 18.6879 25.3175C20.9263 24.3904 22.8395 22.8202 24.1855 20.8057C25.5316 18.7912 26.25 16.4228 26.25 14C26.25 10.7511 24.9594 7.63526 22.6621 5.33794C20.3647 3.04062 17.2489 1.75 14 1.75ZM12.25 18.8919L7.87501 14.5169L9.26678 13.125L12.25 16.1081L18.7338 9.625L20.13 11.0127L12.25 18.8919Z"
-                              fill="#82D300"
-                            ></path>
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_1026_2121">
-                              <rect width="28" height="28" fill="white"></rect>
-                            </clipPath>
-                          </defs>
-                        </svg> -->
-                      </div>
-                      <div class="card-right-item">
-                        <app-button
-                          theme="main"
-                          :font-size="14"
-                          :sides="10"
-                          :height="40"
-                          weight="500"
-                          class="d-flex align-center"
-                        >
-                          <svg
-                            class="mr-5"
-                            width="18"
-                            height="14"
-                            viewBox="0 0 18 14"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M12.125 13.25H1.5C1.16848 13.25 0.850537 13.1183 0.616116 12.8839C0.381696 12.6495 0.25 12.3315 0.25 12V2C0.25 1.66848 0.381696 1.35054 0.616116 1.11612C0.850537 0.881696 1.16848 0.75 1.5 0.75H12.125C12.4565 0.75 12.7745 0.881696 13.0089 1.11612C13.2433 1.35054 13.375 1.66848 13.375 2V4.5375L16.7625 2.11875C16.8558 2.05233 16.9655 2.01282 17.0797 2.00452C17.1939 1.99623 17.3082 2.01947 17.4101 2.07171C17.512 2.12395 17.5976 2.20318 17.6576 2.30075C17.7175 2.39833 17.7495 2.51049 17.75 2.625V11.375C17.7495 11.4895 17.7175 11.6017 17.6576 11.6992C17.5976 11.7968 17.512 11.8761 17.4101 11.9283C17.3082 11.9805 17.1939 12.0038 17.0797 11.9955C16.9655 11.9872 16.8558 11.9477 16.7625 11.8812L13.375 9.4625V12C13.375 12.3315 13.2433 12.6495 13.0089 12.8839C12.7745 13.1183 12.4565 13.25 12.125 13.25ZM1.5 2V12H12.125V8.25C12.1255 8.13549 12.1575 8.02333 12.2174 7.92575C12.2774 7.82818 12.363 7.74895 12.4649 7.69671C12.5668 7.64447 12.6811 7.62123 12.7953 7.62952C12.9095 7.63782 13.0192 7.67733 13.1125 7.74375L16.5 10.1625V3.8375L13.1125 6.25625C13.0192 6.32267 12.9095 6.36218 12.7953 6.37048C12.6811 6.37877 12.5668 6.35553 12.4649 6.30329C12.363 6.25105 12.2774 6.17182 12.2174 6.07425C12.1575 5.97667 12.1255 5.86451 12.125 5.75V2H1.5Z"
-                              fill="#A0E82F"
-                            ></path>
-                          </svg>
-                          Treylerni ko'rish
-                        </app-button>
-                        <span class="pointer">
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <g clip-path="url(#clip0_1026_2196)">
-                              <path d="M10.5 9H9V18H10.5V9Z" fill="#000"></path>
-                              <path d="M15 9H13.5V18H15V9Z" fill="#000"></path>
-                              <path
-                                d="M3 4.5V6H4.5V21C4.5 21.3978 4.65804 21.7794 4.93934 22.0607C5.22064 22.342 5.60218 22.5 6 22.5H18C18.3978 22.5 18.7794 22.342 19.0607 22.0607C19.342 21.7794 19.5 21.3978 19.5 21V6H21V4.5H3ZM6 21V6H18V21H6Z"
-                                fill="#000"
-                              ></path>
-                              <path d="M15 1.5H9V3H15V1.5Z" fill="#000"></path>
-                            </g>
-                            <defs>
-                              <clipPath id="clip0_1026_2196">
-                                <rect
-                                  width="24"
-                                  height="24"
-                                  fill="white"
-                                ></rect>
-                              </clipPath>
-                            </defs>
-                          </svg>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="basket-card">
-              <div class="basket-card-content">
-                <div class="position-relative d-flex align-center flex-wrap">
-                  <div class="basket-card-image">
-                    <img
-                      src="https://topskill.uz/_next/image?url=https%3A%2F%2Ftopskill-bucket2.s3.ap-south-1.amazonaws.com%2Fcourses%2Fbanner_files%2F01885c1e-e3d2-7b85-86c0-8db7f864ecdd.png&w=2048&q=75"
-                      class="bg-video"
-                    />
-                  </div>
-                  <div v-if="isDesktopMedium">
-                    <h3 class="basket-course-title">Scratch</h3>
-                    <p class="basket-course-author">Javokhir Komiljonov</p>
-                  </div>
-                </div>
-                <div>
-                  <div class="d-flex justify-space-between">
-                    <div v-if="!isDesktopMedium">
-                      <h3 class="basket-course-title">Scratch</h3>
-                      <p class="basket-course-author">Javokhir Komiljonov</p>
-                    </div>
-                    <div class="card-right">
-                      <div class="card-right-item">
-                        <p class="basket-modules">7 modullar | 39 darslar</p>
-
                         <svg
                           class="mb-auto"
                           width="28"
@@ -182,29 +83,33 @@
                       </div>
                       <div class="card-right-item">
                         <app-button
-                          theme="main"
+                          theme="info"
                           :font-size="14"
-                          :sides="10"
+                          :sides="20"
                           :height="40"
                           weight="500"
                           class="d-flex align-center"
                         >
                           <svg
-                            class="mr-5"
                             width="18"
-                            height="14"
-                            viewBox="0 0 18 14"
+                            height="18"
+                            viewBox="0 0 25 25"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
+                            class="mr-5"
                           >
                             <path
-                              d="M12.125 13.25H1.5C1.16848 13.25 0.850537 13.1183 0.616116 12.8839C0.381696 12.6495 0.25 12.3315 0.25 12V2C0.25 1.66848 0.381696 1.35054 0.616116 1.11612C0.850537 0.881696 1.16848 0.75 1.5 0.75H12.125C12.4565 0.75 12.7745 0.881696 13.0089 1.11612C13.2433 1.35054 13.375 1.66848 13.375 2V4.5375L16.7625 2.11875C16.8558 2.05233 16.9655 2.01282 17.0797 2.00452C17.1939 1.99623 17.3082 2.01947 17.4101 2.07171C17.512 2.12395 17.5976 2.20318 17.6576 2.30075C17.7175 2.39833 17.7495 2.51049 17.75 2.625V11.375C17.7495 11.4895 17.7175 11.6017 17.6576 11.6992C17.5976 11.7968 17.512 11.8761 17.4101 11.9283C17.3082 11.9805 17.1939 12.0038 17.0797 11.9955C16.9655 11.9872 16.8558 11.9477 16.7625 11.8812L13.375 9.4625V12C13.375 12.3315 13.2433 12.6495 13.0089 12.8839C12.7745 13.1183 12.4565 13.25 12.125 13.25ZM1.5 2V12H12.125V8.25C12.1255 8.13549 12.1575 8.02333 12.2174 7.92575C12.2774 7.82818 12.363 7.74895 12.4649 7.69671C12.5668 7.64447 12.6811 7.62123 12.7953 7.62952C12.9095 7.63782 13.0192 7.67733 13.1125 7.74375L16.5 10.1625V3.8375L13.1125 6.25625C13.0192 6.32267 12.9095 6.36218 12.7953 6.37048C12.6811 6.37877 12.5668 6.35553 12.4649 6.30329C12.363 6.25105 12.2774 6.17182 12.2174 6.07425C12.1575 5.97667 12.1255 5.86451 12.125 5.75V2H1.5Z"
-                              fill="#A0E82F"
-                            ></path>
+                              d="M16.6665 4.16669C17.2418 4.16669 17.7082 4.63306 17.7082 5.20835V9.58335L23.1387 5.78201C23.3743 5.61705 23.6991 5.67436 23.864 5.91002C23.9253 5.99756 23.9582 6.10183 23.9582 6.2087V18.7914C23.9582 19.079 23.7249 19.3122 23.4373 19.3122C23.3305 19.3122 23.2262 19.2793 23.1387 19.218L17.7082 15.4167V19.7917C17.7082 20.367 17.2418 20.8334 16.6665 20.8334H2.08317C1.50788 20.8334 1.0415 20.367 1.0415 19.7917V5.20835C1.0415 4.63306 1.50788 4.16669 2.08317 4.16669H16.6665ZM15.6248 6.25002H3.12484V18.75H15.6248V6.25002ZM7.70817 9.19655C7.78741 9.19655 7.86501 9.21915 7.93187 9.26169L12.4683 12.1485C12.6624 12.272 12.7196 12.5296 12.5961 12.7238C12.5634 12.7751 12.5197 12.8188 12.4683 12.8516L7.93187 15.7384C7.73772 15.8619 7.48019 15.8047 7.35665 15.6105C7.3141 15.5437 7.2915 15.4661 7.2915 15.3868V9.61322C7.2915 9.3831 7.47806 9.19655 7.70817 9.19655ZM21.8748 9.20972L17.7082 12.1261V12.874L21.8748 15.7903V9.20972Z"
+                              fill="white"
+                            />
                           </svg>
+
                           Treylerni ko'rish
                         </app-button>
-                        <span class="pointer">
+                        <span
+                          class="pointer"
+                          @click="removeFromCartList(item.id)"
+                        >
                           <svg
                             width="24"
                             height="24"
@@ -289,7 +194,7 @@
           </div>
         </div>
       </div>
-      <div class="empty-page">
+      <div class="empty-page" v-else>
         <div class="text-center center-content">
           <img src="/images/cart.webp" alt="" />
           <p class="title">Savat bo‘sh</p>
@@ -315,7 +220,7 @@
 
 <script>
 import "../../../assets/styles/pages/cabinet.scss";
-import { mapGetters, mapMutations } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import AppButton from "@/components/shared-components/AppButton.vue";
 
 export default {
@@ -323,13 +228,6 @@ export default {
   components: { AppButton },
   data() {
     return {
-      coursesListInBasket: [
-        {
-          courseName: null,
-          courseDescription: null,
-          coursePrice: null,
-        },
-      ],
       totalPrice: 0,
     };
   },
@@ -337,9 +235,17 @@ export default {
     ...mapGetters(["coursesOnBasket"]),
   },
   methods: {
-    ...mapMutations(["setCoursesOnBasket"]),
+    ...mapMutations(["removeCoursesOnBasket"]),
+    ...mapActions(["loadCoursesOnBasket"]),
+    removeFromCartList(courseId) {
+      this.removeCoursesOnBasket(courseId);
+      this.warningNotification("Kurs savatdan o'chirildi");
+    },
   },
-  created() {},
+  created() {
+    this.loadCoursesOnBasket();
+  },
+  watch: {},
 };
 </script>
 
@@ -430,7 +336,6 @@ export default {
   max-width: 229px;
   font-weight: 800;
   font-size: 25px;
-  line-height: 160%;
   letter-spacing: -0.02em;
   color: #222;
 }

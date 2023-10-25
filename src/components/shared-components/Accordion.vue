@@ -40,6 +40,10 @@ export default {
   list-style: none;
   margin: 0;
   padding: 0;
+  background-color: rgba(0, 0, 0, 0.02);
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  overflow: hidden;
 
   &__item:last-child {
     border-bottom: none;

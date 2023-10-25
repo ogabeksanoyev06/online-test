@@ -11,22 +11,28 @@
         <div class="header__inner">
           <div class="header__left">
             <svg
-              width="15"
-              height="15"
-              class="pointer mr-10"
-              viewBox="0 0 18 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+              viewBox="64 64 896 896"
+              focusable="false"
+              data-icon="menu"
+              width="1em"
+              height="1em"
+              fill="currentColor"
+              aria-hidden="true"
               v-if="isDesktopMedium"
               @click="showNavigationDrawer"
             >
               <path
-                d="M0 0H18V2H0V0ZM0 7H18V9H0V7ZM0 14H18V16H0V14Z"
-                fill="#000"
-              />
+                d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"
+              ></path>
             </svg>
             <router-link to="/" class="logo">
-              <img src="/svg/logo1.svg" alt="logo" />
+              <img
+                src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
+                height="32"
+                width="32"
+                alt="logo"
+              />
+              <span class="acss-wehhhl">iTestify</span>
             </router-link>
             <ul class="header__menu" v-if="!isDesktopMedium">
               <li
@@ -96,7 +102,9 @@
                     </clipPath>
                   </defs>
                 </svg>
-                <span class="header__basket-notification"> 10 </span>
+                <span class="header__basket-notification">
+                  {{ coursesOnBasket.length }}
+                </span>
               </span>
             </router-link>
             <div
@@ -134,7 +142,8 @@
                 :theme="scrolled ? 'light-info' : 'info'"
                 :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
                 :sides="isMobileSmall ? 10 : isMobile ? 15 : 20"
-                :height="isMobile ? '40' : '45'"
+                :height="isMobile ? '40' : '40'"
+                weight="500"
                 class="header__login mr-10"
                 v-if="!isMobileSmall"
                 @click="$router.push({ path: '/sign-in' })"
@@ -146,7 +155,8 @@
                 @click="$router.push({ path: '/sign-up' })"
                 :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
                 :sides="isMobileSmall ? 10 : isMobile ? 15 : 20"
-                :height="isMobile ? '40' : '45'"
+                :height="isMobile ? '40' : '40'"
+                weight="500"
                 class="header__register"
                 v-if="!isMobileSmall"
               >
@@ -179,7 +189,7 @@
       />
     </transition>
     <div
-      class="overlay"
+      class=""
       :class="navigationDrawer ? 'visible' : ''"
       @click="close"
     ></div>
@@ -254,17 +264,17 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isLoggedOn", "user"]),
+    ...mapGetters(["isLoggedOn", "user", "coursesOnBasket"]),
   },
   methods: {
+    ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
+    ...mapActions(["getUser", "loadCoursesOnBasket"]),
     closeDrawer() {
       this.navigationDrawer = false;
     },
     close() {
       this.navigationDrawer = false;
     },
-    ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
-    ...mapActions(["getUser"]),
     showNavigationDrawer() {
       this.navigationDrawer = !this.navigationDrawer;
     },
@@ -294,7 +304,9 @@ export default {
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
+    this.loadCoursesOnBasket();
   },
+  created() {},
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
   },

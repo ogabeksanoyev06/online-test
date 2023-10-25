@@ -1,33 +1,189 @@
 @import "../abstracts/variables";
-.form-group {
-  margin-bottom: 2px;
-}
+
 .auth {
-  position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   min-height: 100vh;
-  background: #3165cb;
-  border-bottom-left-radius: 100%;
-  border-bottom-right-radius: 100%;
-  padding: 30px 0;
-  &__wrap {
-    max-width: 600px;
+
+  &__column {
+    width: 50%;
+    position: relative;
+    display: flex;
+  }
+
+  &__content {
+    justify-content: center;
+    overflow-y: auto;
+    height: 100vh;
+
+    &::-webkit-scrollbar {
+      width: 3px;
+    }
+  }
+
+  &__photo {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    overflow: hidden;
+    padding: 20px 20px 0;
+
+    img {
+      object-fit: contain;
+      max-width: 100%;
+    }
+  }
+
+  &__banner {
+    position: relative;
+    z-index: 2;
+    object-fit: cover !important;
+    min-height: 300px;
+    margin-top: auto;
+  }
+
+  &__professor {
+    position: absolute;
+    z-index: 2;
+    bottom: 10%;
+    right: 10%;
+  }
+
+  &__science {
+    position: absolute;
+    z-index: 2;
+    top: 40%;
+    left: 10%;
+  }
+
+  &__test {
+    position: absolute;
+    z-index: 2;
+    top: 15%;
+    right: 50px;
+    max-width: 280px;
+  }
+
+  &__round {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 660px;
+    max-height: 660px;
     width: 100%;
-    background-color: #fff;
-    border: 0 solid rgba(0, 0, 0, 0.5);
-    box-shadow: 0 7.3px 29px rgb(0 0 0 / 5%);
-    border-radius: 0.5rem;
-    padding: 30px;
+  }
+
+  &__wrap {
+    max-width: 460px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    //justify-content: center;
+    min-height: 100vh;
+    padding: 60px 30px;
+  }
+
+  &__header {
+    margin-top: auto;
+    display: flex;
+  }
+
+  &__footer {
+    margin-top: auto;
+  }
+
+  .logo {
+    max-width: unset !important;
+
+    img {
+      max-width: 80px !important;
+      height: 100% !important;
+      object-fit: contain;
+    }
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1650px) {
   .auth {
-    &__wrap {
-      padding: 30px;
+    &__test {
+      max-width: 200px;
     }
+
+    &__round {
+      max-width: 600px;
+      max-height: 600px;
+    }
+
+    &__banner {
+      max-height: 750px;
+    }
+  }
+}
+
+@media (max-width: 1300px) {
+  .auth {
+    &__test {
+      right: 15px;
+      max-width: 150px;
+      top: 40%;
+    }
+
+    &__round {
+      max-width: 500px;
+      max-height: 500px;
+    }
+
+    &__science {
+      max-width: 170px;
+      left: 5%;
+      top: 50%;
+    }
+
+    &__professor {
+      max-width: 300px;
+    }
+  }
+}
+
+@media (max-width: 1040px) {
+  .auth {
+    &__column {
+      width: 100%;
+    }
+
+    &__photo {
+      display: none;
+    }
+
+    &__header {
+      margin-top: unset;
+    }
+
+    &__footer {
+      margin-top: unset;
+    }
+
+    &__wrap {
+      min-height: unset;
+      height: unset;
+      justify-content: unset;
+    }
+
+    &__content {
+      overflow-y: unset;
+      height: unset;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .auth__wrap {
+    padding: 20px;
+    justify-content: center;
   }
 }

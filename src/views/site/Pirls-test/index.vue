@@ -1,12 +1,109 @@
 <template>
-  <div></div>
+  <div style="background-color: rgb(242 242 242)">
+    <div class="container">
+      <section class="py-40">
+        <div class="section__top" :class="isMobile ? 'mb-10' : 'mb-20'">
+          <app-text
+            :size="isMobileSmall ? 22 : isMobile ? 26 : 30"
+            :line-height="isMobileSmall ? 26 : isMobile ? 30 : 36"
+            weight="700"
+            class="mb-10"
+          >
+            PIRLS testlariga tayyorlanish uchun kategoriyani tanlang
+          </app-text>
+        </div>
+        <div class="bg-white radius" :class="isMobileSmall ? 'pa-10' : 'pa-20'">
+          <block-wrap
+            :count="isMobileSmall ? 1 : isMobile ? 2 : 3"
+            offset-x="24"
+            offset-y="24"
+            class="pTest"
+          >
+            <div class="pTest-item">
+              <p>O'qish savodxonligi</p>
+              <span> Umumiy vaqt: 40 daqiqa </span>
+            </div>
+          </block-wrap>
+        </div>
+        <div
+          class="bg-white radius w-100 mt-20"
+          :class="isMobileSmall ? 'pa-10' : 'pa-20'"
+        >
+          <div class="test__details mb-20">
+            <base-input
+              v-model="questionTotalTime"
+              hide-details=""
+              label="Savollar soni"
+              disabled
+            >
+            </base-input>
+            <base-input
+              v-model="questionTotalTime"
+              hide-details=""
+              label="Umumiy vaqt"
+              disabled
+            >
+            </base-input>
+          </div>
+          <AppButton theme="light-green" sides="20" disabled>
+            Testni boshlash
+          </AppButton>
+        </div>
+      </section>
+    </div>
+  </div>
 </template>
 <script>
+import BaseInput from "@/components/shared-components/BaseInput.vue";
+import AppButton from "@/components/shared-components/AppButton.vue";
+import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 export default {
   name: "Pirls-test",
-  components: {},
+  components: { BaseInput, AppButton, BlockWrap },
   data() {
-    return {};
+    return {
+      questionsCount: 0,
+      questionTotalTime: 0,
+    };
   },
 };
 </script>
+<style lang="scss" scoped>
+.test__details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+.pTest {
+  &-item {
+    $self: &;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    max-width: 320px !important;
+    min-height: 100px;
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.5s;
+    background-color: #daab00;
+
+    p {
+      font-size: 16px;
+      line-height: 22px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    span {
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 500;
+      color: #fff;
+    }
+  }
+}
+</style>

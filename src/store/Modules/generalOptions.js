@@ -52,7 +52,7 @@ const actions = {
     try {
       commit("setLoading", true);
       await this._vm.$http
-        .get(`courses/courses/?cat_id=` + payload)
+        .get(`courses/?cat_id=` + payload)
         .then((data) => {
           if (data) {
             commit("setCoursesBySubjectId", data);

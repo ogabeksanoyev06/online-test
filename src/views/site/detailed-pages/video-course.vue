@@ -9,7 +9,7 @@
             weight="700"
             class="mb-20"
           >
-            Python Development
+            {{ course.title }}
           </AppText>
           <AppText
             size="16"
@@ -18,9 +18,7 @@
             weight="500"
             maxWidth="700"
           >
-            Dasturlash sohasiga kirish uchun siz uchun eng to'g'ri tanlov. Ushbu
-            kursda siz kodlashtirasiz, veb-saytlar va veb-ilovalarning orqa
-            qismini ishlab chiqasiz.
+            {{ course.description }}
           </AppText>
           <app-button
             theme="info"
@@ -45,7 +43,6 @@
         </div>
       </div>
     </div>
-
     <div
       class="detailed-page__body py-30"
       :class="isMobileMedium ? 'pb-30' : 'pb-60'"
@@ -61,7 +58,11 @@
             Kurs davomida quyidagilarni o'rganamiz:
           </AppText>
           <div class="benefits mb-30">
-            <div class="benefits__item" v-for="(item, index) in 6" :key="index">
+            <div
+              class="benefits__item"
+              v-for="(item, index) in benefits"
+              :key="index"
+            >
               <svg
                 width="40"
                 height="40"
@@ -79,12 +80,10 @@
                   fill="#045140"
                 ></path>
               </svg>
-
               <div style="flex: 1">
-                <h4>Python</h4>
+                <h4>{{ item.name }}</h4>
                 <p>
-                  Ushbu modul Python dasturlash tili va uning sintaksisi haqida
-                  kerakli bilimlarni beradi.
+                  {{ item.description }}
                 </p>
               </div>
             </div>
@@ -116,8 +115,10 @@
                 :line-height="isMobile ? 20 : 24"
                 weight="500"
               >
-                <span class="bold-text color-secondary">6 ta</span> Modullar
-                soni
+                <span class="bold-text color-secondary">
+                  {{ course.modules_count }} ta
+                </span>
+                Modullar soni
               </AppText>
               <AppText
                 :size="isMobile ? 16 : 20"
@@ -125,8 +126,10 @@
                 weight="500"
                 class=""
               >
-                <span class="bold-text color-secondary">150 ta</span> Video
-                darslar soni
+                <span class="bold-text color-secondary">
+                  {{ course.lessons_count }} ta
+                </span>
+                Video darslar soni
               </AppText>
             </block-wrap>
             <block-wrap
@@ -175,46 +178,22 @@
             </block-wrap>
           </block-wrap>
           <div class="course-accordion">
-            <Accordion :active-prop="activeAccordionIndex">
+            <Accordion>
               <AccordionItem
-                :class="sectionContentId === sectionContent.id ? 'active' : ''"
-                v-for="(sectionContent, sectionContentIndex) in sections"
-                :key="sectionContentIndex"
+                v-for="(sectionContent, index) in sections"
+                :key="index"
+                :name="sectionContent.name"
+                :moduleIndex="index + 1"
                 class="active"
               >
-                <template slot="accordion-trigger">
-                  <div class="course__accordion-header">
-                    <div
-                      class="course__accordion-numb"
-                      :class="isDesktopSmall ? 'mr-10' : 'mr-20'"
-                    >
-                      {{ sectionContentIndex + 1 }}-modul
-                    </div>
-                    <h4 class="course__accordion-text">
-                      {{ sectionContent.name }}
-                    </h4>
-                  </div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="1em"
-                    viewBox="0 0 448 512"
-                    fill="#024033"
-                  >
-                    <path
-                      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-                    />
-                  </svg>
-                </template>
                 <template slot="accordion-content">
                   <li
-                    v-for="(
-                      content, contentIndex
-                    ) in sectionContent.contentList"
-                    :key="contentIndex"
+                    v-for="(content, i) in sectionContent.lessons"
+                    :key="i"
                     @click="selectContent(sectionContent.id, content.id)"
                     class="d-flex align-center justify-space-between"
                   >
-                    Introduction to Programming
+                    {{ content.name }}
                     <div class="d-flex align-center">
                       <span>
                         <svg
@@ -254,23 +233,6 @@
                           </defs>
                         </svg>
                       </span>
-                      <svg
-                        fill="none"
-                        width="25"
-                        height="25"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                        style="color: rgb(130, 211, 0); margin-right: 15px"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"
-                        ></path>
-                      </svg>
                       <span class="lesson-duration">16 : 44</span>
                     </div>
                   </li>
@@ -282,7 +244,7 @@
 
         <div class="author__info mb-30">
           <div class="author__photo mr-30">
-            <img src="/images/author.jpg" alt="" />
+            <img :src="teacher.photo" alt="" />
           </div>
           <div class="author__content">
             <AppText
@@ -296,11 +258,11 @@
 
             <AppText size="18" line-height="20" weight="700" class="mb-10">
               {{
-                teacher.firstName +
+                teacher.first_name +
                 " " +
-                teacher.middleName +
+                teacher.last_name +
                 " " +
-                teacher.lastName
+                teacher.father_name
               }}
             </AppText>
 
@@ -309,7 +271,7 @@
             </AppText>
 
             <AppText size="14" line-height="26" weight="500" class="mb-10">
-              Phone: {{ teacher.telefon }}
+              Phone: {{ teacher.phone }}
             </AppText>
           </div>
         </div>
@@ -321,20 +283,44 @@
 <script>
 import "../../../assets/styles/pages/detailed-page.scss";
 import AppButton from "../../../components/shared-components/AppButton";
-import AppText from "../../../components/shared-components/AppText";
 import Accordion from "../../../components/shared-components/Accordion";
 import AccordionItem from "../../../components/shared-components/AccordionItem";
+import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 
 import { mapGetters } from "vuex";
-import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 
 export default {
   name: "AppVideoCourse",
-  components: { AppButton, AppText, BlockWrap, Accordion, AccordionItem },
+  components: { AppButton, BlockWrap, Accordion, AccordionItem },
   data() {
     return {
-      certificates: [],
       courseId: null,
+      sections: [
+        {
+          contentList: [],
+          id: 1,
+          name: "Kirish",
+        },
+      ],
+      teacher: {
+        email: null,
+        firstName: "Og`abek",
+        id: null,
+        isTeacher: null,
+        lastName: "Sanoyev",
+        middleName: "Otabek o`g`li",
+        photo: null,
+        telefon: null,
+        userName: null,
+      },
+      benefits: [
+        {
+          id: 0,
+          name: "Python",
+          description:
+            "Ushbu modul Python dasturlash tili va uning sintaksisi haqida kerakli bilimlarni beradi.",
+        },
+      ],
       course: {
         authorFullName: null,
         authorId: null,
@@ -363,125 +349,34 @@ export default {
         videoCount: null,
         visitCount: null,
       },
-      courseFiles: [
-        {
-          courseFileName: null,
-          courseFilePlace: null,
-          courseId: null,
-          id: null,
-        },
-      ],
-      teacher: {
-        email: null,
-        firstName: "Og`abek",
-        id: null,
-        isTeacher: null,
-        lastName: "Sanoyev",
-        middleName: "Otabek o`g`li",
-        photo: null,
-        telefon: null,
-        userName: null,
-      },
-      similarCourses: [
-        {
-          authorFullName: null,
-          authorId: null,
-          avgStar: null,
-          boughtCount: null,
-          categoryId: null,
-          description: null,
-          durationHour: null,
-          durationMinute: null,
-          id: null,
-          isActive: null,
-          isFree: null,
-          isPayed: null,
-          languageId: null,
-          languageName: null,
-          levelId: null,
-          levelName: null,
-          name: null,
-          pictureLarge: null,
-          pictureSmall: null,
-          price: null,
-          releasedDate: null,
-          shortName: null,
-          subjectId: null,
-          subjectName: null,
-          videoCount: null,
-          visitCount: null,
-        },
-      ],
-      sections: [
-        {
-          id: 1,
-          name: "Birinchi bo'lim",
-          contentList: [
-            {
-              id: 1,
-              name: "Birinchi bo'limning birinchi kontenti",
-              files: [
-                {
-                  name: "Fayl 1",
-                  link: "http://example.com/file1.pdf",
-                },
-                {
-                  name: "Fayl 2",
-                  link: "http://example.com/file2.pdf",
-                },
-              ],
-            },
-            {
-              id: 2,
-              name: "Birinchi bo'limning ikkinchi kontenti",
-              files: [
-                {
-                  name: "Fayl 3",
-                  link: "http://example.com/file3.pdf",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: "Ikkinchi bo'lim",
-          contentList: [
-            {
-              id: 3,
-              name: "Ikkinchi bo'limning birinchi kontenti",
-              files: [
-                {
-                  name: "Fayl 4",
-                  link: "http://example.com/file4.pdf",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      comments: [],
     };
   },
   computed: {
-    ...mapGetters(["coursesOnBasket", "favouriteCourses"]),
-    isFavourite() {
-      return this.isCourseInFavouritesList(this.courseId);
-    },
-    inBasket() {
-      return this.isCourseInBasketSolid(this.courseId);
-    },
+    ...mapGetters([]),
   },
   methods: {
-    startCourse() {
-      this.$router.push({
-        name: "course-page",
-        params: { course_id: this.courseId },
-      });
+    getCourse(courseId) {
+      try {
+        this.$http.get(`courses/${courseId}/`).then((res) => {
+          if (res) {
+            this.course = res;
+            this.sections = res.modules;
+            this.teacher = res.teacher;
+            this.benefits = res.planed_skills;
+          }
+        });
+      } catch (e) {
+        //something
+      }
+    },
+    whenCourseIdChanged() {
+      this.courseId = this.$route.params.course_id;
+      if (this.courseId === null) return;
+      this.getCourse(this.courseId);
     },
   },
   mounted() {
-    this.courseId = this.$route.params.course_id;
+    this.whenCourseIdChanged();
   },
   watch: {
     $route() {},
@@ -499,88 +394,24 @@ export default {
       letter-spacing: -0.02em;
       color: #000;
       opacity: 0.8;
-      padding: 24px 0;
+      padding: 16px;
       position: relative;
       border-bottom: 1.5px solid #eaeaea;
       .lesson-duration {
         width: 50px;
-        font-size: 16px;
         white-space: nowrap;
       }
-      &:hover {
-        background-color: #eaeaea;
-      }
     }
   }
 }
-.accordion {
-  border: 1px solid #eaeaea;
-}
-.accordion__item {
-  border-bottom: 1px solid #d9d9d9;
-}
-.course__accordion {
-  &-header {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-  &-text {
-    font-weight: 500;
-    font-size: 32px;
-    line-height: 143%;
-    color: #119c75;
-  }
-  &-wrap {
-    padding: 15px 30px 15px 30px;
-  }
 
-  &-numb {
-    background-color: #119c75;
-    color: #fff;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    min-width: 24px;
-    min-height: 24px;
-    font-size: 14px;
-    line-height: 14px;
-    padding: 0 10px;
-    white-space: nowrap;
-  }
-  &-item {
-    display: flex;
-    width: 100%;
-    background: white;
-    padding: 10px 20px;
-    &.active {
-      background-color: #0467a71c;
-    }
-    &:hover {
-      background-color: #0467a71c;
-    }
-    &:nth-child(3n) {
-      margin-bottom: 0;
-    }
-  }
-}
 @media (max-width: 992px) {
   .accordion__content {
     ul {
       li {
         font-size: 16px;
-        padding: 18px 0;
+        padding: 18px;
       }
-    }
-  }
-  .course__accordion {
-    &-text {
-      font-weight: 500;
-      font-size: 28px;
-      line-height: 143%;
-      color: #024033;
     }
   }
 }
@@ -588,21 +419,9 @@ export default {
   .accordion__content {
     ul {
       li {
-        font-size: 12px;
-        padding: 15px 0;
+        font-size: 14px;
+        padding: 10px;
       }
-    }
-  }
-  .course__accordion {
-    &-text {
-      font-weight: 500;
-      font-size: 20px;
-      line-height: 143%;
-      color: #119c75;
-    }
-    &-numb {
-      font-size: 11px;
-      padding: 4px 12px;
     }
   }
 }
