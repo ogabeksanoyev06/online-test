@@ -192,7 +192,6 @@ import test from "../../../constants/test";
 export default {
   name: "AppTest",
   components: { AppButton },
-
   data() {
     return {
       questions: [
@@ -201,34 +200,7 @@ export default {
           subjectName: null,
         },
       ],
-      mandatorySubjectsQuestions: [
-        {
-          maxBall: null,
-          quesCount: null,
-          questions: [],
-          subjectName: null,
-        },
-      ],
-      mainSubjectsQuestions: [
-        {
-          maxBall: null,
-          quesCount: null,
-          questions: [],
-          subjectName: null,
-        },
-      ],
-      rawTests: {
-        questions: [
-          {
-            id: 1,
-            question: "Example question",
-            answers: ["1 st answer", "2 nd answer", "3 nd answer"],
-          },
-        ],
-        subjectName: null,
-        maxBall: null,
-        quesCount: null,
-      },
+      rawTests: [],
       onlineTestAnswers: false,
       blockTestAnswers: false,
       testTypeProperty: test.TYPE_ONLINE,
@@ -256,20 +228,14 @@ export default {
       testTimer: 0,
       answerLabels: ["A", "B", "C", "D", "E", "F", "G", "H"],
       selectedAnswers: [],
+      testFinished: false,
     };
   },
   computed: {
-    stillMandatory(index) {
-      return index <= 2;
-    },
     ...mapGetters(["selectedQuestionIndex", "selectedSubjectId", "testType"]),
   },
   methods: {
-    ...mapMutations([
-      "setSelectedQuestionIndex",
-      "setSelectedSubjectId",
-      "setCurrentSubjectQuestionCount",
-    ]),
+    ...mapMutations([]),
     scrollToTest(testId) {
       const testElement = this.$refs["test_" + testId][0];
       if (testElement) {
@@ -283,69 +249,127 @@ export default {
         questionElement.scrollIntoView({ behavior: "smooth" });
       }
     },
-
     readQuestionsFromStorage() {
       let questions = JSON.parse(localStorage.getItem("questions"));
-      if (questions.length > 0) {
-        this.questions = questions;
-        this.rawTests = questions;
-        this.mandatorySubjectsQuestions = [];
-        this.mainSubjectsQuestions = [];
-        this.questions.forEach((q, index) => {
-          if (index <= 2) {
-            this.mandatorySubjectsQuestions.push(q);
-          } else {
-            this.mainSubjectsQuestions.push(q);
-          }
-        });
+      this.testTypeProperty = localStorage.getItem("testType");
+      if (this.testTypeProperty === test.TYPE_ONLINE) {
+        this.rawTests = questions || [];
+      } else {
+        if (questions) {
+          let parametersModel = {
+            id: parseInt(localStorage.getItem("science_id")),
+            name: questions.name || "",
+            question_ball: questions.ball,
+            questions: questions.questions.map((question) => {
+              return {
+                id: question.id,
+                question: question.question,
+                answers: [
+                  question.answer1,
+                  question.answer2,
+                  question.answer3,
+                  question.answer4,
+                ],
+              };
+            }),
+          };
+          this.rawTests.push(parametersModel);
+        }
       }
     },
-
     alreadySelected(testId, questionId) {
-      let examEntry = this.selectedAnswers.find(
-        (entry) => entry.exam_id === testId
-      );
-      if (examEntry) {
-        let questionEntry = examEntry.questions.find(
-          (q) => q.question_id === questionId
+      if (test.TYPE_ONLINE === this.testType) {
+        let examEntry = this.selectedAnswers.find(
+          (entry) => entry.exam_id === testId
         );
-        return questionEntry ? questionEntry.answer : -1;
+        if (examEntry) {
+          let questionEntry = examEntry.questions.find(
+            (q) => q.question_id === questionId
+          );
+          return questionEntry ? questionEntry.answer : -1;
+        }
+        return -1;
+      } else {
+        let examEntry = this.selectedAnswers.find(
+          (entry) => entry.science_id === testId
+        );
+        if (examEntry) {
+          let questionEntry = examEntry.questions.find(
+            (q) => q.question_id === questionId
+          );
+          return questionEntry ? questionEntry.answer : -1;
+        }
+        return -1;
       }
-      return -1;
     },
     selectAnswer(testId, questionId, answerKey = null) {
-      let examEntry = this.selectedAnswers.find(
-        (entry) => entry.exam_id === testId
-      );
-      if (examEntry) {
-        let questionEntry = examEntry.questions.find(
-          (q) => q.question_id === questionId
+      if (test.TYPE_ONLINE === this.testType) {
+        let examEntry = this.selectedAnswers.find(
+          (entry) => entry.exam_id === testId
         );
-        if (questionEntry) {
-          questionEntry.answer = answerKey;
+        if (examEntry) {
+          let questionEntry = examEntry.questions.find(
+            (q) => q.question_id === questionId
+          );
+          if (questionEntry) {
+            questionEntry.answer = answerKey;
+          } else {
+            examEntry.questions.push({
+              question_id: questionId,
+              answer: answerKey,
+            });
+          }
         } else {
-          examEntry.questions.push({
-            question_id: questionId,
-            answer: answerKey,
-          });
+          this.fillSelectedAnswersArray(testId, questionId, answerKey);
         }
       } else {
-        this.fillSelectedAnswersArray(testId, questionId, answerKey);
+        let examEntry = this.selectedAnswers.find(
+          (entry) => entry.science_id === testId
+        );
+        if (examEntry) {
+          let questionEntry = examEntry.questions.find(
+            (q) => q.question_id === questionId
+          );
+          if (questionEntry) {
+            questionEntry.answer = answerKey;
+          } else {
+            examEntry.questions.push({
+              question_id: questionId,
+              answer: answerKey,
+            });
+          }
+        } else {
+          this.fillSelectedAnswersArray(testId, questionId, answerKey);
+        }
       }
+
       localStorage.removeItem("answers");
       localStorage.setItem("answers", JSON.stringify(this.selectedAnswers));
     },
     fillSelectedAnswersArray(testId, questionId, answerKey = null) {
-      let model = {
-        exam_id: testId,
-        questions: [
-          {
-            question_id: questionId,
-            answer: answerKey,
-          },
-        ],
-      };
-      this.selectedAnswers.push(model);
+      if (test.TYPE_ONLINE === this.testType) {
+        let model = {
+          exam_id: testId,
+          questions: [
+            {
+              question_id: questionId,
+              answer: answerKey,
+            },
+          ],
+        };
+        this.selectedAnswers.push(model);
+      } else {
+        let model = {
+          science_id: testId,
+          questions: [
+            {
+              question_id: questionId,
+              answer: answerKey,
+            },
+          ],
+        };
+        this.selectedAnswers.push(model);
+      }
     },
     answeredQuestionsCount(testId) {
       const examEntry = this.selectedAnswers.find(
@@ -353,33 +377,44 @@ export default {
       );
       return examEntry ? examEntry.questions.length : 0;
     },
-
     testFinish() {
       try {
         let answers = JSON.parse(localStorage.getItem("answers"));
-        let questions = JSON.parse(localStorage.getItem("questions"));
-        if (!answers || answers.length <= 0) {
-          this.errorNotification(
-            "Sizda belgilangan javoblar yo`q",
-            "Test natijasi"
-          );
-          return false;
-        }
-        switch (this.testTypeProperty) {
-          case test.TYPE_BLOCK:
-            this.subjectTestResults(answers);
-            return;
-          case test.TYPE_SCHOOL:
-            this.subjectTestResults(answers);
-            return;
-          case test.TYPE_ONLINE:
-            this.onlineTestResults(questions, answers);
-            return;
-          default:
-            return null;
+        if (this.testTypeProperty === test.TYPE_ONLINE) {
+          let questions = JSON.parse(localStorage.getItem("questions"));
+          switch (this.testTypeProperty) {
+            case test.TYPE_BLOCK:
+              this.blockTestResults(questions, answers);
+              return;
+            case test.TYPE_SCHOOL:
+              this.subjectTestResults(questions, answers);
+              return;
+            case test.TYPE_ONLINE:
+              this.onlineTestResults(questions, answers);
+              return;
+            default:
+              return null;
+          }
+        } else {
+          let questions = this.rawTests;
+          switch (this.testTypeProperty) {
+            case test.TYPE_BLOCK:
+              this.blockTestResults(questions, answers);
+              return;
+            case test.TYPE_SCHOOL:
+              this.subjectTestResults(questions, answers);
+              return;
+            case test.TYPE_ONLINE:
+              this.onlineTestResults(questions, answers);
+              return;
+            default:
+              return null;
+          }
         }
       } catch (e) {
-        console.log(e.response.data.error.message);
+        console.log(e);
+      } finally {
+        this.testFinished = true;
       }
     },
     onlineTestResults(questions, answers) {
@@ -387,6 +422,9 @@ export default {
         started_time: "2023-09-09 22:02:20",
         finished_time: "2021-09-09 22:05:30",
       };
+      if (!answers) {
+        answers = [];
+      }
       this.completeAnswers(questions, answers);
       answers.push(additionalData);
       this.$http
@@ -402,40 +440,46 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          this.errorNotification(err.response.data.message);
         });
     },
-    subjectTestResults(answers) {
+    blockTestResults(questions, answers) {
+      if (!answers) {
+        answers = [];
+      }
+      this.completeAnswers(questions, answers);
+      let result = {
+        science_id: answers[0].science_id,
+        questions: answers[0].questions,
+        time: {
+          started_time: "2021-09-09 22:05:30",
+          finished_time: "2021-09-09 23:02:20",
+        },
+      };
       this.$http
-        .post(`main/BlockTest/TestDone`, {
-          answers,
-        })
+        .post(`tests/sciences-tests/done/`, result)
         .then((res) => {
-          if (!res.error) {
-            this.blockTestAnswers = true;
-            this.onlineTestResult = res.result;
-            this.setTestResultTotals();
+          if (res) {
+            localStorage.setItem("testResult", JSON.stringify([res]));
+            this.$router.push({ name: "result-test" });
           }
         })
         .catch((err) => {
-          console.log(err);
+          this.errorNotification(err.response.data.message);
         });
     },
-    getStoredTime() {
-      let storedTime = localStorage.getItem("testTime");
-      return storedTime ? parseInt(storedTime) : 0;
-    },
+    schoolTestResults() {},
+
     setTimer() {
       let _this = this;
-      _this.testTimer = _this.getStoredTime();
+      this.testTimer = parseInt(localStorage.getItem("testTime"));
       let testTimerInterval = setInterval(function () {
-        if (_this.testTimer <= 0) {
+        if (_this.testTimer / 60 <= 0) {
           _this.testFinish();
           clearInterval(testTimerInterval);
           return;
         }
         _this.testTimer--;
-        localStorage.setItem("testTime", _this.testTimer);
       }, 1000);
     },
     timerFormat(time) {
@@ -443,12 +487,16 @@ export default {
       let hours = Math.floor(sec_num / 3600);
       let minutes = Math.floor((sec_num - hours * 3600) / 60);
       let seconds = sec_num - hours * 3600 - minutes * 60;
-
-      let formattedHours = hours < 10 ? "0" + hours : hours;
-      let formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-      let formattedSeconds = seconds < 10 ? "0" + seconds : seconds;
-
-      return formattedHours + ":" + formattedMinutes + ":" + formattedSeconds;
+      if (hours < 10) {
+        hours = "0" + hours;
+      }
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      return hours + ":" + minutes + ":" + seconds;
     },
 
     closeModal() {
@@ -459,34 +507,65 @@ export default {
     },
 
     completeAnswers(questions, answers) {
-      questions.forEach((questionItem) => {
-        let foundExam = answers.find(
-          (answerItem) => answerItem.exam_id === questionItem.id
-        );
-        if (!foundExam) {
-          foundExam = {
-            exam_id: questionItem.id,
-            questions: [],
-          };
-          answers.push(foundExam);
+      if (test.TYPE_ONLINE === this.testType) {
+        if (answers === null || answers === undefined) {
+          answers = [];
         }
-
-        // Har bir savol uchun tekshirish
-        questionItem.questions.forEach((q) => {
-          let foundQuestion = (foundExam.questions || []).find(
-            (a) => a.question_id === q.id
+        questions.forEach((questionItem) => {
+          let foundExam = answers.find(
+            (answerItem) => answerItem.exam_id === questionItem.id
           );
-
-          if (!foundQuestion) {
-            // Agar savol javoblarda mavjud bo'lmasa, uni null qiymati bilan qo'shadi
-            foundExam.questions.push({
-              question_id: q.id,
-              answer: null,
-            });
+          if (!foundExam) {
+            foundExam = {
+              exam_id: questionItem.id,
+              questions: [],
+            };
+            answers.push(foundExam);
           }
+          questionItem.questions.forEach((q) => {
+            let foundQuestion = (foundExam.questions || []).find(
+              (a) => a.question_id === q.id
+            );
+            if (!foundQuestion) {
+              foundExam.questions.push({
+                question_id: q.id,
+                answer: null,
+              });
+            }
+          });
         });
-      });
+        return answers;
+      } else {
+        if (answers === null || answers === undefined) {
+          answers = [];
+        }
+        questions.forEach((questionItem) => {
+          let foundExam = answers.find(
+            (answerItem) => answerItem.science_id === questionItem.id
+          );
+          if (!foundExam) {
+            foundExam = {
+              science_id: questionItem.id,
+              questions: [],
+            };
+            answers.push(foundExam);
+          }
+          questionItem.questions.forEach((q) => {
+            let foundQuestion = (foundExam.questions || []).find(
+              (a) => a.question_id === q.id
+            );
+            if (!foundQuestion) {
+              foundExam.questions.push({
+                question_id: q.id,
+                answer: null,
+              });
+            }
+          });
+        });
+        return answers;
+      }
     },
+
     parseQuestion(question) {
       const formatMappings = [
         { search: /\\ldots/g, replace: "..." },
@@ -517,7 +596,6 @@ export default {
       return processed;
     },
   },
-
   watch: {
     testType() {
       this.testTypeProperty = this.testType;
@@ -531,8 +609,8 @@ export default {
     }
   },
   created() {
-    this.setTimer();
     this.readQuestionsFromStorage();
+    this.setTimer();
   },
 };
 </script>
@@ -583,7 +661,7 @@ export default {
         text-decoration-color, fill, stroke;
       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       transition-duration: 0.15s;
-      font-style: italic;
+
       &:hover {
         background-color: rgba(0, 76, 151, 0.08);
       }

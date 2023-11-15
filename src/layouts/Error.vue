@@ -9,10 +9,8 @@
     <AppFooter />
   </div>
 </template>
-
 <script>
 import { mapMutations } from "vuex";
-
 import AppFooter from "../components/layouts/default/app-footer/AppFooter";
 import AppHeader from "../components/layouts/default/app-header/AppHeader";
 import TokenService from "../service/TokenService";

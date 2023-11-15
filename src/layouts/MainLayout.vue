@@ -45,8 +45,8 @@ export default {
     ...mapGetters(["windowWidth"]),
   },
   mounted() {
-    this.setWidth();
     this.setToken();
+    this.setWidth();
     this.setTestTypeInLayout();
     window.addEventListener("resize", this.setWidth);
   },
@@ -57,6 +57,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.notice-content {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 12px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  z-index: 999999;
+  cursor: pointer;
+  span {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+}
 .page {
   &__wrap {
     min-height: calc(100vh - 402px);

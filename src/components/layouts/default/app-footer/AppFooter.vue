@@ -57,9 +57,7 @@
                 <!-- <router-link to="/guide" tag="a">Yo'riqnoma</router-link>
                 <router-link to="/publication" tag="a">Nashrlar</router-link> -->
                 <router-link to="/choose-test" tag="a">Testlar</router-link>
-                <router-link to="/internation-studies" tag="a">
-                  Tadqiqotlar
-                </router-link>
+                <router-link to="/research" tag="a"> Tadqiqotlar </router-link>
                 <router-link to="/video-course" tag="a">
                   Videokurslar
                 </router-link>

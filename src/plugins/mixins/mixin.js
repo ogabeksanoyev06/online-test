@@ -6,6 +6,7 @@ Vue.mixin({
   data() {
     return {
       baseURL,
+      testTimer: null,
     };
   },
   computed: {
@@ -78,10 +79,7 @@ Vue.mixin({
       localStorage.removeItem("testTime");
       localStorage.setItem("testTime", testTime);
     },
-    clearTestPropertiesFromLocalStorage() {
-      localStorage.removeItem("selectedQuestionIndex");
-      localStorage.removeItem("testTime");
-    },
+
     setTestTypeToStorage(testType) {
       localStorage.removeItem("testType");
       localStorage.setItem("testType", testType);
@@ -102,45 +100,29 @@ Vue.mixin({
       if (!testType) return null;
       return testType;
     },
-    // setMathPlugin() {
-    //   window.renderMathInElement(
-    //     document.getElementById("test_solving_component"),
-    //     {
-    //       delimiters: [
-    //         { left: "$$", right: "$$", display: true },
-    //         { left: "$", right: "$", display: false },
-    //         { left: "\\(", right: "\\)", display: false },
-    //         { left: "\\[", right: "\\]", display: true },
-    //       ],
-    //       Macros: {
-    //         "\\par": "\\newline",
-    //       },
-    //     }
-    //   );
-    // },
-    setQuestionIndexToStorage(questionIndex) {
-      localStorage.removeItem("selectedQuestionIndex");
-      localStorage.setItem("selectedQuestionIndex", questionIndex);
+
+    redirectToLoginOrTest() {
+      if (!this.isLoggedOn) {
+        this.warningNotification(
+          "Test ishlash uchun tizimga kirishingiz shart!"
+        );
+        this.$router.push({ name: "login" });
+        return true;
+      }
+      const testEndTime = localStorage.getItem("testTime");
+      if (testEndTime) {
+        this.warningNotification("Sizda tugallanmagan test mavjud");
+        this.$router.push({ name: "test" });
+        return true;
+      }
+      return false;
     },
-    checkQuestionIndex() {
-      let selectedQuestionIndex = localStorage.getItem("selectedQuestionIndex");
-      if (!selectedQuestionIndex) return 0;
-      return parseInt(selectedQuestionIndex);
-    },
-    setSelectedSubjectIdMixin(selectedSubjectId) {
-      localStorage.removeItem("selectedSubjectId");
-      localStorage.setItem("selectedSubjectId", selectedSubjectId);
-    },
-    getSelectedSubjectIdMixin() {
-      let selectedSubjectId = localStorage.getItem("selectedSubjectId");
-      if (!selectedSubjectId) return null;
-      return parseInt(selectedSubjectId);
-    },
+
     removeTestAttributesFromStorage() {
-      localStorage.removeItem("selectedSubjectId");
       localStorage.removeItem("questions");
       localStorage.removeItem("answers");
       localStorage.removeItem("testType");
+      localStorage.removeItem("testTime");
     },
   },
 });

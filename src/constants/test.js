@@ -4,4 +4,5 @@ export default {
   TYPE_SCHOOL: "school",
   TYPE_PRESIDENT: "prezident",
   TYPE_ATTESTATION: "attestation",
+  TYPE_PISA: "pisa",
 };

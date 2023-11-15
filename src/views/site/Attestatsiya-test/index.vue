@@ -243,7 +243,6 @@ export default {
     },
   },
   created() {
-    this.removeTestAttributesFromStorage();
     this.getSubjects();
     this.testLevelList();
   },

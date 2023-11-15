@@ -79,8 +79,8 @@
               </ul>
               <div class="results__answers">
                 <div
-                  v-for="subject in testResult"
-                  :key="subject.science"
+                  v-for="(subject, index) in testResult"
+                  :key="index"
                   class="results__answers-list bg-white radius bordered"
                   :class="
                     isMobileSmall ? 'pa-10' : isMobile ? 'pa-20' : 'pa-30'
@@ -179,6 +179,10 @@ export default {
   },
   mounted() {
     this.fetchTestResult();
+    localStorage.removeItem("questions");
+    localStorage.removeItem("answers");
+    localStorage.removeItem("testTime");
+    localStorage.removeItem("testType");
   },
   created() {},
 };

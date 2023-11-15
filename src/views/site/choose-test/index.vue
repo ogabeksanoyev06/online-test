@@ -211,8 +211,9 @@
               :font-size="isMobileSmall ? 14 : 16"
               :height="isMobileSmall ? 40 : 45"
               :class="isMobile ? 'w-100' : ''"
+              :disabled="true"
             >
-              Testni boshlash
+              Jarayonda...
             </AppButton>
             <AppButton
               theme="gray"
@@ -221,6 +222,7 @@
               :height="isMobileSmall ? 40 : 45"
               :class="isMobile ? 'w-100' : ''"
               :weight="600"
+              :disabled="true"
             >
               Hisobni to'ldirish
             </AppButton>
@@ -262,8 +264,9 @@
               :font-size="isMobileSmall ? 14 : 16"
               :height="isMobileSmall ? 40 : 45"
               :class="isMobile ? 'w-100' : ''"
+              :disabled="true"
             >
-              Testni boshlash
+              Jarayonda...
             </AppButton>
             <AppButton
               theme="gray"
@@ -272,6 +275,7 @@
               :height="isMobileSmall ? 40 : 45"
               :class="isMobile ? 'w-100' : ''"
               :weight="600"
+              :disabled="true"
             >
               Hisobni to'ldirish
             </AppButton>
@@ -508,21 +512,7 @@ export default {
     startClassTest() {
       this.$router.push({ path: "/choose-subject-school" });
     },
-    startPresidentTest() {
-      this.$router.push({ path: "/President-school-test" });
-    },
-    startAttestatsiyaTest() {
-      this.$router.push({ path: "/Attestatsiya-test" });
-    },
     startOnlineTest() {
-      if (!this.isLoggedOn) {
-        this.warningNotification(
-          "Test ishlash uchun tizimga kirishingiz shart!"
-        );
-        this.$router.push({ name: "login" });
-        return;
-      }
-      this.clearTestPropertiesFromLocalStorage();
       this.storeTestTimeToStorage(this.examsOverAllTime * 60);
       this.directionMandatorySubjects.forEach((s) => {
         this.selectedSubjectsForOnlineTest.push(s.id);
@@ -542,14 +532,30 @@ export default {
           if (res) {
             localStorage.setItem("questions", JSON.stringify(res));
             this.$router.push({ name: "test" });
+          } else {
+            //
           }
         })
         .catch((err) => {
-          this.errorNotification(err.response.data);
+          if (err.response && err.response.data) {
+            const detail = err.response.data.detail;
+            const message = err.response.data.message;
+            if (detail) {
+              this.errorNotification(detail);
+            } else {
+              this.errorNotification(message);
+            }
+          }
         })
         .finally(() => {
           this.isLoading = false;
         });
+    },
+    startPresidentTest() {
+      this.$router.push({ path: "/President-school-test" });
+    },
+    startAttestatsiyaTest() {
+      this.$router.push({ path: "/Attestatsiya-test" });
     },
     closeModal() {
       this.chooseTestModal = !this.chooseTestModal;
@@ -561,7 +567,6 @@ export default {
   mounted() {},
   watch: {},
   created() {
-    this.removeTestAttributesFromStorage();
     this.getSpecList();
   },
 };

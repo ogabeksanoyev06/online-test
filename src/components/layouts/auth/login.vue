@@ -49,6 +49,7 @@
         </div>
         <div class="text-center">
           <app-button
+            :disabled="isLoading"
             theme="info"
             type="submit"
             :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
@@ -107,6 +108,7 @@ export default {
         password: "",
       },
       passwordField: false,
+      isLoading: false,
     };
   },
   computed: {},
@@ -123,20 +125,21 @@ export default {
       this.showPassword = !this.showPassword;
     },
     loginToSystem() {
+      this.isLoading = true;
       this.$http
         .post("users/login/", this.request)
         .then((data) => {
-          if (!data || !data.access || !data.refresh) {
-            throw new Error("Invalid response from the server");
+          if (data && data.access && data.refresh) {
+            TokenService.saveToken(data.access);
+            TokenService.saveRefreshToken(data.refresh);
+            TokenService.saveTokenExpireDate(3600);
+            TokenService.saveTokenCreationTime(Math.floor(Date.now() / 1000));
+            this.$router.push({ name: "home" });
+            this.successNotification("Tizimga kirildi");
+            this.request.password = "";
+          } else {
+            this.errorNotification(data.detail);
           }
-          TokenService.saveToken(data.access);
-          TokenService.saveRefreshToken(data.refresh);
-          TokenService.saveTokenExpireDate(3600);
-          TokenService.saveTokenCreationTime(Math.floor(Date.now() / 1000));
-
-          this.$router.push({ name: "home" });
-          this.successNotification("Tizimga kirildi");
-          this.request.password = "";
         })
         .catch((err) => {
           const errorMessage =
@@ -144,6 +147,9 @@ export default {
           this.errorNotification(errorMessage);
           this.request.login = "";
           this.request.password = "";
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
   },

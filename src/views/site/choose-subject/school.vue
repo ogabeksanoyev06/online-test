@@ -18,7 +18,7 @@
             :key="idx"
             :title="item.name"
             style="cursor: pointer"
-            :active="selectedScience.science.id === item.id"
+            :active="selectedSubject.science.id === item.id"
             @click="selectScience(item)"
           />
         </div>
@@ -117,6 +117,7 @@
           <AppButton
             theme="light-green"
             sides="20"
+            :disabled="!selectedSubject.selected"
             @click="getQuestionBySelectedParameters"
           >
             Testni boshlash
@@ -153,7 +154,7 @@ export default {
           photo: "/icons/sciences.svg",
         },
       ],
-      selectedScience: {
+      selectedSubject: {
         selected: false,
         science: {
           name: null,
@@ -161,7 +162,7 @@ export default {
       },
       questionLevelList: [],
       questionSelectedLevel: "beginner",
-      questionTotalTime: 0,
+      questionTotalTime: 5,
       questionsCount: 5,
       questionsCountSelect: [
         {
@@ -260,8 +261,8 @@ export default {
       }
     },
     selectScience(science) {
-      this.selectedScience.selected = true;
-      this.selectedScience.science = science;
+      this.selectedSubject.selected = true;
+      this.selectedSubject.science = science;
     },
     selectedLevelValue(item) {
       this.questionSelectedLevel = item.id;
@@ -269,7 +270,7 @@ export default {
 
     getQuestionBySelectedParameters() {
       let paramtersModel = {};
-      paramtersModel.science_id = this.selectedScience.science.id;
+      paramtersModel.science_id = this.selectedSubject.science.id;
       paramtersModel.class_id = this.selectedClass;
       paramtersModel.test_count = this.questionsCount;
       paramtersModel.test_score = this.questionSelectedLevel;
@@ -279,11 +280,11 @@ export default {
         this.$http
           .post(`tests/school-tests/start/`, paramtersModel)
           .then((res) => {
-            if (!res.error) {
+            if (res) {
               this.setTestType(test.TYPE_SCHOOL);
               this.setTestTypeToStorage(test.TYPE_SCHOOL);
               let rawQuestions = [];
-              rawQuestions.push(res.result);
+              rawQuestions.push(res);
               localStorage.setItem("questions", JSON.stringify(rawQuestions));
               this.$router.push("test");
             } else {
@@ -291,7 +292,7 @@ export default {
             }
           })
           .catch((e) => {
-            this.errorNotification(e.response.data.error);
+            this.errorNotification(e.response.data.message);
           });
       } catch (e) {
         this.errorNotification(e.response.data.error);
@@ -304,7 +305,6 @@ export default {
     },
   },
   created() {
-    this.removeTestAttributesFromStorage();
     this.getScience();
   },
 };

@@ -3,7 +3,7 @@
     <div class="container">
       <div class="section__top mb-30">
         <div class="section__top-details">
-          <router-link class="section__top-link" to="/internation-studies">
+          <router-link class="section__top-link" to="/research">
             <span> Barcha tadqiqotlar</span>
           </router-link>
         </div>

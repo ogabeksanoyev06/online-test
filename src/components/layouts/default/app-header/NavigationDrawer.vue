@@ -39,7 +39,7 @@ export default {
         {
           id: 4,
           title: "Tadqiqotlar",
-          link: "/internation-studies",
+          link: "/research",
         },
         {
           id: 5,

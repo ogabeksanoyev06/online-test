@@ -12,16 +12,7 @@ const routes = [
         name: "home",
         component: () => import("../views/site/home"),
       },
-      {
-        path: "/guide",
-        name: "guide",
-        component: () => import("../views/site/guide"),
-      },
-      {
-        path: "/publication",
-        name: "publication",
-        component: () => import("../views/site/publication"),
-      },
+
       {
         path: "/choose-test",
         name: "choose-test",
@@ -48,20 +39,11 @@ const routes = [
         component: () => import("../views/site/Attestatsiya-test"),
       },
       {
-        path: "/pirls-test",
-        name: "pirls-test",
-        component: () => import("../views/site/Pirls-test"),
+        path: "/research-test/:research_id",
+        name: "research-test",
+        component: () => import("../views/site/research-test"),
       },
-      {
-        path: "/pisa-test",
-        name: "pisa-test",
-        component: () => import("../views/site/Pisa-test"),
-      },
-      {
-        path: "/Timss-test",
-        name: "timss-test",
-        component: () => import("../views/site/Timss-test"),
-      },
+
       {
         path: "/video-course",
         name: "video-course",
@@ -83,14 +65,19 @@ const routes = [
         component: () => import("../views/site/library"),
       },
       {
-        path: "/internation-studies",
-        name: "internation-studies",
-        component: () => import("../views/site/internationalStudies"),
+        path: "/research",
+        name: "research",
+        component: () => import("../views/site/research"),
       },
       {
         path: "/test",
         name: "test",
         component: () => import("../views/site/test"),
+      },
+      {
+        path: "/test-list",
+        name: "test-list",
+        component: () => import("../views/site/test/testList"),
       },
       {
         path: "result-test",
@@ -188,5 +175,13 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0);
   next();
+});
+router.beforeEach((to, from, next) => {
+  const testType = localStorage.getItem("testType");
+  if (to.name === "test" && testType === null) {
+    next("/");
+  } else {
+    next();
+  }
 });
 export default router;

@@ -1,14 +1,24 @@
 <template>
-  <div id="app" @mouseup="handleUserAction">
+  <div
+    id="app"
+    v-if="!isLoading"
+    @scroll="handleUserAction()"
+    @mousemove="handleUserAction()"
+  >
     <router-view />
+  </div>
+  <div v-else>
+    <loader />
   </div>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
+import Loader from "./components/shared-components/Loader.vue";
 import TokenService from "./service/TokenService";
 
 export default {
+  components: { Loader },
   name: "App",
   data() {
     return {
@@ -29,6 +39,7 @@ export default {
       } else if (currentTime >= expirationTime) {
         this.logOut();
       }
+      console.log("aaa");
     },
     refreshToken() {
       this.$http
@@ -50,21 +61,35 @@ export default {
     logOut() {
       this.setAccessToken(null);
       this.setIsLoggedOn(false);
+      localStorage.clear();
     },
+  },
+  mounted() {
+    this.handleUserAction();
   },
   created() {
     const checkLoading = () => {
       if (navigator.onLine && document.readyState === "complete") {
-        this.isLoading = false; // Internet va DOM yuklangan, loading animatsiyasini yopamiz
+        this.isLoading = false;
       }
     };
-
-    checkLoading();
-    setInterval(this.handleUserAction, 10000);
+    window.addEventListener("load", checkLoading);
   },
 };
 </script>
 
 <style>
-/* Your styles here */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+}
 </style>

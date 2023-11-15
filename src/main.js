@@ -20,6 +20,8 @@ Vue.use(VueMask);
 Vue.use(Moment);
 Vue.use(Toast);
 Vue.prototype.$http = http;
+// global o'zgaruvchini o'rnatish
+Vue.prototype.$timerInterval = null;
 
 new Vue({
   router,

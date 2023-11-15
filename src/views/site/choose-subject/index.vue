@@ -117,6 +117,7 @@
           <AppButton
             theme="light-green"
             sides="20"
+            :disabled="!selectedSubject.selected"
             @click="getQuestionBySelectedParameters"
           >
             Testni boshlash
@@ -256,7 +257,6 @@ export default {
         this.errorNotification(e.response.data.error.message);
       }
     },
-
     sectionChanged(sectionId) {
       let index = this.selectedSubjectSections.findIndex(
         (s) => s === sectionId
@@ -267,37 +267,30 @@ export default {
         this.selectedSubjectSections.splice(index, 1);
       }
     },
-
     getQuestionBySelectedParameters() {
       let paramtersModel = {};
       paramtersModel.science_id = this.selectedSubject.subject.id;
-      paramtersModel.subject_list = [2, 4];
+      paramtersModel.subject_list = this.selectedSubjectSections;
       paramtersModel.test_count = this.questionsCount;
       paramtersModel.test_score = this.questionSelectedLevel;
       paramtersModel.started_time = new Date();
-      paramtersModel.finished_time = new Date();
-      this.storeTestTimeToStorage(this.questionTotalTime);
-      try {
-        this.$http
-          .post(`tests/sciences-tests/start/`, paramtersModel)
-          .then((res) => {
-            if (!res.error) {
-              this.setTestType(test.TYPE_BLOCK);
-              this.setTestTypeToStorage(test.TYPE_BLOCK);
-              let rawQuestions = [];
-              rawQuestions.push(res.result);
-              localStorage.setItem("questions", JSON.stringify(rawQuestions));
-              this.$router.push("test");
-            } else {
-              this.errorNotification(res.error.message);
-            }
-          })
-          .catch((e) => {
-            this.errorNotification(e.response.data.message);
-          });
-      } catch (e) {
-        this.errorNotification(e.response.data.error.message);
-      }
+      this.storeTestTimeToStorage(this.questionTotalTime * 60);
+      localStorage.setItem("science_id", this.selectedSubject.subject.id);
+      this.$http
+        .post(`tests/sciences-tests/start/`, paramtersModel)
+        .then((res) => {
+          if (!res.error) {
+            this.setTestType(test.TYPE_BLOCK);
+            this.setTestTypeToStorage(test.TYPE_BLOCK);
+            localStorage.setItem("questions", JSON.stringify(res));
+            this.$router.push({ name: "test" });
+          } else {
+            //
+          }
+        })
+        .catch(() => {
+          // this.errorNotification(e.response.message);
+        });
     },
 
     selectedLevelValue(item) {
@@ -308,7 +301,6 @@ export default {
     },
   },
   created() {
-    this.removeTestAttributesFromStorage();
     this.getSubjects();
   },
   watch: {

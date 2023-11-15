@@ -3,7 +3,6 @@ import TokenService from "../service/TokenService";
 import router from "../router/index";
 
 const baseURL = "https://api.chay-chay.uz/api/";
-
 const http = axios.create({
   baseURL: baseURL,
   headers: {
@@ -31,7 +30,6 @@ http.interceptors.response.use(
     }
     switch (error.response.status) {
       case 401:
-        handleTokenExpiry();
         break;
       case 403:
         router.push({ path: "/403" });
@@ -40,12 +38,5 @@ http.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-function handleTokenExpiry() {
-  localStorage.clear();
-  router.push({ name: "home" }).catch((err) => {
-    console.error("Router Error:", err);
-  });
-}
 
 export default http;

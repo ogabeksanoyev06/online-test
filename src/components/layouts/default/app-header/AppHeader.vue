@@ -141,8 +141,8 @@
               <AppButton
                 :theme="scrolled ? 'light-info' : 'info'"
                 :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
-                :sides="isMobileSmall ? 10 : isMobile ? 15 : 20"
-                :height="isMobile ? '40' : '40'"
+                :sides="isMobileSmall ? 10 : isMobile ? 15 : 30"
+                :height="isMobile ? '40' : '50'"
                 weight="500"
                 class="header__login mr-10"
                 v-if="!isMobileSmall"
@@ -154,8 +154,8 @@
                 :theme="scrolled ? 'light-orange' : 'orange'"
                 @click="$router.push({ path: '/sign-up' })"
                 :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
-                :sides="isMobileSmall ? 10 : isMobile ? 15 : 20"
-                :height="isMobile ? '40' : '40'"
+                :sides="isMobileSmall ? 10 : isMobile ? 15 : 30"
+                :height="isMobile ? '40' : '50'"
                 weight="500"
                 class="header__register"
                 v-if="!isMobileSmall"
@@ -201,8 +201,6 @@ import "./header.scss";
 import NavigationDrawer from "./NavigationDrawer";
 import AppButton from "../../../shared-components/AppButton";
 import { mapActions, mapGetters, mapMutations } from "vuex";
-import TokenService from "@/service/TokenService";
-
 export default {
   name: "AppHeader",
   components: { AppButton, NavigationDrawer },
@@ -230,7 +228,7 @@ export default {
         {
           id: 4,
           title: "Tadqiqotlar",
-          link: "/internation-studies",
+          link: "/research",
         },
         {
           id: 5,
@@ -285,14 +283,8 @@ export default {
       this.languageDropdown = false;
     },
     setToken() {
-      let accessToken = TokenService.getToken();
-      if (accessToken !== null) {
-        this.setAccessToken(accessToken);
-        this.setIsLoggedOn(true);
-      } else {
-        this.setAccessToken(null);
-        this.setIsLoggedOn(false);
-      }
+      this.setAccessToken(null);
+      this.setIsLoggedOn(false);
     },
     handleScroll() {
       if (window.scrollY > 100) {
@@ -302,15 +294,20 @@ export default {
       }
     },
   },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
+  async mounted() {
+    if (this.userIsLoggedOn) {
+      await this.getUser();
+    }
     this.loadCoursesOnBasket();
   },
   created() {},
-  destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
+  watch: {
+    async isLoggedOn() {
+      if (this.userIsLoggedOn) {
+        await this.getUser();
+      }
+    },
   },
-  watch: {},
 };
 </script>
 
