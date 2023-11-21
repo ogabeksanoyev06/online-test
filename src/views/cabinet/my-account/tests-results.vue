@@ -15,13 +15,13 @@
             v-for="(item, idx) in testResults"
             :key="idx"
             class="text-center"
-            :class="selectedIndex === idx ? 'selected-row' : ''"
-            @click="selectSubjectList(idx)"
+            :class="selectedIndex === item.id ? 'selected-row' : ''"
+            @click="selectSubjectList(item)"
           >
             <td>{{ idx + 1 }}</td>
-            <td>{{ item.testType }}</td>
-            <td>{{ $moment(item.beginTime).format("YYYY-MM-DD HH:mm:ss") }}</td>
-            <td>{{ $moment(item.endTime).format("YYYY-MM-DD HH:mm:ss") }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ $moment(item.started).format("YYYY-MM-DD HH:mm:ss") }}</td>
+            <td>{{ $moment(item.finished).format("YYYY-MM-DD HH:mm:ss") }}</td>
           </tr>
         </tbody>
       </table>
@@ -33,7 +33,7 @@
       <span>
         <strong>
           Tanlgangan test turi boyicha natijalar -
-          <span style="color: #008ae4"> Online test </span>
+          <span style="color: #119c75"> {{ selectedTestType }} test </span>
         </strong>
       </span>
     </div>
@@ -53,12 +53,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, idx) in 10" :key="idx" class="text-center">
-            <td>10</td>
-            <td>Matematika</td>
-            <td>189</td>
-            <td>5</td>
-            <td>122</td>
+          <tr
+            v-for="(item, idx) in selectedSubjectList"
+            :key="idx"
+            class="text-center"
+          >
+            <td>{{ item.question_count }}</td>
+            <td>{{ item.science }}</td>
+            <td>{{ currencyFormat(item.max_ball) }}</td>
+            <td>{{ item.correct_answers }}</td>
+            <td>{{ currencyFormat(item.total_ball) }}</td>
           </tr>
         </tbody>
       </table>
@@ -79,36 +83,57 @@ export default {
           maxBall: null,
           userAnsCount: null,
           userTestBall: null,
-          subjectList: [
-            {
-              id: null,
-              subjectName: null,
-              subjectStatus: null,
-              quesCount: null,
-              maxBall: null,
-              userAnsCount: null,
-              userTestBall: null,
-            },
-          ],
         },
       ],
+      selectedSubjectList: [],
+      selectedIndex: null,
+      selectedTestType: null,
     };
   },
   methods: {
     getTestResults() {
-      this.$api
-        .get("main/User/GetBalance")
+      this.$http
+        .get("tests/tests-history")
         .then((data) => {
           if (!data.error) {
-            this.userBalance = data.result;
+            this.testResults = data;
           }
         })
-        .catch((error) => {
-          this.errorMes = error.response.data.error.message;
+        .catch(() => {
+          // this.errorMes = error.response.data.error.message;
         });
     },
+    selectSubjectList(item) {
+      if (this.testResults && this.testResults.length > 0) {
+        this.selectedTestType = item.type;
+        this.selectedIndex = item.id;
+        this.$http
+          .get(`tests/tests-history/${item.id}/?type=${item.type}`)
+          .then((res) => {
+            this.selectedSubjectList = res;
+          })
+          .catch(() => {
+            // this.errorMes = error.response.data.error.message;
+          });
+      }
+    },
+  },
+  created() {
+    this.getTestResults();
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.hoverTable tr:hover {
+  background-color: #119c75 !important;
+  cursor: pointer;
+  color: white;
+}
+
+.selected-row {
+  background-color: #119c75 !important;
+  cursor: pointer;
+  color: white;
+}
+</style>

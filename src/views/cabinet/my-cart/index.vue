@@ -42,31 +42,13 @@
                       <div class="card-right-item">
                         <p class="basket-modules">7 modullar | 39 darslar</p>
                         <svg
+                          class="mb-auto pointer"
                           width="28"
                           height="28"
                           viewBox="0 0 28 28"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g clip-path="url(#clip0_1026_2106)">
-                            <path
-                              d="M7.47205 4.23023C9.40433 2.93913 11.6761 2.25 14 2.25C17.1163 2.25 20.105 3.48794 22.3085 5.6915C24.5121 7.89505 25.75 10.8837 25.75 14C25.75 16.3239 25.0609 18.5957 23.7698 20.5279C22.4787 22.4602 20.6436 23.9663 18.4965 24.8556C16.3495 25.7449 13.987 25.9776 11.7077 25.5242C9.42842 25.0709 7.33477 23.9518 5.6915 22.3085C4.04823 20.6652 2.92915 18.5716 2.47578 16.2923C2.0224 14.013 2.25509 11.6505 3.14442 9.50347C4.03375 7.35644 5.53978 5.52134 7.47205 4.23023Z"
-                              stroke="#045140"
-                            ></path>
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_1026_2106">
-                              <rect width="28" height="28" fill="white"></rect>
-                            </clipPath>
-                          </defs>
-                        </svg>
-                        <svg
-                          class="mb-auto"
-                          width="28"
-                          height="28"
-                          viewBox="0 0 28 28"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                          v-if="item.id === activeCourse"
                         >
                           <g clip-path="url(#clip0_1026_2121)">
                             <path
@@ -76,6 +58,28 @@
                           </g>
                           <defs>
                             <clipPath id="clip0_1026_2121">
+                              <rect width="28" height="28" fill="white"></rect>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                        <svg
+                          width="28"
+                          height="28"
+                          viewBox="0 0 28 28"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="pointer"
+                          @click="courseChecked(item)"
+                          v-else
+                        >
+                          <g clip-path="url(#clip0_1026_2106)">
+                            <path
+                              d="M7.47205 4.23023C9.40433 2.93913 11.6761 2.25 14 2.25C17.1163 2.25 20.105 3.48794 22.3085 5.6915C24.5121 7.89505 25.75 10.8837 25.75 14C25.75 16.3239 25.0609 18.5957 23.7698 20.5279C22.4787 22.4602 20.6436 23.9663 18.4965 24.8556C16.3495 25.7449 13.987 25.9776 11.7077 25.5242C9.42842 25.0709 7.33477 23.9518 5.6915 22.3085C4.04823 20.6652 2.92915 18.5716 2.47578 16.2923C2.0224 14.013 2.25509 11.6505 3.14442 9.50347C4.03375 7.35644 5.53978 5.52134 7.47205 4.23023Z"
+                              stroke="#045140"
+                            ></path>
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_1026_2106">
                               <rect width="28" height="28" fill="white"></rect>
                             </clipPath>
                           </defs>
@@ -149,7 +153,7 @@
           <div class="sidebar-sticky">
             <div class="sidebar-form__detail-list">
               <div class="sidebar-form__detail-row">
-                <span>Qiymati:</span><span>19 054 000 so'm</span>
+                <span>Qiymati:</span><span>{{ coursePrice }} </span>
               </div>
               <div class="sidebar-form__detail-row">
                 <span>Naqd pul to'lash uchun komissiya miqdori:</span
@@ -166,7 +170,7 @@
             />
             <div class="sidebar-form__detail-list mb-20">
               <div class="sidebar-form__detail-row">
-                <span>To'lov turi:</span><span>19 054 000 so'm</span>
+                <span>To'lov turi:</span><span>PayMe</span>
               </div>
               <div class="sidebar-form__detail-row">
                 <span>Buyurtma turi:</span><span><b>To'liq to'lash</b></span>
@@ -228,7 +232,10 @@ export default {
   components: { AppButton },
   data() {
     return {
+      coursePrice: 0,
       totalPrice: 0,
+      isChecked: false,
+      activeCourse: null,
     };
   },
   computed: {
@@ -240,6 +247,10 @@ export default {
     removeFromCartList(courseId) {
       this.removeCoursesOnBasket(courseId);
       this.warningNotification("Kurs savatdan o'chirildi");
+    },
+    courseChecked(item) {
+      this.activeCourse = item.id;
+      this.coursePrice = item.price;
     },
   },
   created() {

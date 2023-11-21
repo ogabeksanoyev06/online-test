@@ -101,12 +101,11 @@
             >
               Fan mavzularini tanlang
             </AppText>
-            <div class="choose-test-topics mb-20">
+            <div class="choose-test-topics d-flex flex-wrap gap-20 mb-20">
               <BaseCheckbox
                 size="18"
                 v-for="(item, index) in subjectSectionList"
                 :title="item.name"
-                class="mb-20"
                 :key="index"
                 style="display: flex"
                 @change="sectionChanged(item.id)"
@@ -279,7 +278,7 @@ export default {
       this.$http
         .post(`tests/sciences-tests/start/`, paramtersModel)
         .then((res) => {
-          if (!res.error) {
+          if (res) {
             this.setTestType(test.TYPE_BLOCK);
             this.setTestTypeToStorage(test.TYPE_BLOCK);
             localStorage.setItem("questions", JSON.stringify(res));
@@ -306,6 +305,7 @@ export default {
   watch: {
     subject_id() {
       this.questionTotalTime = this.questionTime * this.questionsCount;
+      this.selectedSubjectSections = [];
     },
     questionsCount() {
       this.questionTotalTime = this.questionTime * this.questionsCount;

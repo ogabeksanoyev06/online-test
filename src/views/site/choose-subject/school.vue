@@ -193,31 +193,31 @@ export default {
       questionTime: 1,
       classes: [
         {
-          id: 5,
+          id: 2,
           name: 5,
         },
         {
-          id: 6,
+          id: 3,
           name: 6,
         },
         {
-          id: 7,
+          id: 4,
           name: 7,
         },
         {
-          id: 8,
+          id: 5,
           name: 8,
         },
         {
-          id: 9,
+          id: 6,
           name: 9,
         },
         {
-          id: 10,
+          id: 7,
           name: 10,
         },
         {
-          id: 11,
+          id: 8,
           name: 11,
         },
       ],
@@ -271,11 +271,13 @@ export default {
     getQuestionBySelectedParameters() {
       let paramtersModel = {};
       paramtersModel.science_id = this.selectedSubject.science.id;
-      paramtersModel.class_id = this.selectedClass;
+      paramtersModel.class_id = 2;
       paramtersModel.test_count = this.questionsCount;
       paramtersModel.test_score = this.questionSelectedLevel;
       paramtersModel.started_time = new Date();
-      this.storeTestTimeToStorage(this.questionTotalTime);
+      localStorage.setItem("science_id", this.selectedSubject.science.id);
+      this.storeTestTimeToStorage(this.questionTotalTime * 60);
+      console.log(paramtersModel);
       try {
         this.$http
           .post(`tests/school-tests/start/`, paramtersModel)

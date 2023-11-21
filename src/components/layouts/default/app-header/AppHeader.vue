@@ -65,7 +65,9 @@
                     fill="#8A8A8A"
                   ></path>
                 </svg>
-                <span class="header__favourite-notification"> 4 </span>
+                <span class="header__favourite-notification">
+                  {{ favouriteCourses.length }}
+                </span>
               </span>
             </router-link>
             <router-link
@@ -262,11 +264,16 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isLoggedOn", "user", "coursesOnBasket"]),
+    ...mapGetters([
+      "isLoggedOn",
+      "user",
+      "coursesOnBasket",
+      "favouriteCourses",
+    ]),
   },
   methods: {
     ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
-    ...mapActions(["getUser", "loadCoursesOnBasket"]),
+    ...mapActions(["getUser", "loadCoursesOnBasket", "loadfavouriteCourses"]),
     closeDrawer() {
       this.navigationDrawer = false;
     },
@@ -299,6 +306,7 @@ export default {
       await this.getUser();
     }
     this.loadCoursesOnBasket();
+    this.loadfavouriteCourses();
   },
   created() {},
   watch: {

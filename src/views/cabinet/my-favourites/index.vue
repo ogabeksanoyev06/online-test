@@ -20,8 +20,16 @@
         <AppCard
           v-for="item in favouriteCourses"
           :key="item.id"
+          :courseId="item.id"
           :title="item.title"
-          :photo="item.image"
+          :modules_count="item.modules_count"
+          :lessons_count="item.lessons_count"
+          :language="item.language"
+          :teacher="item.teacher"
+          :trailer="item.trailer"
+          :image="item.image"
+          :price="item.price"
+          :trailerBtn="item.trailer ? true : false"
         />
       </BlockWrap>
       <div class="empty-page" v-else>

@@ -1,5 +1,5 @@
 <template>
-  <div class="course" :class="{ 'news-card--medium': medium }">
+  <div class="course">
     <div class="course-card">
       <div class="bg-shadow"></div>
       <div class="course-card-header">
@@ -19,7 +19,6 @@
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
-                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <g clip-path="url(#clip0_455_5967)">
@@ -50,7 +49,6 @@
                 width="22"
                 height="19"
                 viewBox="0 0 22 19"
-                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -207,7 +205,7 @@ export default {
       type: Number,
       default: 0,
     },
-    teacher: Number,
+    teacher: String,
     trailerBtn: Boolean,
     level: String,
     isFree: Boolean,
@@ -237,29 +235,6 @@ export default {
         params: { course_id: this.courseId },
       });
     },
-    addToFavourite() {
-      if (this.isFavourite) {
-        this.removefavouriteCourses(this.courseId);
-        this.warningNotification("Kurs sevimlilardan o'chirildi");
-      } else {
-        const courseData = {
-          id: this.courseId,
-          title: this.title,
-          modules_count: this.modules_count,
-          lessons_count: this.lessons_count,
-          language: this.language,
-          teacher: this.teacher,
-          trailer: this.trailer,
-          image: this.image,
-          price: this.price,
-        };
-        this.setFavouriteCourses({
-          courseId: this.courseId,
-          data: courseData,
-        });
-        this.successNotification("Kurs sevimlilarga qo'shildi");
-      }
-    },
     addToCart() {
       if (this.inBasket) {
         this.removeCoursesOnBasket(this.courseId);
@@ -281,6 +256,29 @@ export default {
           data: courseData,
         });
         this.successNotification("Kurs savatga qo'shildi");
+      }
+    },
+    addToFavourite() {
+      if (this.isFavourite) {
+        this.removefavouriteCourses(this.courseId);
+        this.warningNotification("Kurs sevimlilardan o'chirildi");
+      } else {
+        const courseData = {
+          id: this.courseId,
+          title: this.title,
+          modules_count: this.modules_count,
+          lessons_count: this.lessons_count,
+          language: this.language,
+          teacher: this.teacher,
+          trailer: this.trailer,
+          image: this.image,
+          price: this.price,
+        };
+        this.setFavouriteCourses({
+          courseId: this.courseId,
+          data: courseData,
+        });
+        this.successNotification("Kurs sevimlilarga qo'shildi");
       }
     },
   },

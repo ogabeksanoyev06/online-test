@@ -53,14 +53,14 @@
               >
                 {{ user.first_name + " " + user.last_name }}
               </AppText>
-              <AppText
+              <!-- <AppText
                 :size="isMobileSmall ? 14 : 16"
                 :line-height="isMobileSmall ? 18 : 24"
                 weight="700"
                 class="color-secondary mb-10"
               >
                 Maqomi: O'quvchi
-              </AppText>
+              </AppText> -->
               <AppText
                 :size="isMobileSmall ? 14 : 16"
                 :line-height="isMobileSmall ? 18 : 20"
@@ -78,7 +78,7 @@
                 Hisobim: 5000
               </AppText>
               <app-button
-                theme="logout"
+                theme="red"
                 radius="10"
                 :font-size="16"
                 :sides="20"

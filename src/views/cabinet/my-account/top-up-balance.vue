@@ -16,17 +16,6 @@
             <img src="/svg/payme.svg" alt="" />
           </div>
         </div>
-
-        <div
-          class="payment__methods-item"
-          style="cursor: pointer"
-          :class="[selectedPaymentType === 2 ? 'active' : '']"
-          @click="paymentSelect(2)"
-        >
-          <div class="payment__methods-logo mr-30">
-            <img src="/svg/clicksvg.svg" alt="" />
-          </div>
-        </div>
       </div>
 
       <div class="payment__methods-details pa-20 bordered shadowed radius">

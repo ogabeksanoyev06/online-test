@@ -1,4 +1,4 @@
-@import '../../styles/abstracts/variables';
+@import "../../styles/abstracts/variables";
 
 .checkbox {
   $self: &;
@@ -20,28 +20,28 @@
     &:before {
       flex-shrink: 0;
       display: block;
-      content: '';
+      content: "";
       width: var(--size);
       height: var(--size);
       border-radius: 4px;
       background: $border-color center/10px 10px no-repeat;
-      border: 1px solid #E2E3E5;
+      border: 1px solid #e2e3e5;
     }
   }
   &__input:checked ~ &__title {
     &:before {
       background-color: $color-secondary;
-      background-image: url('../../../../public/svg/check.svg');
+      background-image: url("../../../../public/svg/check.svg");
       background-size: contain;
       border-color: $color-secondary;
     }
   }
   &__text {
-    margin-left: 13px;
+    margin-left: 5px;
   }
   &:after {
     display: block;
-    content: '';
+    content: "";
     position: absolute;
     top: -5px;
     right: -5px;
@@ -50,7 +50,7 @@
   }
   &--theme-light {
     #{$self}__title {
-      color: #9596AF;
+      color: #9596af;
     }
     #{$self}__input:checked ~ #{$self}__title {
       &:before {
@@ -62,7 +62,7 @@
   &--theme-radio {
     #{$self}__title:before {
       border-radius: 100%;
-      background: #FFFFFF center/10px 10px no-repeat;
+      background: #ffffff center/10px 10px no-repeat;
     }
     #{$self}__input:checked ~ #{$self}__title:before {
       background-color: #fff;

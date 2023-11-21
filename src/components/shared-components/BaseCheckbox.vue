@@ -81,7 +81,6 @@ export default {
       if (!this.reset || this.type !== "radio") {
         return;
       }
-
       let value = this.val;
       if (
         this.reset &&

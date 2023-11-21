@@ -236,6 +236,7 @@ export default {
   },
   methods: {
     ...mapMutations([]),
+
     scrollToTest(testId) {
       const testElement = this.$refs["test_" + testId][0];
       if (testElement) {
@@ -249,146 +250,337 @@ export default {
         questionElement.scrollIntoView({ behavior: "smooth" });
       }
     },
+
     readQuestionsFromStorage() {
-      let questions = JSON.parse(localStorage.getItem("questions"));
-      this.testTypeProperty = localStorage.getItem("testType");
-      if (this.testTypeProperty === test.TYPE_ONLINE) {
-        this.rawTests = questions || [];
-      } else {
-        if (questions) {
-          let parametersModel = {
-            id: parseInt(localStorage.getItem("science_id")),
-            name: questions.name || "",
-            question_ball: questions.ball,
-            questions: questions.questions.map((question) => {
-              return {
-                id: question.id,
-                question: question.question,
-                answers: [
-                  question.answer1,
-                  question.answer2,
-                  question.answer3,
-                  question.answer4,
-                ],
+      try {
+        let questions = JSON.parse(localStorage.getItem("questions"));
+        this.testTypeProperty = localStorage.getItem("testType");
+        switch (this.testTypeProperty) {
+          case test.TYPE_ONLINE: {
+            this.rawTests = questions;
+            return;
+          }
+          case test.TYPE_BLOCK: {
+            if (questions) {
+              let parametersModel = {
+                id: parseInt(localStorage.getItem("science_id")),
+                name: questions.name || "",
+                question_ball: questions.ball,
+                questions: questions.questions.map((question) => {
+                  return {
+                    id: question.id,
+                    question: question.question,
+                    answers: [
+                      question.answer1,
+                      question.answer2,
+                      question.answer3,
+                      question.answer4,
+                    ],
+                  };
+                }),
               };
-            }),
-          };
-          this.rawTests.push(parametersModel);
+              this.rawTests.push(parametersModel);
+            }
+            return;
+          }
+          case test.TYPE_SCHOOL: {
+            if (questions) {
+              let parametersModel = {
+                id: parseInt(localStorage.getItem("science_id")),
+                name: questions.name || "",
+                question_ball: questions.ball,
+                questions: questions.questions.map((question) => {
+                  return {
+                    id: question.id,
+                    question: question.question,
+                    answers: [
+                      question.answer1,
+                      question.answer2,
+                      question.answer3,
+                      question.answer4,
+                    ],
+                  };
+                }),
+              };
+              this.rawTests.push(parametersModel);
+            }
+            return;
+          }
+          case test.TYPE_RESEARCH: {
+            if (questions) {
+              let parametersModel = {
+                id: parseInt(localStorage.getItem("specification_id")),
+                name: questions.name || "",
+                question_ball: questions.ball,
+                questions: questions.questions.map((question) => {
+                  return {
+                    id: question.id,
+                    question: question.question,
+                    answers: [
+                      question.answer1,
+                      question.answer2,
+                      question.answer3,
+                      question.answer4,
+                    ],
+                  };
+                }),
+              };
+              this.rawTests.push(parametersModel);
+            }
+            return;
+          }
+          default:
+            return null;
         }
+      } catch (error) {
+        console.log(error);
       }
     },
+
     alreadySelected(testId, questionId) {
-      if (test.TYPE_ONLINE === this.testType) {
-        let examEntry = this.selectedAnswers.find(
-          (entry) => entry.exam_id === testId
-        );
-        if (examEntry) {
-          let questionEntry = examEntry.questions.find(
-            (q) => q.question_id === questionId
+      switch (this.testTypeProperty) {
+        case test.TYPE_ONLINE: {
+          let examEntry = this.selectedAnswers.find(
+            (entry) => entry.exam_id === testId
           );
-          return questionEntry ? questionEntry.answer : -1;
+          if (examEntry) {
+            let questionEntry = examEntry.questions.find(
+              (q) => q.question_id === questionId
+            );
+            return questionEntry ? questionEntry.answer : -1;
+          }
+          return -1;
         }
-        return -1;
-      } else {
-        let examEntry = this.selectedAnswers.find(
-          (entry) => entry.science_id === testId
-        );
-        if (examEntry) {
-          let questionEntry = examEntry.questions.find(
-            (q) => q.question_id === questionId
+        case test.TYPE_BLOCK: {
+          let examEntry = this.selectedAnswers.find(
+            (entry) => entry.science_id === testId
           );
-          return questionEntry ? questionEntry.answer : -1;
+          if (examEntry) {
+            let questionEntry = examEntry.questions.find(
+              (q) => q.question_id === questionId
+            );
+            return questionEntry ? questionEntry.answer : -1;
+          }
+          return -1;
         }
-        return -1;
+        case test.TYPE_SCHOOL: {
+          let examEntry = this.selectedAnswers.find(
+            (entry) => entry.science_id === testId
+          );
+          if (examEntry) {
+            let questionEntry = examEntry.questions.find(
+              (q) => q.question_id === questionId
+            );
+            return questionEntry ? questionEntry.answer : -1;
+          }
+          return -1;
+        }
+        case test.TYPE_RESEARCH: {
+          let examEntry = this.selectedAnswers.find(
+            (entry) => entry.specification_id === testId
+          );
+          if (examEntry) {
+            let questionEntry = examEntry.questions.find(
+              (q) => q.question_id === questionId
+            );
+            return questionEntry ? questionEntry.answer : -1;
+          }
+          return -1;
+        }
+        default:
+          return null;
       }
     },
     selectAnswer(testId, questionId, answerKey = null) {
-      if (test.TYPE_ONLINE === this.testType) {
-        let examEntry = this.selectedAnswers.find(
-          (entry) => entry.exam_id === testId
-        );
-        if (examEntry) {
-          let questionEntry = examEntry.questions.find(
-            (q) => q.question_id === questionId
+      switch (this.testTypeProperty) {
+        case test.TYPE_ONLINE: {
+          let examEntry = this.selectedAnswers.find(
+            (entry) => entry.exam_id === testId
           );
-          if (questionEntry) {
-            questionEntry.answer = answerKey;
+          if (examEntry) {
+            let questionEntry = examEntry.questions.find(
+              (q) => q.question_id === questionId
+            );
+            if (questionEntry) {
+              questionEntry.answer = answerKey;
+            } else {
+              examEntry.questions.push({
+                question_id: questionId,
+                answer: answerKey,
+              });
+            }
           } else {
-            examEntry.questions.push({
-              question_id: questionId,
-              answer: answerKey,
-            });
+            this.fillSelectedAnswersArray(testId, questionId, answerKey);
           }
-        } else {
-          this.fillSelectedAnswersArray(testId, questionId, answerKey);
+          localStorage.removeItem("answers");
+          localStorage.setItem("answers", JSON.stringify(this.selectedAnswers));
+          return;
         }
-      } else {
-        let examEntry = this.selectedAnswers.find(
-          (entry) => entry.science_id === testId
-        );
-        if (examEntry) {
-          let questionEntry = examEntry.questions.find(
-            (q) => q.question_id === questionId
+        case test.TYPE_BLOCK: {
+          let examEntry = this.selectedAnswers.find(
+            (entry) => entry.science_id === testId
           );
-          if (questionEntry) {
-            questionEntry.answer = answerKey;
+          if (examEntry) {
+            let questionEntry = examEntry.questions.find(
+              (q) => q.question_id === questionId
+            );
+            if (questionEntry) {
+              questionEntry.answer = answerKey;
+            } else {
+              examEntry.questions.push({
+                question_id: questionId,
+                answer: answerKey,
+              });
+            }
           } else {
-            examEntry.questions.push({
-              question_id: questionId,
-              answer: answerKey,
-            });
+            this.fillSelectedAnswersArray(testId, questionId, answerKey);
           }
-        } else {
-          this.fillSelectedAnswersArray(testId, questionId, answerKey);
+          localStorage.removeItem("answers");
+          localStorage.setItem("answers", JSON.stringify(this.selectedAnswers));
+          return;
         }
+        case test.TYPE_SCHOOL: {
+          let examEntry = this.selectedAnswers.find(
+            (entry) => entry.science_id === testId
+          );
+          if (examEntry) {
+            let questionEntry = examEntry.questions.find(
+              (q) => q.question_id === questionId
+            );
+            if (questionEntry) {
+              questionEntry.answer = answerKey;
+            } else {
+              examEntry.questions.push({
+                question_id: questionId,
+                answer: answerKey,
+              });
+            }
+          } else {
+            this.fillSelectedAnswersArray(testId, questionId, answerKey);
+          }
+          localStorage.removeItem("answers");
+          localStorage.setItem("answers", JSON.stringify(this.selectedAnswers));
+          return;
+        }
+        case test.TYPE_RESEARCH: {
+          let examEntry = this.selectedAnswers.find(
+            (entry) => entry.specification_id === testId
+          );
+          if (examEntry) {
+            let questionEntry = examEntry.questions.find(
+              (q) => q.question_id === questionId
+            );
+            if (questionEntry) {
+              questionEntry.answer = answerKey;
+            } else {
+              examEntry.questions.push({
+                question_id: questionId,
+                answer: answerKey,
+              });
+            }
+          } else {
+            this.fillSelectedAnswersArray(testId, questionId, answerKey);
+          }
+          localStorage.removeItem("answers");
+          localStorage.setItem("answers", JSON.stringify(this.selectedAnswers));
+          return;
+        }
+        default:
+          return null;
       }
-
-      localStorage.removeItem("answers");
-      localStorage.setItem("answers", JSON.stringify(this.selectedAnswers));
     },
     fillSelectedAnswersArray(testId, questionId, answerKey = null) {
-      if (test.TYPE_ONLINE === this.testType) {
-        let model = {
-          exam_id: testId,
-          questions: [
-            {
-              question_id: questionId,
-              answer: answerKey,
-            },
-          ],
-        };
-        this.selectedAnswers.push(model);
-      } else {
-        let model = {
-          science_id: testId,
-          questions: [
-            {
-              question_id: questionId,
-              answer: answerKey,
-            },
-          ],
-        };
-        this.selectedAnswers.push(model);
+      switch (this.testTypeProperty) {
+        case test.TYPE_ONLINE: {
+          let model = {
+            exam_id: testId,
+            questions: [
+              {
+                question_id: questionId,
+                answer: answerKey,
+              },
+            ],
+          };
+          return this.selectedAnswers.push(model);
+        }
+        case test.TYPE_BLOCK: {
+          let model = {
+            science_id: testId,
+            questions: [
+              {
+                question_id: questionId,
+                answer: answerKey,
+              },
+            ],
+          };
+          return this.selectedAnswers.push(model);
+        }
+        case test.TYPE_SCHOOL: {
+          let model = {
+            science_id: testId,
+            questions: [
+              {
+                question_id: questionId,
+                answer: answerKey,
+              },
+            ],
+          };
+          return this.selectedAnswers.push(model);
+        }
+        case test.TYPE_RESEARCH: {
+          let model = {
+            specification_id: testId,
+            questions: [
+              {
+                question_id: questionId,
+                answer: answerKey,
+              },
+            ],
+          };
+          return this.selectedAnswers.push(model);
+        }
+        default:
+          return null;
       }
     },
     answeredQuestionsCount(testId) {
-      const examEntry = this.selectedAnswers.find(
-        (entry) => entry.exam_id === testId
-      );
-      return examEntry ? examEntry.questions.length : 0;
+      switch (this.testTypeProperty) {
+        case test.TYPE_ONLINE: {
+          const examEntry = this.selectedAnswers.find(
+            (entry) => entry.exam_id === testId
+          );
+          return examEntry ? examEntry.questions.length : 0;
+        }
+        case test.TYPE_BLOCK: {
+          const examEntry = this.selectedAnswers.find(
+            (entry) => entry.science_id === testId
+          );
+          return examEntry ? examEntry.questions.length : 0;
+        }
+        case test.TYPE_SCHOOL: {
+          const examEntry = this.selectedAnswers.find(
+            (entry) => entry.science_id === testId
+          );
+          return examEntry ? examEntry.questions.length : 0;
+        }
+        case test.TYPE_RESEARCH: {
+          const examEntry = this.selectedAnswers.find(
+            (entry) => entry.specification_id === testId
+          );
+          return examEntry ? examEntry.questions.length : 0;
+        }
+        default:
+          return null;
+      }
     },
+
+    // finished function
     testFinish() {
       try {
         let answers = JSON.parse(localStorage.getItem("answers"));
         if (this.testTypeProperty === test.TYPE_ONLINE) {
           let questions = JSON.parse(localStorage.getItem("questions"));
           switch (this.testTypeProperty) {
-            case test.TYPE_BLOCK:
-              this.blockTestResults(questions, answers);
-              return;
-            case test.TYPE_SCHOOL:
-              this.subjectTestResults(questions, answers);
-              return;
             case test.TYPE_ONLINE:
               this.onlineTestResults(questions, answers);
               return;
@@ -402,10 +594,16 @@ export default {
               this.blockTestResults(questions, answers);
               return;
             case test.TYPE_SCHOOL:
-              this.subjectTestResults(questions, answers);
+              this.schoolTestResults(questions, answers);
               return;
-            case test.TYPE_ONLINE:
-              this.onlineTestResults(questions, answers);
+            case test.TYPE_PISA:
+              this.pisaTestResults(questions, answers);
+              return;
+            case test.TYPE_PIRLS:
+              this.pirlsTestResults(questions, answers);
+              return;
+            case test.TYPE_TIMSS:
+              this.timssTestResults(questions, answers);
               return;
             default:
               return null;
@@ -417,6 +615,7 @@ export default {
         this.testFinished = true;
       }
     },
+    // results tests
     onlineTestResults(questions, answers) {
       const additionalData = {
         started_time: "2023-09-09 22:02:20",
@@ -468,7 +667,32 @@ export default {
           this.errorNotification(err.response.data.message);
         });
     },
-    schoolTestResults() {},
+    schoolTestResults(questions, answers) {
+      if (!answers) {
+        answers = [];
+      }
+      this.completeAnswers(questions, answers);
+      let result = {
+        science_id: answers[0].science_id,
+        class_id: 1,
+        questions: answers[0].questions,
+        time: {
+          started_time: "2021-09-09 22:05:30",
+          finished_time: "2021-09-09 23:02:20",
+        },
+      };
+      this.$http
+        .post(`tests/school-tests/done/`, result)
+        .then((res) => {
+          if (res) {
+            localStorage.setItem("testResult", JSON.stringify([res]));
+            this.$router.push({ name: "result-test" });
+          }
+        })
+        .catch((err) => {
+          this.errorNotification(err.response.data.message);
+        });
+    },
 
     setTimer() {
       let _this = this;
@@ -655,19 +879,19 @@ export default {
     flex-direction: column;
     gap: 0.5rem;
     &-title {
-      background-color: rgb(245, 247, 249);
       padding: 0.75rem 1rem;
-      transition-property: color, background-color, border-color,
-        text-decoration-color, fill, stroke;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 0.15s;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid #f0f0f0;
 
       &:hover {
-        background-color: rgba(0, 76, 151, 0.08);
+        border-color: rgba(0, 76, 151, 0.08);
+        box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d,
+          0 12px 48px 16px #00000008;
       }
       &.active {
-        background-color: #004c97;
-        color: #fff !important;
+        border-color: #004c97;
+        box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d,
+          0 12px 48px 16px #00000008;
       }
     }
   }
