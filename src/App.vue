@@ -22,25 +22,27 @@ export default {
     ...mapMutations(["setAccessToken", "setIsLoggedOn"]),
 
     async handleUserAction() {
-      if (
-        TokenService.getToken() &&
-        TokenService.isTokenExpired(TokenService.getToken())
-      ) {
-        try {
-          await this.refreshToken();
-        } catch (error) {
-          console.error("Error refreshing token:", error);
+      if (TokenService.isTokenExpired(TokenService.getToken())) {
+        if (
+          TokenService.isRefreshTokenExpired(TokenService.getRefreshToken())
+        ) {
           this.logOut();
+        } else {
+          try {
+            const response = await this.$http.post("users/token/refresh/", {
+              refresh: TokenService.getRefreshToken(),
+            });
+            if (response && response.access) {
+              TokenService.saveToken(response.access);
+            }
+          } catch (error) {
+            console.error("Error refreshing token:", error);
+            this.logOut();
+          }
         }
       }
-
-      if (
-        !TokenService.getToken() ||
-        TokenService.isTokenExpired(TokenService.getToken())
-      ) {
-        this.logOut();
-      }
     },
+
     refreshToken() {
       this.$http
         .post("users/token/refresh/", {
