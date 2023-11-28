@@ -229,6 +229,8 @@ export default {
       answerLabels: ["A", "B", "C", "D", "E", "F", "G", "H"],
       selectedAnswers: [],
       testFinished: false,
+      testInProgress: true,
+      testTimerInterval: null,
     };
   },
   computed: {
@@ -236,7 +238,6 @@ export default {
   },
   methods: {
     ...mapMutations([]),
-
     scrollToTest(testId) {
       const testElement = this.$refs["test_" + testId][0];
       if (testElement) {
@@ -250,7 +251,6 @@ export default {
         questionElement.scrollIntoView({ behavior: "smooth" });
       }
     },
-
     readQuestionsFromStorage() {
       try {
         let questions = JSON.parse(localStorage.getItem("questions"));
@@ -287,9 +287,9 @@ export default {
             if (questions) {
               let parametersModel = {
                 id: parseInt(localStorage.getItem("science_id")),
-                name: questions.name || "",
-                question_ball: questions.ball,
-                questions: questions.questions.map((question) => {
+                name: questions[0].name || "",
+                question_ball: questions[0].ball,
+                questions: questions[0].questions.map((question) => {
                   return {
                     id: question.id,
                     question: question.question,
@@ -336,7 +336,6 @@ export default {
         console.log(error);
       }
     },
-
     alreadySelected(testId, questionId) {
       switch (this.testTypeProperty) {
         case test.TYPE_ONLINE: {
@@ -573,46 +572,44 @@ export default {
           return null;
       }
     },
-
     // finished function
     testFinish() {
       try {
         let answers = JSON.parse(localStorage.getItem("answers"));
         if (this.testTypeProperty === test.TYPE_ONLINE) {
           let questions = JSON.parse(localStorage.getItem("questions"));
-          switch (this.testTypeProperty) {
-            case test.TYPE_ONLINE:
-              this.onlineTestResults(questions, answers);
-              return;
-            default:
-              return null;
-          }
+          this.onlineTestResults(questions, answers);
         } else {
           let questions = this.rawTests;
-          switch (this.testTypeProperty) {
-            case test.TYPE_BLOCK:
-              this.blockTestResults(questions, answers);
-              return;
-            case test.TYPE_SCHOOL:
-              this.schoolTestResults(questions, answers);
-              return;
-            case test.TYPE_PISA:
-              this.pisaTestResults(questions, answers);
-              return;
-            case test.TYPE_PIRLS:
-              this.pirlsTestResults(questions, answers);
-              return;
-            case test.TYPE_TIMSS:
-              this.timssTestResults(questions, answers);
-              return;
-            default:
-              return null;
-          }
+          this.processTestResults(questions, answers);
         }
       } catch (e) {
-        console.log(e);
+        //
       } finally {
+        if (this.testTimerInterval) {
+          clearInterval(this.testTimerInterval);
+          this.testTimerInterval = null;
+        }
+        localStorage.removeItem("testTime");
         this.testFinished = true;
+      }
+    },
+    processTestResults(questions, answers) {
+      switch (this.testTypeProperty) {
+        case test.TYPE_ONLINE:
+          this.onlineTestResults(questions, answers);
+          break;
+        case test.TYPE_BLOCK:
+          this.blockTestResults(questions, answers);
+          break;
+        case test.TYPE_SCHOOL:
+          this.schoolTestResults(questions, answers);
+          break;
+        case test.TYPE_RESEARCH:
+          this.timssTestResults(questions, answers);
+          break;
+        default:
+          console.warn("Unknown test type:", this.testTypeProperty);
       }
     },
     // results tests
@@ -674,11 +671,11 @@ export default {
       this.completeAnswers(questions, answers);
       let result = {
         science_id: answers[0].science_id,
-        class_id: 1,
+        class_id: localStorage.getItem("class_id"),
         questions: answers[0].questions,
         time: {
-          started_time: "2021-09-09 22:05:30",
-          finished_time: "2021-09-09 23:02:20",
+          started_time: localStorage.getItem("started_time"),
+          finished_time: new Date(),
         },
       };
       this.$http
@@ -693,17 +690,18 @@ export default {
           this.errorNotification(err.response.data.message);
         });
     },
-
+    //
     setTimer() {
       let _this = this;
       this.testTimer = parseInt(localStorage.getItem("testTime"));
-      let testTimerInterval = setInterval(function () {
+      this.testTimerInterval = setInterval(function () {
         if (_this.testTimer / 60 <= 0) {
           _this.testFinish();
-          clearInterval(testTimerInterval);
+          clearInterval(this.testTimerInterval);
           return;
         }
         _this.testTimer--;
+        localStorage.setItem("testTime", _this.testTimer.toString());
       }, 1000);
     },
     timerFormat(time) {
@@ -722,14 +720,14 @@ export default {
       }
       return hours + ":" + minutes + ":" + seconds;
     },
-
+    //
     closeModal() {
       this.onlineTestAnswers = false;
     },
     closeBlockTestResultModal() {
       this.blockTestAnswers = false;
     },
-
+    //
     completeAnswers(questions, answers) {
       if (test.TYPE_ONLINE === this.testType) {
         if (answers === null || answers === undefined) {
@@ -789,7 +787,7 @@ export default {
         return answers;
       }
     },
-
+    //
     parseQuestion(question) {
       const formatMappings = [
         { search: /\\ldots/g, replace: "..." },
@@ -826,6 +824,9 @@ export default {
     },
   },
   mounted() {
+    // window.onbeforeunload = function () {
+    //   return "Are you sure you want to leave?";
+    // };
     this.testTypeProperty = this.testType;
     let storedAnswers = localStorage.getItem("answers");
     if (storedAnswers) {
@@ -836,6 +837,12 @@ export default {
     this.readQuestionsFromStorage();
     this.setTimer();
   },
+  // beforeRouteLeave() {
+  //   window.dispatchEvent(new Event("onbeforeunload"));
+  // },
+  // beforeDestroy() {
+  //   window.onbeforeunload = null;
+  // },
 };
 </script>
 
@@ -856,10 +863,7 @@ export default {
       display: none;
     }
   }
-  &__right {
-  }
-  &__body {
-  }
+
   &__subject {
     display: flex;
     flex-direction: column;
@@ -870,10 +874,7 @@ export default {
   &__title {
     box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
   }
-  &__question {
-    &-title {
-    }
-  }
+
   &__answers {
     display: flex;
     flex-direction: column;
@@ -951,8 +952,7 @@ export default {
         }
       }
     }
-    &__subject {
-    }
+
     &__header {
       color: #004c97 !important;
     }

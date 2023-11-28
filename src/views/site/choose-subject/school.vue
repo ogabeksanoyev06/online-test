@@ -54,11 +54,13 @@
               </template>
             </BaseSelect>
             <BaseSelect
-              v-model="selectedClass"
               label="Sinfni tanlang"
               :options-prop="classes"
               hideDetails
               :append="true"
+              :selectType="'classes'"
+              v-model="selectedClassValue"
+              @itemSelected="selectedClassesValue"
             >
               <template #append>
                 <svg
@@ -81,8 +83,8 @@
             </BaseSelect>
             <BaseSelect
               label="Darajani tanlang"
-              :options-prop="levelList"
-              v-model="questionSelectedLevel"
+              :options-prop="questionLevelList"
+              v-model="questionSelectedValue"
               @itemSelected="selectedLevelValue"
               hideDetails
               :append="true"
@@ -160,8 +162,22 @@ export default {
           name: null,
         },
       },
-      questionLevelList: [],
+      questionLevelList: [
+        {
+          id: "beginner",
+          name: "Oson",
+        },
+        {
+          id: "medium",
+          name: "O'rta",
+        },
+        {
+          id: "advanced",
+          name: "Qiyin",
+        },
+      ],
       questionSelectedLevel: "beginner",
+      questionSelectedValue: "Oson",
       questionTotalTime: 5,
       questionsCount: 5,
       questionsCountSelect: [
@@ -191,51 +207,9 @@ export default {
         },
       ],
       questionTime: 1,
-      classes: [
-        {
-          id: 2,
-          name: 5,
-        },
-        {
-          id: 3,
-          name: 6,
-        },
-        {
-          id: 4,
-          name: 7,
-        },
-        {
-          id: 5,
-          name: 8,
-        },
-        {
-          id: 6,
-          name: 9,
-        },
-        {
-          id: 7,
-          name: 10,
-        },
-        {
-          id: 8,
-          name: 11,
-        },
-      ],
-      selectedClass: 5,
-      levelList: [
-        {
-          id: "beginner",
-          name: "Oson",
-        },
-        {
-          id: "medium",
-          name: "O'rta",
-        },
-        {
-          id: "advanced",
-          name: "Qiyin",
-        },
-      ],
+      classes: [],
+      selectedClass: null,
+      selectedClassValue: "",
     };
   },
 
@@ -260,23 +234,41 @@ export default {
         this.errorNotification(e.response.data.error.message);
       }
     },
+    testClassesList() {
+      try {
+        this.$http.get(`tests/classes`).then((res) => {
+          if (!res.error) {
+            this.classes = res;
+            if (this.classes.length > 0) {
+              this.selectedClass = this.classes[0].id;
+              this.selectedClassValue = this.classes[0].number;
+            }
+          }
+        });
+      } catch (e) {
+        //
+      }
+    },
     selectScience(science) {
       this.selectedSubject.selected = true;
       this.selectedSubject.science = science;
     },
     selectedLevelValue(item) {
       this.questionSelectedLevel = item.id;
+      this.questionSelectedValue = item.name;
     },
-
+    selectedClassesValue(item) {
+      this.selectedClass = item.id;
+      this.selectedClassValue = item.number;
+    },
     getQuestionBySelectedParameters() {
       let paramtersModel = {};
       paramtersModel.science_id = this.selectedSubject.science.id;
-      paramtersModel.class_id = 2;
+      paramtersModel.class_id = this.selectedClass;
       paramtersModel.test_count = this.questionsCount;
       paramtersModel.test_score = this.questionSelectedLevel;
       paramtersModel.started_time = new Date();
-      localStorage.setItem("science_id", this.selectedSubject.science.id);
-      this.storeTestTimeToStorage(this.questionTotalTime * 60);
+
       console.log(paramtersModel);
       try {
         this.$http
@@ -288,6 +280,13 @@ export default {
               let rawQuestions = [];
               rawQuestions.push(res);
               localStorage.setItem("questions", JSON.stringify(rawQuestions));
+              localStorage.setItem(
+                "science_id",
+                this.selectedSubject.science.id
+              );
+              localStorage.setItem("class_id", this.selectedClass);
+              localStorage.setItem("started_time", new Date());
+              this.storeTestTimeToStorage(this.questionTotalTime * 60);
               this.$router.push("test");
             } else {
               this.errorNotification(res.error.message);
@@ -306,8 +305,10 @@ export default {
       this.questionTotalTime = this.questionTime * this.questionsCount;
     },
   },
+  mounted() {},
   created() {
     this.getScience();
+    this.testClassesList();
   },
 };
 </script>

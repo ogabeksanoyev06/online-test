@@ -1,117 +1,142 @@
 <template>
-  <div class="loader">
-    <div class="lds-roller">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+  <div class="main-loading">
+    <div class="container">
+      <div class="loader">
+        <div class="loader--dot"></div>
+        <div class="loader--dot"></div>
+        <div class="loader--dot"></div>
+        <div class="loader--dot"></div>
+        <div class="loader--dot"></div>
+        <div class="loader--dot"></div>
+        <div class="loader--text"></div>
+      </div>
     </div>
   </div>
 </template>
+
 <script>
 export default {
-  name: "PreLoader",
+  name: "main-loading",
+  data: () => ({
+    loading: false,
+  }),
+  methods: {
+    start() {
+      this.loading = true;
+    },
+    finish() {
+      this.loading = false;
+    },
+  },
 };
 </script>
-<style>
-.loader {
-  position: fixed;
-  z-index: 2000;
-  background-color: hsla(0, 0%, 100%, 0.9);
-  top: 0%;
-  left: 0%;
+
+<style scoped>
+.main-loading {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #fff;
+  z-index: 99999;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.lds-roller {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
+.container {
+  height: 100vh;
+  width: 100vw;
+  font-family: Helvetica;
 }
-.lds-roller div {
-  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  transform-origin: 40px 40px;
-}
-.lds-roller div:after {
-  content: " ";
-  display: block;
+
+.loader {
+  height: 20px;
+  width: 250px;
   position: absolute;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #22ae5f;
-  margin: -4px 0 0 -4px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
-.lds-roller div:nth-child(1) {
-  animation-delay: -0.036s;
+.loader--dot {
+  animation-name: loader;
+  animation-timing-function: ease-in-out;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  height: 20px;
+  width: 20px;
+  border-radius: 100%;
+  background-color: black;
+  position: absolute;
+  border: 2px solid white;
 }
-.lds-roller div:nth-child(1):after {
-  top: 63px;
-  left: 63px;
+.loader--dot:first-child {
+  background-color: #059669;
+  animation-delay: 0.5s;
 }
-.lds-roller div:nth-child(2) {
-  animation-delay: -0.072s;
+.loader--dot:nth-child(2) {
+  background-color: #059669;
+  animation-delay: 0.4s;
 }
-.lds-roller div:nth-child(2):after {
-  top: 68px;
-  left: 56px;
+.loader--dot:nth-child(3) {
+  background-color: #059669;
+  animation-delay: 0.3s;
 }
-.lds-roller div:nth-child(3) {
-  animation-delay: -0.108s;
+.loader--dot:nth-child(4) {
+  background-color: #059669;
+  animation-delay: 0.2s;
 }
-.lds-roller div:nth-child(3):after {
-  top: 71px;
-  left: 48px;
+.loader--dot:nth-child(5) {
+  background-color: #059669;
+  animation-delay: 0.1s;
 }
-.lds-roller div:nth-child(4) {
-  animation-delay: -0.144s;
+.loader--dot:nth-child(6) {
+  background-color: #059669;
+  animation-delay: 0s;
 }
-.lds-roller div:nth-child(4):after {
-  top: 72px;
-  left: 40px;
+.loader--text {
+  position: absolute;
+  top: 200%;
+  left: 0;
+  right: 0;
+  width: 4rem;
+  margin: auto;
+  color: #059669;
 }
-.lds-roller div:nth-child(5) {
-  animation-delay: -0.18s;
+.loader--text:after {
+  content: "Loading";
+  font-weight: bold;
+  animation-name: loading-text;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
 }
-.lds-roller div:nth-child(5):after {
-  top: 71px;
-  left: 32px;
-}
-.lds-roller div:nth-child(6) {
-  animation-delay: -0.216s;
-}
-.lds-roller div:nth-child(6):after {
-  top: 68px;
-  left: 24px;
-}
-.lds-roller div:nth-child(7) {
-  animation-delay: -0.252s;
-}
-.lds-roller div:nth-child(7):after {
-  top: 63px;
-  left: 17px;
-}
-.lds-roller div:nth-child(8) {
-  animation-delay: -0.288s;
-}
-.lds-roller div:nth-child(8):after {
-  top: 56px;
-  left: 12px;
-}
-@keyframes lds-roller {
-  0% {
-    transform: rotate(0deg);
+
+@keyframes loader {
+  15% {
+    transform: translateX(0);
   }
-  100% {
-    transform: rotate(360deg);
+  45% {
+    transform: translateX(230px);
+  }
+  65% {
+    transform: translateX(230px);
+  }
+  95% {
+    transform: translateX(0);
+  }
+}
+@keyframes loading-text {
+  0% {
+    content: "Loading";
+  }
+  25% {
+    content: "Loading.";
+  }
+  50% {
+    content: "Loading..";
+  }
+  75% {
+    content: "Loading...";
   }
 }
 </style>

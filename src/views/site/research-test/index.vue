@@ -1,5 +1,6 @@
 <template>
   <div style="background-color: rgb(242 242 242)">
+    <loader v-if="loading" />
     <div class="container">
       <section class="py-40">
         <div class="section__top" :class="isMobile ? 'mb-10' : 'mb-20'">
@@ -93,9 +94,10 @@ import AppButton from "@/components/shared-components/AppButton.vue";
 import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 import BaseSelect from "@/components/shared-components/BaseSelect.vue";
 import test from "../../../constants/test";
+import Loader from "@/components/shared-components/Loader.vue";
 export default {
   name: "Pirls-test",
-  components: { BaseInput, AppButton, BlockWrap, BaseSelect },
+  components: { BaseInput, AppButton, BlockWrap, BaseSelect, Loader },
   data() {
     return {
       researchId: null,
@@ -130,17 +132,21 @@ export default {
           name: 30,
         },
       ],
+      loading: false,
     };
   },
   methods: {
     getResearchId() {
+      this.loading = true;
       this.$http
         .get(`tests/researches/${this.researchId}`)
         .then((res) => {
           this.researchData = res;
         })
         .catch(() => {})
-        .finally(() => {});
+        .finally(() => {
+          this.loading = false;
+        });
     },
     selectedCountValue(item) {
       this.questionsCount = item.id;
@@ -154,6 +160,7 @@ export default {
       paramtersModel.question_count = this.questionsCount;
       paramtersModel.started_time = new Date();
       this.storeTestTimeToStorage(this.questionTotalTime * 60);
+      localStorage.setItem("specification_id", this.specification_id);
       this.$http
         .post(
           `tests/researches/${this.specification_id}/StartTest`,
@@ -161,8 +168,8 @@ export default {
         )
         .then((res) => {
           if (!res.error) {
-            this.setTestType(test.TYPE_PISA);
-            this.setTestTypeToStorage(test.TYPE_PISA);
+            this.setTestType(test.TYPE_RESEARCH);
+            this.setTestTypeToStorage(test.TYPE_RESEARCH);
             localStorage.setItem("questions", JSON.stringify(res));
             this.$router.push({ name: "test" });
           } else {

@@ -1,5 +1,6 @@
 <template>
   <section class="section py-30">
+    <loader v-if="isLoading" />
     <div class="container">
       <div class="section__top mb-30">
         <div class="section__top-left">
@@ -313,9 +314,7 @@
               </svg>
             </template>
           </BaseSelect>
-          <span class="d-flex justify-content-center" v-if="isLoading">
-            <loader />
-          </span>
+
           <AppText
             size="14"
             line-height="24"

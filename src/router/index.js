@@ -60,11 +60,6 @@ const routes = [
         component: () => import("../views/site/course-page"),
       },
       {
-        path: "/library",
-        name: "library",
-        component: () => import("../views/site/library"),
-      },
-      {
         path: "/research",
         name: "research",
         component: () => import("../views/site/research"),
@@ -73,11 +68,6 @@ const routes = [
         path: "/test",
         name: "test",
         component: () => import("../views/site/test"),
-      },
-      {
-        path: "/test-list",
-        name: "test-list",
-        component: () => import("../views/site/test/testList"),
       },
       {
         path: "result-test",

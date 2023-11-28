@@ -37,8 +37,8 @@ const TokenService = {
   },
   isTokenExpired(token) {
     try {
-      const tokenPayload = JSON.parse(atob(token.split(".")[1])); // Decode the token payload
-      const expirationTime = tokenPayload.exp * 1000; // Convert the UNIX timestamp to milliseconds
+      const tokenPayload = JSON.parse(atob(token.split(".")[1]));
+      const expirationTime = tokenPayload.exp * 1000;
       return Date.now() >= expirationTime;
     } catch (error) {
       return true;
@@ -46,8 +46,8 @@ const TokenService = {
   },
   isRefreshTokenExpired(refreshToken) {
     try {
-      const refreshTokenPayload = JSON.parse(atob(refreshToken.split(".")[1])); // Decode the token payload
-      const refreshExpirationTime = refreshTokenPayload.exp * 1000; // Convert the UNIX timestamp to milliseconds
+      const refreshTokenPayload = JSON.parse(atob(refreshToken.split(".")[1]));
+      const refreshExpirationTime = refreshTokenPayload.exp * 1000;
       return Date.now() >= refreshExpirationTime;
     } catch (error) {
       return true;

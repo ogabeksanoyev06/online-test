@@ -5,11 +5,7 @@
     </AppText>
 
     <div class="cabinet__content">
-      <div
-        class="course__item pa-20"
-        v-for="(item, index) in boughtCourses"
-        :key="index"
-      >
+      <div class="course__item pa-20" v-for="(item, index) in 10" :key="index">
         <div class="course__item-photo mr-30">
           <img src="/images/cta-banner.jpg" alt="" />
         </div>
@@ -93,7 +89,7 @@ export default {
     },
   },
   mounted() {
-    this.getBoughtCourses();
+    // this.getBoughtCourses();
   },
 };
 </script>

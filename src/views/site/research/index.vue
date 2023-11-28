@@ -1,5 +1,6 @@
 <template>
   <section class="section py-30">
+    <loader v-if="loading" />
     <div class="container">
       <div class="section__top mb-30">
         <div>
@@ -71,12 +72,14 @@
 <script>
 import AppButton from "@/components/shared-components/AppButton.vue";
 import BlockWrap from "@/components/shared-components/BlockWrap.vue";
+import Loader from "@/components/shared-components/Loader.vue";
 export default {
   name: "AppInternationStudies",
-  components: { AppButton, BlockWrap },
+  components: { AppButton, BlockWrap, Loader },
   data() {
     return {
       researches: [],
+      loading: false,
     };
   },
   methods: {
@@ -90,13 +93,16 @@ export default {
       this.$router.push({ path: "/Timss-test" });
     },
     getResearch() {
+      this.loading = true;
       this.$http
         .get("tests/researches")
         .then((res) => {
           this.researches = res;
         })
         .catch(() => {})
-        .finally(() => {});
+        .finally(() => {
+          this.loading = false;
+        });
     },
     goToResearch(name, id) {
       this.$router.push({

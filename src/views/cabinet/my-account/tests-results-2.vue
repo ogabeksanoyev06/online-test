@@ -37,10 +37,10 @@
       v-if="selectedSubjectList && selectedSubjectList.length > 0"
     >
       <span>
-        <strong
-          >Tanlgangan test turi boyicha natijalar -
-          <span style="color: #008ae4">{{ selectedTestType }}</span></strong
-        >
+        <strong>
+          Tanlgangan test turi boyicha natijalar -
+          <span style="color: #008ae4">{{ selectedTestType }}</span>
+        </strong>
       </span>
     </div>
     <div
@@ -69,9 +69,9 @@
           >
             <td>{{ item.quesCount }}</td>
             <td>{{ item.subjectName }}</td>
-            <td>{{ currencyFormat(item.maxBall) }}</td>
+            <td>{{ item.maxBall }}</td>
             <td>{{ item.userAnsCount }}</td>
-            <td>{{ currencyFormat(item.userTestBall) }}</td>
+            <td>{{ item.userTestBall }}</td>
           </tr>
         </tbody>
       </table>

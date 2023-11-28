@@ -207,12 +207,13 @@
             sahifaga qarang
           </p>
           <AppButton
-            theme="main"
+            theme="info"
             radius="10"
             :font-size="16"
             :sides="20"
             :height="45"
             weight="500"
+            @click="$router.push({ name: 'home' })"
           >
             Asosiy sahifaga o'ting
           </AppButton>

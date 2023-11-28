@@ -149,7 +149,7 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      loading: false,
       subjects: [
         {
           name: "Maths",
@@ -267,28 +267,35 @@ export default {
       }
     },
     getQuestionBySelectedParameters() {
+      this.loading = true;
       let paramtersModel = {};
       paramtersModel.science_id = this.selectedSubject.subject.id;
       paramtersModel.subject_list = this.selectedSubjectSections;
       paramtersModel.test_count = this.questionsCount;
       paramtersModel.test_score = this.questionSelectedLevel;
       paramtersModel.started_time = new Date();
-      this.storeTestTimeToStorage(this.questionTotalTime * 60);
-      localStorage.setItem("science_id", this.selectedSubject.subject.id);
+
       this.$http
         .post(`tests/sciences-tests/start/`, paramtersModel)
         .then((res) => {
-          if (res) {
+          if (!res.error) {
             this.setTestType(test.TYPE_BLOCK);
             this.setTestTypeToStorage(test.TYPE_BLOCK);
             localStorage.setItem("questions", JSON.stringify(res));
+            this.storeTestTimeToStorage(this.questionTotalTime * 60);
+            localStorage.setItem("science_id", this.selectedSubject.subject.id);
+            localStorage.setItem("started_time", new Date());
             this.$router.push({ name: "test" });
           } else {
             //
           }
         })
-        .catch(() => {
-          // this.errorNotification(e.response.message);
+        .catch((err) => {
+          console.log(err);
+          this.errorNotification(err.response.data.message);
+        })
+        .finally(() => {
+          this.loading = false;
         });
     },
 

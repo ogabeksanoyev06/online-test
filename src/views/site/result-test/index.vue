@@ -183,6 +183,7 @@ export default {
     localStorage.removeItem("answers");
     localStorage.removeItem("testTime");
     localStorage.removeItem("testType");
+    localStorage.removeItem("science_id");
   },
   created() {},
 };
