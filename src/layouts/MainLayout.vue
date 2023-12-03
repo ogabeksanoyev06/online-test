@@ -49,6 +49,7 @@ export default {
     this.setWidth();
     this.setTestTypeInLayout();
     window.addEventListener("resize", this.setWidth);
+    console.log(new Date());
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.setWidth);

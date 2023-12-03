@@ -62,22 +62,6 @@ export default {
       selectedPaymentType: 1,
       paymentOrderId: null,
       paymentAmount: null,
-      paymerequest: {
-        merchant: "6090983351d5f0862e0c7157",
-        amount: null,
-        account: {
-          order_id: null,
-        },
-      },
-      clickRequest: {
-        amount: null,
-        merchant_id: 213,
-        merchant_user_id: 164,
-        service_id: 15624,
-        transaction_param: null,
-        return_url: "http://cpru.uz/payment-history",
-        card_type: "uzcard",
-      },
     };
   },
   methods: {
@@ -99,60 +83,18 @@ export default {
     },
     createPayment() {
       try {
-        this.$api
-          .post("main/User/AddPayment?Amount=" + this.paymentAmount)
+        this.$http
+          .post("payments/payme/CreateLink/", {
+            amount: this.paymentAmount * 100,
+          })
           .then((res) => {
             if (!res.error) {
-              this.paymerequest.amount = res.result.amount * 100;
-              this.paymerequest.account.order_id = res.result.id;
-              this.clickRequest.amount = res.result.amount;
-              this.clickRequest.transaction_param = res.result.id;
-
-              this.makePayment();
+              window.open(res.result.link);
             }
           });
       } catch (e) {
         this.errorNotification(e.response.data.error.message);
       }
-    },
-    makePayment() {
-      switch (this.selectedPaymentType) {
-        case 1:
-          this.makePaymentPayme();
-          break;
-        case 2:
-          this.makePaymentClick();
-          break;
-      }
-    },
-    makePaymentClick() {
-      window.open(
-        "https://my.click.uz/services/pay?service_id=" +
-          this.clickRequest.service_id +
-          "&merchant_id=" +
-          this.clickRequest.merchant_id +
-          "&amount=" +
-          this.clickRequest.amount +
-          "&transaction_param=" +
-          this.clickRequest.transaction_param +
-          "&return_url=" +
-          this.clickRequest.return_url +
-          "&card_type=" +
-          this.clickRequest.card_type,
-        "_self"
-      );
-    },
-    makePaymentPayme() {
-      var encodedString = window.btoa(
-        ("m=" + this.paymerequest.merchant).toString() +
-          ";" +
-          ("ac.payment_id=" + this.paymerequest.account.order_id).toString() +
-          ";" +
-          ("a=" + this.paymerequest.amount).toString() +
-          ";" +
-          ("c=" + this.baseURL + "payment-history")
-      );
-      window.open("https://checkout.paycom.uz/" + encodedString, "_self");
     },
   },
 };

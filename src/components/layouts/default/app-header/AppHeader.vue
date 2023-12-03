@@ -165,7 +165,7 @@
                 Ro'yxatdan o'tish
               </AppButton>
             </div>
-            <div class="header__account">
+            <div class="header__account" v-if="!isMobileSmall">
               <AppButton
                 v-if="userIsLoggedOn"
                 theme="info"
@@ -180,6 +180,35 @@
                 Kabinet
               </AppButton>
             </div>
+            <span
+              v-if="isMobileSmall && userIsLoggedOn"
+              class="d-flex align-center justify-content-center pointer"
+              style="
+                width: 36px;
+                height: 36px;
+                line-height: 36px;
+                font-size: 18px;
+                background-color: rgb(4, 81, 64);
+                border-radius: 50%;
+              "
+              @click="$router.push({ path: '/cabinet' })"
+            >
+              <svg
+                width="12"
+                height="15"
+                viewBox="0 0 12 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style="vertical-align: baseline"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12 12.2243C12 14.7124 8.57576 15 6.00076 15L5.81649 14.9998C4.17591 14.9959 0 14.8927 0 12.2092C0 9.77182 3.28663 9.44608 5.84203 9.4338L6.18502 9.43359C7.82549 9.43756 12 9.54077 12 12.2243ZM6.00076 10.5658C2.77273 10.5658 1.13636 11.1183 1.13636 12.2092C1.13636 13.3098 2.77273 13.8677 6.00076 13.8677C9.22803 13.8677 10.8636 13.3151 10.8636 12.2243C10.8636 11.1236 9.22803 10.5658 6.00076 10.5658ZM6.00076 0C8.21894 0 10.0227 1.79815 10.0227 4.00847C10.0227 6.2188 8.21894 8.0162 6.00076 8.0162H5.97651C3.76288 8.0094 1.9697 6.21049 1.97725 4.00621C1.97725 1.79815 3.78182 0 6.00076 0ZM6.00076 1.07799C4.37879 1.07799 3.05908 2.39225 3.05908 4.00847C3.05379 5.61941 4.36364 6.93293 5.97879 6.93896L6.00076 7.47796V6.93896C7.62197 6.93896 8.94091 5.62394 8.94091 4.00847C8.94091 2.39225 7.62197 1.07799 6.00076 1.07799Z"
+                  fill="white"
+                ></path>
+              </svg>
+            </span>
           </div>
         </div>
       </div>

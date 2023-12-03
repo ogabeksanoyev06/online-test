@@ -53,14 +53,6 @@
               >
                 {{ user.first_name + " " + user.last_name }}
               </AppText>
-              <!-- <AppText
-                :size="isMobileSmall ? 14 : 16"
-                :line-height="isMobileSmall ? 18 : 24"
-                weight="700"
-                class="color-secondary mb-10"
-              >
-                Maqomi: O'quvchi
-              </AppText> -->
               <AppText
                 :size="isMobileSmall ? 14 : 16"
                 :line-height="isMobileSmall ? 18 : 20"
@@ -75,7 +67,7 @@
                 weight="700"
                 class="color-secondary mb-10"
               >
-                Hisobim: 5000
+                Hisobim: {{ user.balance / 100 }}
               </AppText>
               <app-button
                 theme="red"

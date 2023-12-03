@@ -46,7 +46,7 @@
             Tanlangan yo'nalish bo'yicha kurs mavjud emas!
           </AppText>
           <BlockWrap
-            :count="isMobileSmall ? 1 : isMobile ? 2 : 3"
+            :count="isMobileSmall ? 1 : 2"
             offset-x="24"
             offset-y="24"
             class="mb-20"

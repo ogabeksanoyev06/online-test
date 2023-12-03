@@ -79,6 +79,13 @@ Vue.mixin({
       localStorage.removeItem("testTime");
       localStorage.setItem("testTime", testTime);
     },
+    storeTestStartedTimeToStorage(started_time) {
+      localStorage.removeItem("started_time");
+      localStorage.setItem(
+        "started_time",
+        this.$moment(started_time).format("YYYY-MM-DD HH:mm")
+      );
+    },
 
     setTestTypeToStorage(testType) {
       localStorage.removeItem("testType");

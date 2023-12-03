@@ -3,7 +3,6 @@
     <AppText size="14" line-height="26" weight="700" class="color-text mb-20">
       To'lovlar tarixi
     </AppText>
-
     <div class="table-block">
       <table>
         <thead>
@@ -16,18 +15,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, idx) in payments.data" :key="idx">
+          <tr v-for="(item, idx) in payments" :key="idx">
             <td>{{ idx + 1 }}</td>
-            <td>{{ item.isPayed ? "To'langan" : "To'lanmagan" }}</td>
-            <td class="bold-text">{{ currencyFormat(item.amount) }} UZS</td>
+            <td>{{ item.payment_system }}</td>
+            <td class="bold-text">
+              {{ currencyFormat(item.amount) / 100 }} UZS
+            </td>
             <td>
               {{
-                item.payedDate
-                  ? $moment(item.payedDate).format("YYYY-MM-DD H:mm")
-                  : ""
+                item.date ? $moment(item.date).format("YYYY-MM-DD H:mm") : ""
               }}
             </td>
-            <td>{{ item.paymentStatus }}</td>
+            <td>{{ item.completed ? "To'langan" : "To'lanmagan" }}</td>
           </tr>
         </tbody>
       </table>
@@ -58,9 +57,9 @@ export default {
   methods: {
     getPaymentMonitoring() {
       try {
-        this.$api.get("main/User/PaymentList?skip=0&take=100").then((res) => {
+        this.$http.get("users/payments/history/").then((res) => {
           if (!res.error) {
-            this.payments = res.result;
+            this.payments = res;
           }
         });
       } catch (e) {
@@ -69,7 +68,7 @@ export default {
     },
   },
   mounted() {
-    // this.getPaymentMonitoring();
+    this.getPaymentMonitoring();
   },
 };
 </script>

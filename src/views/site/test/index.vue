@@ -231,6 +231,10 @@ export default {
       testFinished: false,
       testInProgress: true,
       testTimerInterval: null,
+      specification_id: null,
+      class_id: null,
+      research_id: null,
+      started_time: null,
     };
   },
   computed: {
@@ -606,7 +610,7 @@ export default {
           this.schoolTestResults(questions, answers);
           break;
         case test.TYPE_RESEARCH:
-          this.timssTestResults(questions, answers);
+          this.researchTestResults(questions, answers);
           break;
         default:
           console.warn("Unknown test type:", this.testTypeProperty);
@@ -615,8 +619,10 @@ export default {
     // results tests
     onlineTestResults(questions, answers) {
       const additionalData = {
-        started_time: "2023-09-09 22:02:20",
-        finished_time: "2021-09-09 22:05:30",
+        started_time: this.$moment(this.started_time).format(
+          "YYYY-MM-DD HH:mm"
+        ),
+        finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
       };
       if (!answers) {
         answers = [];
@@ -648,8 +654,10 @@ export default {
         science_id: answers[0].science_id,
         questions: answers[0].questions,
         time: {
-          started_time: "2021-09-09 22:05:30",
-          finished_time: "2021-09-09 23:02:20",
+          started_time: this.$moment(this.started_time).format(
+            "YYYY-MM-DD HH:mm"
+          ),
+          finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
         },
       };
       this.$http
@@ -671,15 +679,44 @@ export default {
       this.completeAnswers(questions, answers);
       let result = {
         science_id: answers[0].science_id,
-        class_id: localStorage.getItem("class_id"),
+        class_id: this.class_id,
         questions: answers[0].questions,
         time: {
-          started_time: localStorage.getItem("started_time"),
-          finished_time: new Date(),
+          started_time: this.$moment(this.started_time).format(
+            "YYYY-MM-DD HH:mm"
+          ),
+          finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
         },
       };
       this.$http
         .post(`tests/school-tests/done/`, result)
+        .then((res) => {
+          if (res) {
+            localStorage.setItem("testResult", JSON.stringify([res]));
+            this.$router.push({ name: "result-test" });
+          }
+        })
+        .catch((err) => {
+          this.errorNotification(err.response.data.message);
+        });
+    },
+    researchTestResults(questions, answers) {
+      if (!answers) {
+        answers = [];
+      }
+      this.completeAnswers(questions, answers);
+      let result = {
+        specification_id: this.specification_id,
+        questions: answers[0].questions,
+        time: {
+          started_time: this.$moment(this.started_time).format(
+            "YYYY-MM-DD HH:mm"
+          ),
+          finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
+        },
+      };
+      this.$http
+        .post(`tests/researches/${this.research_id}/DoneTest/`, result)
         .then((res) => {
           if (res) {
             localStorage.setItem("testResult", JSON.stringify([res]));
@@ -832,6 +869,10 @@ export default {
     if (storedAnswers) {
       this.selectedAnswers = JSON.parse(storedAnswers);
     }
+    this.specification_id = localStorage.getItem("specification_id");
+    this.class_id = localStorage.getItem("class_id");
+    this.research_id = localStorage.getItem("research_id");
+    this.started_time = localStorage.getItem("started_time");
   },
   created() {
     this.readQuestionsFromStorage();

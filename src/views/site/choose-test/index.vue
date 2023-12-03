@@ -525,11 +525,12 @@ export default {
       this.$http
         .post("tests/exam-tests/start/", {
           exam_ids: this.selectedSubjectsForOnlineTest,
-          started_time: new Date(),
+          started_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
         })
         .then((res) => {
           if (res) {
             localStorage.setItem("questions", JSON.stringify(res));
+            this.storeTestStartedTimeToStorage(new Date());
             this.$router.push({ name: "test" });
           } else {
             //

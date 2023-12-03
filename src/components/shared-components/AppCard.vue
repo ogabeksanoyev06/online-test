@@ -1,7 +1,6 @@
 <template>
   <div class="course">
     <div class="course-card">
-      <div class="bg-shadow"></div>
       <div class="course-card-header">
         <div class="d-flex justify-space-between align-center mb-10">
           <AppText

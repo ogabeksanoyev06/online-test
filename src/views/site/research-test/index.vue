@@ -26,7 +26,7 @@
               v-for="(item, i) in researchData?.specifications"
               :key="i"
               :class="item.id === specification_id ? 'active' : ''"
-              @click="getSpecId(item.id)"
+              @click="selectedSpecId(item.id)"
             >
               <p>{{ item.name }}</p>
               <span> Umumiy vaqt: {{ questionTotalTime }} daqiqa </span>
@@ -95,6 +95,7 @@ import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 import BaseSelect from "@/components/shared-components/BaseSelect.vue";
 import test from "../../../constants/test";
 import Loader from "@/components/shared-components/Loader.vue";
+import { mapMutations } from "vuex";
 export default {
   name: "Pirls-test",
   components: { BaseInput, AppButton, BlockWrap, BaseSelect, Loader },
@@ -136,6 +137,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setTestType"]),
     getResearchId() {
       this.loading = true;
       this.$http
@@ -151,25 +153,25 @@ export default {
     selectedCountValue(item) {
       this.questionsCount = item.id;
     },
-    getSpecId(specification_id) {
+    selectedSpecId(specification_id) {
       this.specification_id = specification_id;
     },
     getQuestionBySelectedParameters() {
       let paramtersModel = {};
       paramtersModel.specification_id = this.specification_id;
       paramtersModel.question_count = this.questionsCount;
-      paramtersModel.started_time = new Date();
+      paramtersModel.started_time = this.$moment(new Date()).format(
+        "YYYY-MM-DD HH:mm"
+      );
       this.storeTestTimeToStorage(this.questionTotalTime * 60);
       localStorage.setItem("specification_id", this.specification_id);
       this.$http
-        .post(
-          `tests/researches/${this.specification_id}/StartTest`,
-          paramtersModel
-        )
+        .post(`tests/researches/${this.researchId}/StartTest/`, paramtersModel)
         .then((res) => {
-          if (!res.error) {
+          if (res) {
             this.setTestType(test.TYPE_RESEARCH);
             this.setTestTypeToStorage(test.TYPE_RESEARCH);
+            localStorage.setItem("started_time", new Date());
             localStorage.setItem("questions", JSON.stringify(res));
             this.$router.push({ name: "test" });
           } else {

@@ -273,8 +273,9 @@ export default {
       paramtersModel.subject_list = this.selectedSubjectSections;
       paramtersModel.test_count = this.questionsCount;
       paramtersModel.test_score = this.questionSelectedLevel;
-      paramtersModel.started_time = new Date();
-
+      paramtersModel.started_time = this.$moment(new Date()).format(
+        "YYYY-MM-DD HH:mm"
+      );
       this.$http
         .post(`tests/sciences-tests/start/`, paramtersModel)
         .then((res) => {
@@ -284,7 +285,7 @@ export default {
             localStorage.setItem("questions", JSON.stringify(res));
             this.storeTestTimeToStorage(this.questionTotalTime * 60);
             localStorage.setItem("science_id", this.selectedSubject.subject.id);
-            localStorage.setItem("started_time", new Date());
+            this.storeTestStartedTimeToStorage(new Date());
             this.$router.push({ name: "test" });
           } else {
             //

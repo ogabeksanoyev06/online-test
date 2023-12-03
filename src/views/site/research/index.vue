@@ -109,6 +109,7 @@ export default {
         name: "research-test",
         params: { research_name: name, research_id: id },
       });
+      localStorage.setItem("research_id", id);
     },
   },
   mounted() {},
