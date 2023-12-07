@@ -234,7 +234,6 @@ export default {
       specification_id: null,
       class_id: null,
       research_id: null,
-      started_time: null,
     };
   },
   computed: {
@@ -619,10 +618,8 @@ export default {
     // results tests
     onlineTestResults(questions, answers) {
       const additionalData = {
-        started_time: this.$moment(this.started_time).format(
-          "YYYY-MM-DD HH:mm"
-        ),
-        finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
+        started_time: "",
+        finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
       };
       if (!answers) {
         answers = [];
@@ -654,10 +651,8 @@ export default {
         science_id: answers[0].science_id,
         questions: answers[0].questions,
         time: {
-          started_time: this.$moment(this.started_time).format(
-            "YYYY-MM-DD HH:mm"
-          ),
-          finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
+          started_time: "",
+          finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         },
       };
       this.$http
@@ -682,10 +677,8 @@ export default {
         class_id: this.class_id,
         questions: answers[0].questions,
         time: {
-          started_time: this.$moment(this.started_time).format(
-            "YYYY-MM-DD HH:mm"
-          ),
-          finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
+          started_time: "",
+          finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         },
       };
       this.$http
@@ -709,10 +702,8 @@ export default {
         specification_id: this.specification_id,
         questions: answers[0].questions,
         time: {
-          started_time: this.$moment(this.started_time).format(
-            "YYYY-MM-DD HH:mm"
-          ),
-          finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
+          started_time: "",
+          finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         },
       };
       this.$http
@@ -872,7 +863,6 @@ export default {
     this.specification_id = localStorage.getItem("specification_id");
     this.class_id = localStorage.getItem("class_id");
     this.research_id = localStorage.getItem("research_id");
-    this.started_time = localStorage.getItem("started_time");
   },
   created() {
     this.readQuestionsFromStorage();

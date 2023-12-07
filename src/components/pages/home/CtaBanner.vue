@@ -1,26 +1,41 @@
 <template>
-  <div class="cta__banner mt-30">
+  <div class="my-60">
     <div class="container">
-      <div class="cta__banner-content" :class="isMobile ? 'py-30' : 'py-60'">
-        <div data-aos="fade-up" data-aos-duration="200">
+      <div class="cta__banner" :class="{ 'order-reversed': orderingFlex }">
+        <div class="cta__banner-content" :class="isMobile ? 'py-20' : 'py-30'">
           <app-text
-            :size="isMobile ? 26 : 28"
-            :line-height="isMobile ? 30 : 36"
-            weight="600"
-            class="color-main mb-10"
+            :size="isMobile ? '16' : '20'"
+            :line-height="isMobile ? '24' : '28'"
+            :weight="500"
+            class="color-green text-uppercase mb-15"
+          >
+            {{ name }}
+          </app-text>
+          <app-text
+            :size="isMobile ? '22' : '32'"
+            :line-height="isMobile ? '30' : '40'"
+            :weight="600"
+            class="mb-20"
           >
             {{ title }}
           </app-text>
-        </div>
-        <div data-aos="fade-up" data-aos-duration="400">
-          <app-text class="mb-20" size="16" line-height="24">
-            {{ content }}
+          <app-text
+            v-if="textIsActive"
+            :size="isMobile ? '14' : '16'"
+            :line-height="isMobile ? '22' : '24'"
+            class="mb-15"
+          >
+            {{ text }}
           </app-text>
+          <ul class="list" v-if="listIsActive">
+            <li class="list-item"></li>
+          </ul>
         </div>
-        <div data-aos="fade-up" data-aos-duration="600">
-          <app-button theme="info" sides="30" font-size="16">
-            {{ buttonText }}
-          </app-button>
+        <div
+          class="cta__banner-photo"
+          :style="orderingFlex ? 'margin-right:auto;margin-left:inherit' : ''"
+        >
+          <img src="https://boshqar.com/img/mahsulotlar.294d37f6.png" alt="" />
         </div>
       </div>
     </div>
@@ -28,55 +43,87 @@
 </template>
 
 <script>
-import AppButton from "../../shared-components/AppButton";
 export default {
   name: "CtaBanner",
-  components: { AppButton },
+  components: {},
   props: {
+    name: String,
     title: String,
-    content: String,
+    text: String,
+    list: String,
     photo: String,
-    link: String,
-    buttonText: String,
+    listIsActive: {
+      type: Boolean,
+      default: false,
+    },
+    textIsActive: {
+      type: Boolean,
+      default: false,
+    },
+    orderingFlex: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .cta__banner {
-  // display: flex;
-  // border-radius: 10px;
-  // overflow: hidden;
-  // background: #f5f9fd;
-  background: url("https://stesting.uz/stestinglandingbg.png") no-repeat 50%;
-  background-size: cover;
-  &-content {
+  display: flex;
+  align-items: center;
+  &-content,
+  &-photo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    width: 100%;
+  }
+  &-photo {
+    justify-content: center;
+    overflow: hidden;
+    max-width: 40%;
+    margin-left: auto;
+
+    img {
+      max-width: 100%;
+      border-radius: 20px;
+    }
+  }
+  &.order-reversed {
+    flex-direction: row-reverse;
   }
 }
 
-@media (max-width: 991px) {
-  .cta__banner-photo {
-    max-width: 40%;
-  }
-
-  .cta__banner-content {
-    // width: calc(100% - 40%);
+@media (max-width: 768px) {
+  .cta__banner {
+    display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
+    &-content,
+    &-photo {
+      flex: none;
+      display: flex;
+      flex-direction: column;
+      max-width: unset;
+      width: 100%;
+    }
+    &-photo {
+      justify-content: center;
+      overflow: hidden;
+      max-width: unset;
+      img {
+        max-width: 100%;
+        border-radius: 0px;
+      }
+    }
+    &.order-reversed {
+      flex-direction: column-reverse !important;
+    }
   }
 }
 
 @media (max-width: 650px) {
-  .cta__banner {
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-
-    &-photo {
-      max-width: 100%;
-    }
-
-    &-content {
-      width: 100%;
-    }
-  }
 }
 </style>

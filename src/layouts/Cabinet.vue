@@ -71,7 +71,6 @@
               </AppText>
               <app-button
                 theme="red"
-                radius="10"
                 :font-size="16"
                 :sides="20"
                 :height="45"
@@ -135,10 +134,10 @@ export default {
           title: "To`lovlar tarixi",
           path: "/payment-history",
         },
-        {
-          title: "Mening kurslarim",
-          path: "/my-courses",
-        },
+        // {
+        //   title: "Mening kurslarim",
+        //   path: "/my-courses",
+        // },
         {
           title: "Test natijalari",
           path: "/tests-results",

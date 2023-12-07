@@ -37,7 +37,7 @@
       weight="500"
       @click="$router.push({ path: '/' })"
     >
-      Tizimga kirish
+      Bosh sahifa
     </AppButton>
   </div>
 </template>

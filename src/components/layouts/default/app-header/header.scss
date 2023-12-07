@@ -7,39 +7,21 @@
   z-index: 49 !important;
   background-color: #fff;
   transition: all 0.5s ease;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03),
-    0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-  &._scroll {
-    left: 0;
-    position: fixed;
-    top: 0px;
-    width: 100%;
-    z-index: 50;
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    .header__inner {
-      padding: 15px 0;
-    }
-  }
+
   &__inner {
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 65px;
-    padding: 20px 0;
+    padding: 10px 0;
     justify-content: space-between;
     transition: all 0.5s;
   }
   &__left {
-    max-width: 50%;
-    width: 100%;
     padding-right: 20px;
     display: flex;
     align-items: center;
   }
   &__right {
-    max-width: 50%;
-    width: 100%;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -52,12 +34,13 @@
     flex-wrap: wrap;
     flex: 1;
     width: 100%;
+    margin-left: auto;
     &-item {
       margin-right: 20px;
       font-weight: 500;
       color: rgba(0, 0, 0, 0.88);
       position: relative;
-      font-size: 14px;
+      font-size: 16px;
       transition: 0.3s;
       cursor: pointer;
       white-space: nowrap;
@@ -67,7 +50,7 @@
     }
     &-link {
       &.router-link-exact-active {
-        color: $color-main;
+        color: #119c75;
         &::before {
           content: "";
           position: absolute;
@@ -78,7 +61,7 @@
           height: 4px;
           border-radius: 50%;
           overflow: hidden;
-          background-color: $color-main;
+          background-color: #119c75;
           text-align: center;
         }
       }
@@ -217,22 +200,17 @@
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
-  overflow: hidden;
   color: rgba(0, 0, 0, 0.88);
-  font-weight: bold;
+  font-weight: 600;
   font-size: 20px;
   letter-spacing: -0.18px;
-  -webkit-margin-end: 40px;
-  margin-inline-end: 40px;
-
+  margin-right: 40px;
   span {
-    line-height: 32px;
   }
   img {
     height: 32px;
     vertical-align: middle;
-    -webkit-margin-end: 12px;
-    margin-inline-end: 12px;
+    margin-right: 5px;
   }
 }
 

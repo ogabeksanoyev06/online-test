@@ -195,9 +195,9 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: #fff;
-  border-radius: 0.5rem;
+  border-radius: 4px;
   transition: 0.3s;
-  border: 1px solid #f0f0f0;
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.06);
   &:hover {
     border-color: transparent;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 10px 0px;
@@ -264,12 +264,12 @@
       margin-bottom: 5px;
       &.active {
         color: #fff;
-        background: $color-main;
+        background: #119c75;
       }
 
       &:hover {
         color: #fff;
-        background: $color-main;
+        background: #119c75;
       }
     }
   }

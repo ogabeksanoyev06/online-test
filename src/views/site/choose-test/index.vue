@@ -2,8 +2,8 @@
   <section class="section py-30">
     <loader v-if="isLoading" />
     <div class="container">
-      <div class="section__top mb-30">
-        <div class="section__top-left">
+      <div class="section__top mb-40">
+        <div class="section__top-left text-center mx-auto">
           <app-text
             :size="isMobileSmall ? 22 : isMobile ? 26 : 30"
             :line-height="isMobileSmall ? 26 : isMobile ? 30 : 36"
@@ -23,260 +23,72 @@
         </div>
       </div>
       <BlockWrap
-        :count="isMobile ? 1 : isDesktopSmall ? 2 : 3"
-        :offset-y="isMobileSmall ? 15 : 25"
-        :offset-x="isMobileSmall ? 15 : 25"
+        :count="isMobileMedium ? 1 : 2"
+        :offset-y="isMobileSmall ? 8 : 16"
+        :offset-x="isMobileSmall ? 8 : 16"
       >
-        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
-          <div>
-            <BlockWrap count="2" width-auto class="align-center mb-20">
-              <div class="block__icon">
-                <img src="/svg/online-exams.svg" alt="icon" />
-              </div>
-              <app-text
-                size="18"
-                line-height="24"
-                weight="700"
-                class="color-info"
-              >
-                Onlayn testlar
-              </app-text>
-            </BlockWrap>
-            <AppText
-              size="14"
-              line-height="20"
-              class="color-text mb-20"
-              weight="500"
+        <div
+          class="block__item"
+          :class="isMobileSmall ? 'pa-20' : 'pa-20'"
+          v-for="item in testTypesTest"
+          :key="item.id"
+        >
+          <app-text
+            :size="isMobileSmall ? '22' : isMobileMedium ? '24' : '28'"
+            line-height="167%"
+            weight="700"
+            :max-width="376"
+          >
+            {{ item.title }}
+          </app-text>
+          <AppText size="14" line-height="20" class="mt-10 mb-30" weight="400">
+            {{ item.short_description }}
+          </AppText>
+          <app-text :size="14" weight="700" class="mb-30 color-white">
+            <span
+              style="
+                background-color: #ffa800;
+                padding: 5px 10px;
+                border-radius: 4px;
+              "
             >
-              Siz ushbu bo'limda qabul test tizimi talablari asosida onlayn
-              imtihon topshirasiz. Test varianti DTM talablari asosida
-              shakllantirilgan. Savollar 40 000 savol ichidan tanlab beriladi.
-              Testni boshlash uchun boshlash tugmachasini bosing
-            </AppText>
-          </div>
+              {{ item.price }} so'm
+            </span>
+          </app-text>
 
           <div class="d-flex flex-wrap justify-space-between gap-5">
             <AppButton
-              @click="closeModal"
-              theme="info"
-              :sides="isMobileSmall ? 10 : 20"
-              :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
-              :class="isMobile ? 'w-100' : ''"
-            >
-              Testni boshlash
-            </AppButton>
-            <AppButton
-              theme="gray"
-              :sides="isMobileSmall ? 10 : 20"
-              :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
-              :class="isMobile ? 'w-100' : ''"
-            >
-              Hisobni to'ldirish
-            </AppButton>
-          </div>
-        </div>
-        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
-          <div>
-            <BlockWrap count="2" width-auto class="align-center mb-20">
-              <div class="block__icon">
-                <img src="/svg/block-exams.svg" alt="icon" />
-              </div>
-
-              <app-text
-                size="18"
-                line-height="24"
-                weight="700"
-                class="color-orange"
-              >
-                Blokli testlar
-              </app-text>
-            </BlockWrap>
-            <AppText
-              size="14"
-              line-height="20"
-              class="color-text mb-20"
-              weight="500"
-            >
-              Bu qismda tanlagan faningiz bo'yicha 30 ta savoldan iborat
-              testlarni yechasiz. 10 marta blokli test topshirish tekin. Testni
-              boshlash uchun boshlash tugmachasini bosing
-            </AppText>
-          </div>
-
-          <div class="d-flex flex-wrap justify-space-between gap-5">
-            <AppButton
-              @click="startBlockTest"
-              theme="orange"
-              :sides="isMobileSmall ? 10 : 20"
-              :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
-              :class="isMobile ? 'w-100' : ''"
-            >
-              Testni boshlash
-            </AppButton>
-            <AppButton
-              theme="gray"
-              :sides="isMobileSmall ? 10 : 20"
-              :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
-              :class="isMobile ? 'w-100' : ''"
-            >
-              Hisobni to'ldirish
-            </AppButton>
-          </div>
-        </div>
-        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
-          <div>
-            <block-wrap count="2" width-auto class="align-center mb-20">
-              <div class="block__icon">
-                <img src="/svg/school-exams.svg" alt="icon" />
-              </div>
-              <app-text
-                size="18"
-                line-height="24"
-                weight="700"
-                class="color-puple"
-              >
-                Maktab o'quvchilari uchun
-              </app-text>
-            </block-wrap>
-            <AppText
-              size="14"
-              line-height="20"
-              class="color-text mb-20"
-              weight="500"
-            >
-              Ushbu bo'limda maktab o'quvchilari uchun tanlangan fan va undagi
-              mavzular ro'yxatidan bir nechta mavzuni tanlab olish va ular
-              asosida ko'rsatilgan sondagi testlarni yechish imkoniga ega
-              bo'lasiz.
-            </AppText>
-          </div>
-          <div class="d-flex flex-wrap justify-space-between gap-5">
-            <AppButton
-              @click="startClassTest"
-              theme="purple"
-              :sides="isMobileSmall ? 10 : 20"
-              :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
-              :class="isMobile ? 'w-100' : ''"
-            >
-              Testni boshlash
-            </AppButton>
-            <AppButton
-              theme="gray"
-              :sides="isMobileSmall ? 10 : 20"
-              :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
-              :class="isMobile ? 'w-100' : ''"
-            >
-              Hisobni to'ldirish
-            </AppButton>
-          </div>
-        </div>
-        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
-          <div>
-            <block-wrap count="2" width-auto class="align-center mb-20">
-              <div class="block__icon">
-                <img src="/svg/school-exams.svg" alt="icon" />
-              </div>
-              <app-text
-                size="18"
-                line-height="24"
-                weight="700"
-                class="color-green"
-              >
-                Prezident maktabi testlari
-              </app-text>
-            </block-wrap>
-            <AppText
-              size="14"
-              line-height="20"
-              class="color-text mb-20"
-              weight="500"
-            >
-              Ushbu bo'limda maktab o'quvchilari uchun tanlangan fan va undagi
-              mavzular ro'yxatidan bir nechta mavzuni tanlab olish va ular
-              asosida ko'rsatilgan sondagi testlarni yechish imkoniga ega
-              bo'lasiz.
-            </AppText>
-          </div>
-
-          <div class="d-flex flex-wrap justify-space-between gap-5">
-            <AppButton
-              @click="startPresidentTest"
+              v-if="item.bought"
+              @click="selectedTestType(item.name)"
               theme="green"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
+              :height="isMobileSmall ? 40 : 50"
               :class="isMobile ? 'w-100' : ''"
-              :disabled="true"
+              :weight="500"
             >
-              Jarayonda...
+              Testni boshlash
+            </AppButton>
+            <AppButton
+              v-if="!item.bought"
+              @click="buyExams(item.id)"
+              theme="green"
+              :sides="isMobileSmall ? 10 : 20"
+              :font-size="isMobileSmall ? 14 : 16"
+              :height="isMobileSmall ? 40 : 50"
+              :class="isMobile ? 'w-100' : ''"
+              :weight="500"
+            >
+              Testni sotib olish
             </AppButton>
             <AppButton
               theme="gray"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
+              :height="isMobileSmall ? 40 : 50"
               :class="isMobile ? 'w-100' : ''"
-              :weight="600"
-              :disabled="true"
-            >
-              Hisobni to'ldirish
-            </AppButton>
-          </div>
-        </div>
-        <div class="block__item" :class="isMobileSmall ? 'pa-15' : 'pa-30'">
-          <div>
-            <block-wrap count="2" width-auto class="align-center mb-20">
-              <div class="block__icon">
-                <img src="/svg/school-exams.svg" alt="icon" />
-              </div>
-              <app-text
-                size="18"
-                line-height="24"
-                weight="700"
-                class="color-pumpkin"
-              >
-                Attestatsiya testlari
-              </app-text>
-            </block-wrap>
-            <AppText
-              size="14"
-              line-height="20"
-              class="color-text mb-20"
-              weight="500"
-            >
-              Ushbu bo'limda maktab o'quvchilari uchun tanlangan fan va undagi
-              mavzular ro'yxatidan bir nechta mavzuni tanlab olish va ular
-              asosida ko'rsatilgan sondagi testlarni yechish imkoniga ega
-              bo'lasiz.
-            </AppText>
-          </div>
-
-          <div class="d-flex flex-wrap justify-space-between gap-5">
-            <AppButton
-              @click="startAttestatsiyaTest"
-              theme="pumpkin"
-              :sides="isMobileSmall ? 10 : 20"
-              :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
-              :class="isMobile ? 'w-100' : ''"
-              :disabled="true"
-            >
-              Jarayonda...
-            </AppButton>
-            <AppButton
-              theme="gray"
-              :sides="isMobileSmall ? 10 : 20"
-              :font-size="isMobileSmall ? 14 : 16"
-              :height="isMobileSmall ? 40 : 45"
-              :class="isMobile ? 'w-100' : ''"
-              :weight="600"
-              :disabled="true"
+              :weight="500"
+              @click="$router.push({ path: 'top-up-balance' })"
             >
               Hisobni to'ldirish
             </AppButton>
@@ -445,18 +257,65 @@ export default {
       selectedDirectionId: null,
       directionMandatorySubjects: [],
       directionMainSubjects: [],
-      subjectLabels: ["Birinchi fan", "Ikkinchi fan", "Uchinchi fan"],
       examsOverAllTime: 0,
       examsOverAllBall: 0,
-      subjectsListForStartingTest: [],
       selectedSubjectsForOnlineTest: [],
-      firstSubjectId: null,
       startTestButtonState: true,
+      testTypesTest: [],
     };
   },
   methods: {
     ...mapActions(["getSpecList"]),
     ...mapMutations(["setTestType"]),
+    getTestTypes() {
+      this.isLoading = true;
+      this.$http
+        .get("tests/test-types/?category_type=test")
+        .then((res) => {
+          this.testTypesTest = res.sort((a, b) => a.id - b.id);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    buyExams(test_type) {
+      this.isLoading = true;
+      this.$http
+        .post("tests/buy-exams/", {
+          test_type: test_type,
+        })
+        .then((res) => {
+          this.setTestType(res.name);
+          this.getTestTypes();
+        })
+        .catch(() => {
+          this.errorNotification("Balansingizda mablag' yetarli emas");
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    selectedTestType(testType) {
+      switch (testType) {
+        case test.TYPE_ONLINE:
+          this.closeModal();
+          break;
+
+        case test.TYPE_BLOCK:
+          this.startBlockTest();
+          break;
+
+        case test.TYPE_SCHOOL:
+          this.startSchoolTest();
+          break;
+
+        default:
+          return null;
+      }
+    },
 
     directionChange(item) {
       if (!this.selectedDirection) {
@@ -505,14 +364,14 @@ export default {
           this.isLoading = false;
         });
     },
+
     startBlockTest() {
       this.$router.push({ path: "/choose-subject" });
     },
-    startClassTest() {
+    startSchoolTest() {
       this.$router.push({ path: "/choose-subject-school" });
     },
     startOnlineTest() {
-      this.storeTestTimeToStorage(this.examsOverAllTime * 60);
       this.directionMandatorySubjects.forEach((s) => {
         this.selectedSubjectsForOnlineTest.push(s.id);
       });
@@ -525,7 +384,6 @@ export default {
       this.$http
         .post("tests/exam-tests/start/", {
           exam_ids: this.selectedSubjectsForOnlineTest,
-          started_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm"),
         })
         .then((res) => {
           if (res) {
@@ -551,44 +409,25 @@ export default {
           this.isLoading = false;
         });
     },
-    startPresidentTest() {
-      this.$router.push({ path: "/President-school-test" });
-    },
-    startAttestatsiyaTest() {
-      this.$router.push({ path: "/Attestatsiya-test" });
-    },
+
     closeModal() {
       this.chooseTestModal = !this.chooseTestModal;
     },
   },
   computed: {
-    ...mapGetters(["specList"]),
+    ...mapGetters(["specList", "testType"]),
   },
   mounted() {},
   watch: {},
   created() {
+    this.getTestTypes();
     this.getSpecList();
   },
 };
 </script>
 <style lang="scss" scoped>
-.block__item:nth-child(1) {
-  background-color: #f2f7ff;
-}
-.block__item:nth-child(2) {
-  background-color: #fef9e6;
-}
-.block__item:nth-child(3) {
-  background-color: #f7f0fe;
-}
-.block__item:nth-child(4) {
-  background-color: #e9fcf6;
-}
-.block__item:nth-child(5) {
-  background-color: #fff2f9;
-}
 .section {
-  background-color: #fff;
+  background-color: #f9f9f9;
 }
 @media (max-width: 991px) {
 }

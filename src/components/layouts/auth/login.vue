@@ -127,7 +127,10 @@ export default {
     loginToSystem() {
       this.isLoading = true;
       this.$http
-        .post("users/login/", this.request)
+        .post("users/login/", {
+          password: this.request.password,
+          phone: "998" + this.request.phone,
+        })
         .then((data) => {
           if (data && data.access && data.refresh) {
             TokenService.saveToken(data.access);
@@ -144,8 +147,8 @@ export default {
           const errorMessage =
             err.response?.data?.detail || "An error occurred while logging in";
           this.errorNotification(errorMessage);
-          this.request.login = "";
-          this.request.password = "";
+          // this.request.login = "";
+          // this.request.password = "";
         })
         .finally(() => {
           this.isLoading = false;

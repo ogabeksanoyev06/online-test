@@ -17,6 +17,20 @@
     margin-top: #{$marginT}px;
   }
 }
+@each $marginL
+  in (5, 10, 15, 20, 30, 40, 50, 60, 70, 75, 78, 100, 110, 120, 140, 160)
+{
+  .ml-#{$marginL} {
+    margin-left: #{$marginL}px;
+  }
+}
+@each $marginY
+  in (5, 10, 15, 20, 30, 40, 50, 60, 70, 75, 78, 100, 110, 120, 140, 160)
+{
+  .my-#{$marginY} {
+    margin: #{$marginY}px 0;
+  }
+}
 @each $gap
   in (5, 8, 10, 15, 16, 20, 30, 40, 50, 60, 70, 75, 78, 100, 110, 120, 140, 160)
 {
@@ -31,6 +45,9 @@
 
 .mla {
   margin-left: auto;
+}
+.mra {
+  margin-right: auto;
 }
 .mb-auto {
   margin-bottom: auto;

@@ -78,7 +78,7 @@
                 v-model="form.last_name"
               />
             </div>
-            <ValidationObserver>
+            <div class="form-group">
               <base-input
                 :type="passwordField ? 'text' : 'password'"
                 vid="password"
@@ -102,6 +102,8 @@
                   ></i>
                 </template>
               </base-input>
+            </div>
+            <div class="form-group">
               <base-input
                 :type="passwordConfirmationField ? 'text' : 'password'"
                 vid="confirmPassword"
@@ -125,7 +127,7 @@
                   ></i>
                 </template>
               </base-input>
-            </ValidationObserver>
+            </div>
           </div>
 
           <app-button
@@ -263,11 +265,15 @@ export default {
       usertype: [
         {
           value: "applicant",
+          name: "Abituriyent",
+        },
+        {
+          value: "pupil",
           name: "O'quvchi",
         },
         {
-          value: "student",
-          name: "Abituriyent",
+          value: "teacher",
+          name: "O'qituvchi",
         },
       ],
     };
@@ -311,7 +317,13 @@ export default {
     registerUser() {
       this.loading = true;
       this.$http
-        .post("users/register/", this.form)
+        .post("users/register/", {
+          phone: "998" + this.form.phone,
+          first_name: this.form.first_name,
+          last_name: this.form.last_name,
+          password: this.form.password,
+          type: this.form.type,
+        })
         .then((res) => {
           if (res.result && res.result.user) {
             this.user = res.result.user;

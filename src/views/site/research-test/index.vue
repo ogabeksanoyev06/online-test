@@ -160,10 +160,6 @@ export default {
       let paramtersModel = {};
       paramtersModel.specification_id = this.specification_id;
       paramtersModel.question_count = this.questionsCount;
-      paramtersModel.started_time = this.$moment(new Date()).format(
-        "YYYY-MM-DD HH:mm"
-      );
-      this.storeTestTimeToStorage(this.questionTotalTime * 60);
       localStorage.setItem("specification_id", this.specification_id);
       this.$http
         .post(`tests/researches/${this.researchId}/StartTest/`, paramtersModel)
@@ -171,7 +167,6 @@ export default {
           if (res) {
             this.setTestType(test.TYPE_RESEARCH);
             this.setTestTypeToStorage(test.TYPE_RESEARCH);
-            localStorage.setItem("started_time", new Date());
             localStorage.setItem("questions", JSON.stringify(res));
             this.$router.push({ name: "test" });
           } else {

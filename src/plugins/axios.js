@@ -1,6 +1,5 @@
 import axios from "axios";
 import TokenService from "../service/TokenService";
-import router from "../router/index";
 
 const baseURL = "https://api.exam-test.uz/api/";
 const http = axios.create({
@@ -30,9 +29,6 @@ http.interceptors.response.use(
     }
     switch (error.response.status) {
       case 401:
-        break;
-      case 403:
-        router.push({ path: "/403" });
         break;
     }
     return Promise.reject(error);

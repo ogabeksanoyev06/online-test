@@ -164,10 +164,9 @@
           </div>
           <AppButton
             theme="green"
-            radius="10"
-            :font-size="16"
-            :sides="20"
-            :height="45"
+            :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+            :sides="isMobileSmall ? '20' : '30'"
+            :height="isMobileSmall ? '40' : '50'"
             weight="500"
             type="submit"
           >

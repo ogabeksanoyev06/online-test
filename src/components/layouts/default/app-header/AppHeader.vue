@@ -32,7 +32,7 @@
                 width="32"
                 alt="logo"
               />
-              <span class="acss-wehhhl">iTestify</span>
+              <span>iTestify</span>
             </router-link>
             <ul class="header__menu" v-if="!isDesktopMedium">
               <li
@@ -47,7 +47,7 @@
             </ul>
           </div>
           <div class="header__right">
-            <router-link
+            <!-- <router-link
               to="/my-favourites"
               class="header__favourite"
               v-if="!isMobileSmall"
@@ -108,8 +108,8 @@
                   {{ coursesOnBasket.length }}
                 </span>
               </span>
-            </router-link>
-            <div
+            </router-link> -->
+            <!-- <div
               class="header__language"
               @click="languageDropdown = !languageDropdown"
               v-on-click-outside:excludedClass="hideLanguageDropdown"
@@ -138,13 +138,13 @@
                   </ul>
                 </transition>
               </div>
-            </div>
+            </div> -->
             <div class="header__auth" v-if="!userIsLoggedOn">
               <AppButton
-                :theme="scrolled ? 'light-info' : 'info'"
+                theme="green"
                 :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
-                :sides="isMobileSmall ? 10 : isMobile ? 15 : 30"
-                :height="isMobile ? '40' : '50'"
+                :sides="isMobileSmall ? '20' : '30'"
+                :height="isMobileSmall ? '40' : '50'"
                 weight="500"
                 class="header__login mr-10"
                 v-if="!isMobileSmall"
@@ -153,11 +153,11 @@
                 Kirish
               </AppButton>
               <AppButton
-                :theme="scrolled ? 'light-orange' : 'orange'"
+                theme="orange"
                 @click="$router.push({ path: '/sign-up' })"
                 :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
-                :sides="isMobileSmall ? 10 : isMobile ? 15 : 30"
-                :height="isMobile ? '40' : '50'"
+                :sides="isMobileSmall ? '20' : '30'"
+                :height="isMobileSmall ? '40' : '50'"
                 weight="500"
                 class="header__register"
                 v-if="!isMobileSmall"
@@ -168,11 +168,10 @@
             <div class="header__account" v-if="!isMobileSmall">
               <AppButton
                 v-if="userIsLoggedOn"
-                theme="info"
-                radius="10"
+                theme="green"
                 :font-size="16"
-                :sides="isMobileSmall ? '10' : '20'"
-                :height="isMobileSmall ? '40' : '45'"
+                :sides="isMobileSmall ? '20' : '30'"
+                :height="isMobileSmall ? '40' : '50'"
                 weight="500"
                 class="header__login"
                 @click="$router.push({ path: '/cabinet' })"
@@ -242,11 +241,6 @@ export default {
       subActiveId: null,
       menu: [
         // {
-        //   id: 1,
-        //   title: "Yoʻriqnoma",
-        //   link: "/guide",
-        // },
-        // {
         //   id: 2,
         //   title: "Nashrlar",
         //   link: "/publication",
@@ -262,15 +256,10 @@ export default {
           link: "/research",
         },
         {
-          id: 5,
-          title: "Videodarslar",
-          link: "/video-course",
+          id: 1,
+          title: "Yoʻriqnoma",
+          link: "/guide",
         },
-        // {
-        //   id: 6,
-        //   title: "Kutubxona",
-        //   link: "/library",
-        // },
       ],
       search: "",
       searchPackage: [],

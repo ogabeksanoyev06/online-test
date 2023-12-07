@@ -36,10 +36,11 @@
         <AppButton
           @click="createPayment"
           v-if="selectedPaymentType"
-          theme="info"
-          :font-size="isMobileSmall ? 14 : 16"
-          :height="isMobileSmall ? 40 : 50"
-          :sides="isMobileSmall ? 10 : 20"
+          theme="green"
+          :font-size="isMobileSmall ? 12 : isMobile ? 14 : 16"
+          :sides="isMobileSmall ? '20' : '30'"
+          :height="isMobileSmall ? '40' : '50'"
+          weight="500"
           :disabled="paymentAmount <= 999 || paymentAmount === null"
         >
           Hisobni to'ldirish
@@ -84,7 +85,7 @@ export default {
     createPayment() {
       try {
         this.$http
-          .post("payments/payme/CreateLink/", {
+          .post("payments/payme/FillUserBalance/", {
             amount: this.paymentAmount * 100,
           })
           .then((res) => {
