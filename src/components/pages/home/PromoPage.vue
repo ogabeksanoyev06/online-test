@@ -25,21 +25,9 @@
         :offset-x="isMobileSmall ? 12 : 24"
         class="list"
       >
-        <div class="list-item" v-for="(item, i) in 6" :key="i">
-          <svg
-            width="34"
-            height="28"
-            viewBox="0 0 34 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1.955 10.3085H32.045C33.1234 10.3085 34 9.42262 34 8.33271C34 7.94077 33.8831 7.55957 33.6706 7.23743L29.6544 1.14897C29.1816 0.429521 28.39 0 27.5347 0H6.46531C5.61531 0 4.81844 0.429521 4.34563 1.14897L0.329375 7.23206C0.116875 7.55957 0 7.94077 0 8.32734C0 9.42262 0.876563 10.3085 1.955 10.3085ZM3.4 12.0266V20.617V24.9122C3.4 26.335 4.54219 27.4894 5.95 27.4894H17.85C19.2578 27.4894 20.4 26.335 20.4 24.9122V20.617V12.0266H17V20.617H6.8V12.0266H3.4ZM27.2 12.0266V25.7713C27.2 26.7216 27.9597 27.4894 28.9 27.4894C29.8403 27.4894 30.6 26.7216 30.6 25.7713V12.0266H27.2Z"
-              fill="#A0A0A0"
-            ></path>
-          </svg>
-          <app-text size="16" weight="500" class="ml-10">
-            Online testlar
+        <div class="list-item" v-for="(item, i) in testTypeList" :key="i">
+          <app-text size="16" line-height="24" weight="600" class="text-center">
+            {{ item.title }}
           </app-text>
         </div>
       </block-wrap>
@@ -53,6 +41,46 @@ import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 export default {
   components: { BlockWrap },
   name: "PromoPage",
+  data() {
+    return {
+      testTypeList: [
+        {
+          title: "Online test",
+          img: "",
+        },
+        {
+          title: "Blog test",
+          img: "",
+        },
+        {
+          title: "Maktab o'quvchilari uchun test",
+          img: "",
+        },
+        {
+          title: "PISA test",
+          img: "",
+        },
+        {
+          title: "PIRLS test",
+          img: "",
+        },
+        {
+          title: "TIMSS test",
+          img: "",
+        },
+      ],
+    };
+  },
+  methods: {
+    getTestTypes() {
+      this.$http.get("tests/test-types/").then((res) => {
+        this.testTypeList = res;
+      });
+    },
+  },
+  created() {
+    this.getTestTypes();
+  },
 };
 </script>
 
@@ -67,6 +95,7 @@ export default {
   border: 1px solid #f0f0f0;
   transition: all 0.3s ease-out;
   height: 130px;
+  padding: 10px;
   svg {
     overflow: hidden;
   }

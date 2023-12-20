@@ -13,11 +13,9 @@
                 v-model="user.phone"
                 type="text"
                 vid="phone"
-                rules="required|min:9"
-                v-mask="'#########'"
-                :prepend="true"
+                rules="required|min:12"
+                v-mask="'############'"
               >
-                <template #prepend> +998 </template>
               </BaseInput>
             </div>
             <div class="cabinet__content-item">

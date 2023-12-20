@@ -226,6 +226,7 @@ export default {
         rightAnswersBalls: 0,
       },
       testTimer: 0,
+      testDetails: null,
       answerLabels: ["A", "B", "C", "D", "E", "F", "G", "H"],
       selectedAnswers: [],
       testFinished: false,
@@ -575,13 +576,13 @@ export default {
           return null;
       }
     },
-    // finished function
+
     testFinish() {
       try {
         let answers = JSON.parse(localStorage.getItem("answers"));
         if (this.testTypeProperty === test.TYPE_ONLINE) {
           let questions = JSON.parse(localStorage.getItem("questions"));
-          this.onlineTestResults(questions, answers);
+          this.processTestResults(questions, answers);
         } else {
           let questions = this.rawTests;
           this.processTestResults(questions, answers);
@@ -589,11 +590,6 @@ export default {
       } catch (e) {
         //
       } finally {
-        if (this.testTimerInterval) {
-          clearInterval(this.testTimerInterval);
-          this.testTimerInterval = null;
-        }
-        localStorage.removeItem("testTime");
         this.testFinished = true;
       }
     },
@@ -617,8 +613,11 @@ export default {
     },
     // results tests
     onlineTestResults(questions, answers) {
+      const testDetails = JSON.parse(localStorage.getItem("testDetails"));
       const additionalData = {
-        started_time: "",
+        started_time: this.$moment(testDetails.started_time).format(
+          "YYYY-MM-DD HH:mm:ss"
+        ),
         finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
       };
       if (!answers) {
@@ -646,12 +645,15 @@ export default {
       if (!answers) {
         answers = [];
       }
+      const testDetails = JSON.parse(localStorage.getItem("testDetails"));
       this.completeAnswers(questions, answers);
       let result = {
         science_id: answers[0].science_id,
         questions: answers[0].questions,
         time: {
-          started_time: "",
+          started_time: this.$moment(testDetails.started_time).format(
+            "YYYY-MM-DD HH:mm:ss"
+          ),
           finished_time: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         },
       };
@@ -719,9 +721,15 @@ export default {
         });
     },
     //
+    getTestLiveTime(data) {
+      this.$http.post("tests/get-test-live-time/", data).then((res) => {
+        if (res.code === 200) {
+          this.testTimer = parseInt(res.data.left_time, 10) * 60;
+        }
+      });
+    },
     setTimer() {
       let _this = this;
-      this.testTimer = parseInt(localStorage.getItem("testTime"));
       this.testTimerInterval = setInterval(function () {
         if (_this.testTimer / 60 <= 0) {
           _this.testFinish();
@@ -729,7 +737,6 @@ export default {
           return;
         }
         _this.testTimer--;
-        localStorage.setItem("testTime", _this.testTimer.toString());
       }, 1000);
     },
     timerFormat(time) {
@@ -852,9 +859,6 @@ export default {
     },
   },
   mounted() {
-    // window.onbeforeunload = function () {
-    //   return "Are you sure you want to leave?";
-    // };
     this.testTypeProperty = this.testType;
     let storedAnswers = localStorage.getItem("answers");
     if (storedAnswers) {
@@ -867,13 +871,15 @@ export default {
   created() {
     this.readQuestionsFromStorage();
     this.setTimer();
+    this.testDetails = JSON.parse(localStorage.getItem("testDetails"));
+    this.getTestLiveTime({
+      test_type: this.testDetails.test_type,
+      test_id: this.testDetails.test_id,
+      started_time: this.$moment(this.testDetails.started_time).format(
+        "DD-MM-YYYY HH:mm:ss"
+      ),
+    });
   },
-  // beforeRouteLeave() {
-  //   window.dispatchEvent(new Event("onbeforeunload"));
-  // },
-  // beforeDestroy() {
-  //   window.onbeforeunload = null;
-  // },
 };
 </script>
 

@@ -44,58 +44,7 @@ export default {
     CtaBanner,
   },
   data() {
-    return {
-      testCategory: [
-        {
-          id: 0,
-          name: "Online testlar",
-          link: "/",
-          icon: "",
-        },
-        {
-          id: 1,
-          name: "Block testlar",
-          link: "/",
-          icon: "",
-        },
-        {
-          id: 2,
-          name: "Maktab o'quvchilari uchun testlar",
-          link: "/",
-          icon: "",
-        },
-        {
-          id: 3,
-          name: "Prezident maktabi testlari",
-          link: "/",
-          icon: "",
-        },
-        {
-          id: 4,
-          name: "Attestatsiya testlari",
-          link: "/",
-          icon: "",
-        },
-        {
-          id: 5,
-          name: "PISA testlari",
-          link: "/",
-          icon: "",
-        },
-        {
-          id: 6,
-          name: "PIRLS testlari",
-          link: "/",
-          icon: "",
-        },
-        {
-          id: 7,
-          name: "TIIMS testlari",
-          link: "/",
-          icon: "",
-        },
-      ],
-    };
+    return {};
   },
 };
 </script>

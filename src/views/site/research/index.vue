@@ -56,7 +56,6 @@
           <div class="d-flex flex-wrap justify-space-between gap-5">
             <AppButton
               v-if="item.bought"
-              @click="closeModal"
               theme="green"
               :sides="isMobileSmall ? 10 : 20"
               :font-size="isMobileSmall ? 14 : 16"
@@ -130,7 +129,8 @@ export default {
           test_type: test_type,
         })
         .then((res) => {
-          console.log(res);
+          this.successNotification(res.message);
+          this.getTestTypes();
         })
         .catch(() => {
           this.errorNotification("Balansingizda mablag' yetarli emas");

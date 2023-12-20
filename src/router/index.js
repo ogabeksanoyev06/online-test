@@ -1,3 +1,4 @@
+import TokenService from "@/service/TokenService";
 import Vue from "vue";
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
@@ -12,7 +13,6 @@ const routes = [
         name: "home",
         component: () => import("../views/site/home"),
       },
-
       {
         path: "/choose-test",
         name: "choose-test",
@@ -28,16 +28,7 @@ const routes = [
         name: "choose-subject-school",
         component: () => import("../views/site/choose-subject/school.vue"),
       },
-      {
-        path: "/President-school-test",
-        name: "president-school-test",
-        component: () => import("../views/site/President-school-test"),
-      },
-      {
-        path: "/Attestatsiya-test",
-        name: "attestatsiya-school-test",
-        component: () => import("../views/site/Attestatsiya-test"),
-      },
+
       {
         path: "/research-test/:research_id",
         name: "research-test",
@@ -91,11 +82,7 @@ const routes = [
     name: "NotFound",
     component: () => import("@/components/pages/error/404.vue"),
   },
-  {
-    path: "/403",
-    name: "Forbidden",
-    component: () => import("@/components/pages/error/403.vue"),
-  },
+
   {
     path: "/cabinet",
     component: () => import("../layouts/Cabinet"),
@@ -133,17 +120,6 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/sign-in",
-    component: () => import("../layouts/Auth"),
-    children: [
-      {
-        path: "/sign-in",
-        name: "login",
-        component: () => import("../components/layouts/auth/login"),
-      },
-    ],
-  },
 
   {
     path: "/sign-up",
@@ -155,6 +131,25 @@ const routes = [
         component: () => import("../components/layouts/auth/register"),
       },
     ],
+    meta: {
+      public: true,
+      onlyWhenLoggedOut: true,
+    },
+  },
+  {
+    path: "/sign-in",
+    component: () => import("../layouts/Auth"),
+    children: [
+      {
+        path: "/sign-in",
+        name: "login",
+        component: () => import("../components/layouts/auth/login"),
+      },
+    ],
+    meta: {
+      public: true,
+      onlyWhenLoggedOut: true,
+    },
   },
 ];
 
@@ -164,14 +159,29 @@ const router = new VueRouter({
 });
 router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0);
-  next();
-});
-router.beforeEach((to, from, next) => {
-  const testType = localStorage.getItem("testType");
-  if (to.name === "test" && testType === null) {
-    next("/");
+
+  const isPublic = to.matched.some((record) => record.meta.public);
+  const onlyWhenLoggedOut = to.matched.some(
+    (record) => record.meta.onlyWhenLoggedOut
+  );
+  const isLoggedIn = !!TokenService.getToken();
+
+  if (!isPublic && !isLoggedIn) {
+    next({ name: "login" });
+  } else if (isLoggedIn && onlyWhenLoggedOut) {
+    next({ name: "home" });
   } else {
-    next();
+    if (to.name === "test") {
+      const testType = localStorage.getItem("testType");
+      if (!testType) {
+        next("/");
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
   }
 });
+
 export default router;

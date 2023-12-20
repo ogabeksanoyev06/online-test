@@ -303,20 +303,16 @@ export default {
         case test.TYPE_ONLINE:
           this.closeModal();
           break;
-
         case test.TYPE_BLOCK:
           this.startBlockTest();
           break;
-
         case test.TYPE_SCHOOL:
           this.startSchoolTest();
           break;
-
         default:
           return null;
       }
     },
-
     directionChange(item) {
       if (!this.selectedDirection) {
         this.startTestButtonState = true;
@@ -345,7 +341,7 @@ export default {
                 this.directionMainSubjects.push(item);
               }
               this.examsOverAllBall += item.total_ball;
-              this.examsOverAllTime += item.duration_time;
+              this.examsOverAllTime += item.duration_time * item.question_count;
             });
             this.startTestButtonState = false;
             this.selectedDirectionId = false;
@@ -366,29 +362,48 @@ export default {
     },
 
     startBlockTest() {
+      if (this.checkOngoingTest()) {
+        this.redirectToTestPage();
+        return;
+      }
       this.$router.push({ path: "/choose-subject" });
     },
     startSchoolTest() {
+      if (this.checkOngoingTest()) {
+        this.redirectToTestPage();
+        return;
+      }
       this.$router.push({ path: "/choose-subject-school" });
     },
     startOnlineTest() {
+      if (this.checkOngoingTest()) {
+        this.redirectToTestPage();
+        return;
+      }
+      this.isLoading = true;
       this.directionMandatorySubjects.forEach((s) => {
         this.selectedSubjectsForOnlineTest.push(s.id);
       });
       this.directionMainSubjects.forEach((s) => {
         this.selectedSubjectsForOnlineTest.push(s.id);
       });
-      this.setTestType(test.TYPE_ONLINE);
-      this.setTestTypeToStorage(test.TYPE_ONLINE);
-      this.isLoading = true;
       this.$http
         .post("tests/exam-tests/start/", {
           exam_ids: this.selectedSubjectsForOnlineTest,
         })
         .then((res) => {
           if (res) {
+            const lastElement = res[res.length - 1];
+            const testDetails = {
+              test_type: test.TYPE_ONLINE,
+              started_time: this.$moment(lastElement.started_time),
+              test_id: lastElement.test_id,
+            };
+            this.storeTestDetailsToStorage(testDetails);
+            this.setTestType(test.TYPE_ONLINE);
+            this.setTestTypeToStorage(test.TYPE_ONLINE);
+            res.pop();
             localStorage.setItem("questions", JSON.stringify(res));
-            this.storeTestStartedTimeToStorage(new Date());
             this.$router.push({ name: "test" });
           } else {
             //
@@ -411,6 +426,10 @@ export default {
     },
 
     closeModal() {
+      if (this.checkOngoingTest()) {
+        this.redirectToTestPage();
+        return;
+      }
       this.chooseTestModal = !this.chooseTestModal;
     },
   },

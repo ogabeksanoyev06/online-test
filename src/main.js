@@ -12,14 +12,15 @@ import "./assets/styles/main.scss";
 import "./plugins/media/media-mixin";
 import "./plugins/directives/click-outside";
 import "./plugins/mixins/mixin";
+import api from "./service/apiService";
 import "vue-toastification/dist/index.css";
-import http from "./plugins/axios";
 Vue.config.productionTip = false;
+
 Vue.component("AppText", AppText);
 Vue.use(VueMask);
 Vue.use(Moment);
 Vue.use(Toast);
-Vue.prototype.$http = http;
+Vue.use(api);
 // global o'zgaruvchini o'rnatish
 Vue.prototype.$timerInterval = null;
 

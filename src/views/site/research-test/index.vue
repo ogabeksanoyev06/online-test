@@ -66,14 +66,6 @@
                 </svg>
               </template>
             </base-select>
-
-            <base-input
-              v-model="questionTotalTime"
-              hide-details=""
-              label="Umumiy vaqt"
-              disabled
-            >
-            </base-input>
           </div>
           <AppButton
             theme="green"
@@ -89,7 +81,6 @@
   </div>
 </template>
 <script>
-import BaseInput from "@/components/shared-components/BaseInput.vue";
 import AppButton from "@/components/shared-components/AppButton.vue";
 import BlockWrap from "@/components/shared-components/BlockWrap.vue";
 import BaseSelect from "@/components/shared-components/BaseSelect.vue";
@@ -98,13 +89,12 @@ import Loader from "@/components/shared-components/Loader.vue";
 import { mapMutations } from "vuex";
 export default {
   name: "Pirls-test",
-  components: { BaseInput, AppButton, BlockWrap, BaseSelect, Loader },
+  components: { AppButton, BlockWrap, BaseSelect, Loader },
   data() {
     return {
       researchId: null,
       researchData: null,
       specification_id: null,
-      questionTotalTime: 5,
       questionsCount: 5,
       questionTime: 1,
       questionsCountSelect: [

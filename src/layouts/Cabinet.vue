@@ -67,7 +67,7 @@
                 weight="700"
                 class="color-secondary mb-10"
               >
-                Hisobim: {{ user.balance / 100 }}
+                Hisobim: {{ user.balance }} so'm
               </AppText>
               <app-button
                 theme="red"
@@ -102,12 +102,12 @@
         </div>
       </div>
     </div>
-    <AppFooter />
+    <!-- <AppFooter /> -->
   </div>
 </template>
 
 <script>
-import AppFooter from "../components/layouts/default/app-footer/AppFooter";
+// import AppFooter from "../components/layouts/default/app-footer/AppFooter";
 import AppHeader from "../components/layouts/default/app-header/AppHeader";
 import TokenService from "../service/TokenService";
 import "../assets/styles/pages/cabinet.scss";
@@ -116,7 +116,7 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import AppButton from "@/components/shared-components/AppButton.vue";
 export default {
   name: "MyCabinet",
-  components: { ImageUploader, AppHeader, AppFooter, AppButton },
+  components: { ImageUploader, AppHeader, AppButton },
   data() {
     return {
       hasImage: false,
@@ -223,7 +223,7 @@ export default {
       this.setIsLoggedOn(false);
       localStorage.clear();
       this.warningNotification("Tizimdan chiqildi");
-      this.$router.push({ name: "home" });
+      this.$router.push({ name: "login" });
     },
   },
   mounted() {

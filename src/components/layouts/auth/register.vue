@@ -336,7 +336,7 @@ export default {
           }
         })
         .catch((error) => {
-          this.warningNotification(error.response.data.phone[0]);
+          this.warningNotification(error.response.data.detail);
         })
         .finally(() => {
           this.loading = false;

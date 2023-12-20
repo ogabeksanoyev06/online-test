@@ -108,13 +108,6 @@
                 </svg>
               </template>
             </BaseSelect>
-            <BaseInput
-              v-model="questionTotalTime"
-              hide-details=""
-              label="Umumiy vaqt"
-              disabled
-            >
-            </BaseInput>
           </div>
           <AppButton
             theme="light-green"
@@ -135,14 +128,12 @@ import AppSmallCard from "../../../components/shared-components/AppSmallCard";
 import AppText from "../../../components/shared-components/AppText";
 import BaseSelect from "../../../components/shared-components/BaseSelect";
 import AppButton from "../../../components/shared-components/AppButton";
-import BaseInput from "../../../components/shared-components/BaseInput";
 import test from "../../../constants/test";
 import { mapMutations } from "vuex";
 
 export default {
   name: "choose-subject-school",
   components: {
-    BaseInput,
     AppButton,
     BaseSelect,
     AppSmallCard,
@@ -167,18 +158,17 @@ export default {
           id: "beginner",
           name: "Oson",
         },
-        {
-          id: "medium",
-          name: "O'rta",
-        },
-        {
-          id: "advanced",
-          name: "Qiyin",
-        },
+        // {
+        //   id: "medium",
+        //   name: "O'rta",
+        // },
+        // {
+        //   id: "advanced",
+        //   name: "Qiyin",
+        // },
       ],
       questionSelectedLevel: "beginner",
       questionSelectedValue: "Oson",
-      questionTotalTime: 5,
       questionsCount: 5,
       questionsCountSelect: [
         {
@@ -193,20 +183,19 @@ export default {
           id: 15,
           name: 15,
         },
-        {
-          id: 20,
-          name: 20,
-        },
-        {
-          id: 25,
-          name: 25,
-        },
-        {
-          id: 30,
-          name: 30,
-        },
+        // {
+        //   id: 20,
+        //   name: 20,
+        // },
+        // {
+        //   id: 25,
+        //   name: 25,
+        // },
+        // {
+        //   id: 30,
+        //   name: 30,
+        // },
       ],
-      questionTime: 1,
       classes: [],
       selectedClass: null,
       selectedClassValue: "",
@@ -274,24 +263,32 @@ export default {
             if (res) {
               this.setTestType(test.TYPE_SCHOOL);
               this.setTestTypeToStorage(test.TYPE_SCHOOL);
+              const testDetails = {
+                test_type: test.TYPE_SCHOOL,
+                started_time: this.$moment(
+                  res.interval_time.started_time
+                ).format("YYYY-MM-DD HH:mm:ss"),
+                test_id: res.interval_time.id,
+              };
+              this.storeTestDetailsToStorage(testDetails);
               let rawQuestions = [];
               rawQuestions.push(res);
-              localStorage.setItem("questions", JSON.stringify(rawQuestions));
+              localStorage.setItem("questions", JSON.stringify(res));
               localStorage.setItem(
                 "science_id",
                 this.selectedSubject.science.id
               );
               localStorage.setItem("class_id", this.selectedClass);
-              this.$router.push("test");
+              this.$router.push({ name: "test" });
             } else {
               this.errorNotification(res.error.message);
             }
           })
           .catch((e) => {
-            this.errorNotification(e.response.data.message);
+            console.log(e);
           });
       } catch (e) {
-        this.errorNotification(e.response.data.error);
+        console.log(e);
       }
     },
   },

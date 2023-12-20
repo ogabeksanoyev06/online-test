@@ -79,18 +79,14 @@ Vue.mixin({
       localStorage.removeItem("testTime");
       localStorage.setItem("testTime", testTime);
     },
-    storeTestStartedTimeToStorage(started_time) {
-      localStorage.removeItem("started_time");
-      localStorage.setItem(
-        "started_time",
-        this.$moment(started_time).format("YYYY-MM-DD HH:mm")
-      );
+    storeTestDetailsToStorage(testDetails) {
+      localStorage.setItem("testDetails", JSON.stringify(testDetails));
     },
-
     setTestTypeToStorage(testType) {
       localStorage.removeItem("testType");
       localStorage.setItem("testType", testType);
     },
+
     isCourseInBasketSolid(courseId) {
       return !!this.coursesOnBasket.find(
         (item) => parseInt(item.id) === parseInt(courseId)
@@ -107,29 +103,22 @@ Vue.mixin({
       if (!testType) return null;
       return testType;
     },
-
-    redirectToLoginOrTest() {
-      if (!this.isLoggedOn) {
-        this.warningNotification(
-          "Test ishlash uchun tizimga kirishingiz shart!"
-        );
-        this.$router.push({ name: "login" });
-        return true;
-      }
-      const testEndTime = localStorage.getItem("testTime");
-      if (testEndTime) {
-        this.warningNotification("Sizda tugallanmagan test mavjud");
-        this.$router.push({ name: "test" });
+    checkOngoingTest() {
+      const testType = localStorage.getItem("testType");
+      if (testType) {
         return true;
       }
       return false;
     },
-
+    redirectToTestPage() {
+      if (this.checkOngoingTest()) {
+        this.$router.push("/test");
+      }
+    },
     removeTestAttributesFromStorage() {
       localStorage.removeItem("questions");
       localStorage.removeItem("answers");
       localStorage.removeItem("testType");
-      localStorage.removeItem("testTime");
     },
   },
 });

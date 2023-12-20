@@ -57,10 +57,9 @@
               </template>
             </BaseSelect>
             <BaseSelect
-              v-model="questionSelectedLevel"
               label="Darajani tanlang"
-              placeholder="Darajani tanlang"
-              :options-prop="levelList"
+              :options-prop="questionLevelList"
+              v-model="questionSelectedValue"
               @itemSelected="selectedLevelValue"
               hideDetails
               :append="true"
@@ -84,13 +83,6 @@
                 </svg>
               </template>
             </BaseSelect>
-            <BaseInput
-              v-model="questionTotalTime"
-              :hide-details="true"
-              label="Umumiy vaqt"
-              disabled
-            >
-            </BaseInput>
           </div>
           <div v-if="selectedSubject.selected && subjectSectionList.length > 0">
             <AppText
@@ -135,7 +127,6 @@ import AppButton from "../../../components/shared-components/AppButton";
 import test from "../../../constants/test";
 import { mapMutations } from "vuex";
 import BaseCheckbox from "@/components/shared-components/BaseCheckbox.vue";
-import BaseInput from "@/components/shared-components/BaseInput.vue";
 
 export default {
   name: "AppIndex",
@@ -145,7 +136,6 @@ export default {
     AppSmallCard,
     AppText,
     BaseCheckbox,
-    BaseInput,
   },
   data() {
     return {
@@ -164,6 +154,7 @@ export default {
       },
       subject_id: null,
       questionSelectedLevel: "beginner",
+      questionSelectedValue: "Oson",
       subjectSectionList: [
         {
           id: null,
@@ -171,7 +162,6 @@ export default {
         },
       ],
       selectedSubjectSections: [],
-      questionTotalTime: 0,
       questionsCount: 5,
       questionsCountSelect: [
         {
@@ -186,34 +176,33 @@ export default {
           id: 15,
           name: 15,
         },
-        {
-          id: 20,
-          name: 20,
-        },
-        {
-          id: 25,
-          name: 25,
-        },
-        {
-          id: 30,
-          name: 30,
-        },
+        // {
+        //   id: 20,
+        //   name: 20,
+        // },
+        // {
+        //   id: 25,
+        //   name: 25,
+        // },
+        // {
+        //   id: 30,
+        //   name: 30,
+        // },
       ],
-      levelList: [
+      questionLevelList: [
         {
           id: "beginner",
           name: "Oson",
         },
-        {
-          id: "medium",
-          name: "O'rta",
-        },
-        {
-          id: "advanced",
-          name: "Qiyin",
-        },
+        // {
+        //   id: "medium",
+        //   name: "O'rta",
+        // },
+        // {
+        //   id: "advanced",
+        //   name: "Qiyin",
+        // },
       ],
-      questionTime: 1,
     };
   },
   methods: {
@@ -266,6 +255,7 @@ export default {
         this.selectedSubjectSections.splice(index, 1);
       }
     },
+
     getQuestionBySelectedParameters() {
       this.loading = true;
       let paramtersModel = {};
@@ -276,9 +266,17 @@ export default {
       this.$http
         .post(`tests/sciences-tests/start/`, paramtersModel)
         .then((res) => {
-          if (!res.error) {
+          if (res) {
             this.setTestType(test.TYPE_BLOCK);
             this.setTestTypeToStorage(test.TYPE_BLOCK);
+            const testDetails = {
+              test_type: test.TYPE_BLOCK,
+              started_time: this.$moment(res.time_interval.started_time).format(
+                "YYYY-MM-DD HH:mm:ss"
+              ),
+              test_id: res.time_interval.id,
+            };
+            this.storeTestDetailsToStorage(testDetails);
             localStorage.setItem("questions", JSON.stringify(res));
             localStorage.setItem("science_id", this.selectedSubject.subject.id);
             this.$router.push({ name: "test" });
@@ -287,8 +285,7 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
-          this.errorNotification(err.response.data.message);
+          this.errorNotification(err.response.data.detail);
         })
         .finally(() => {
           this.loading = false;
@@ -297,6 +294,7 @@ export default {
 
     selectedLevelValue(item) {
       this.questionSelectedLevel = item.id;
+      this.questionSelectedValue = item.name;
     },
     selectedCountValue(item) {
       this.questionsCount = item.id;

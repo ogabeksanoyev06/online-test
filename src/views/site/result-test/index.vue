@@ -181,7 +181,7 @@ export default {
     this.fetchTestResult();
     localStorage.removeItem("questions");
     localStorage.removeItem("answers");
-    localStorage.removeItem("testTime");
+    localStorage.removeItem("testDetails");
     localStorage.removeItem("testType");
     localStorage.removeItem("science_id");
   },
